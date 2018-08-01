@@ -114,4 +114,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
     }
+
+    // 随便加点注释，测测能不能提交代码
 }
