@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
-import me.jessyan.mvparms.demo.mvp.model.api.service.LoginService;
+import me.jessyan.mvparms.demo.mvp.model.api.service.InterfaceService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
 
@@ -31,7 +31,7 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
 
     @Override
     public Observable<LoginResponse> login(LoginRequest loginRequest) {
-        return mRepositoryManager.obtainRetrofitService(LoginService.class)
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .login(loginRequest);
     }
 
