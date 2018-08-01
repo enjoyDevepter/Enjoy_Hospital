@@ -43,6 +43,10 @@
         <meta-data
             android:name="me.jessyan.mvparms.demo.app.GlobalConfiguration"
             android:value="ConfigModule" />
+
+        <activity
+            android:name=".mvp.ui.activity.MainActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

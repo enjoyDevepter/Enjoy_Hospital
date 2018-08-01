@@ -12,12 +12,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
-import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -72,20 +68,23 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         request.setUsername(username);
         request.setPassword(password);
 
-        mModel.login(request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<LoginResponse>() {
-                    @Override
-                    public void accept(LoginResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            mRootView.killMyself();
-                            mRootView.goMainPage();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
+        mRootView.killMyself();
+        mRootView.goMainPage();
+
+//        mModel.login(request)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<LoginResponse>() {
+//                    @Override
+//                    public void accept(LoginResponse response) throws Exception {
+//                        if (response.isSuccess()) {
+//                            mRootView.killMyself();
+//                            mRootView.goMainPage();
+//                        } else {
+//                            mRootView.showMessage(response.getRetDesc());
+//                        }
+//                    }
+//                });
 
     }
 }
