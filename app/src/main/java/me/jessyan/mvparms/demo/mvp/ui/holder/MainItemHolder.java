@@ -15,10 +15,13 @@
  */
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
+import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
@@ -43,6 +46,8 @@ public class MainItemHolder extends BaseHolder<MainItem> {
 
     public MainItemHolder(View itemView) {
         super(itemView);
+        int screenWidth = ArmsUtils.getScreenWidth(ArmsUtils.getContext());
+        itemView.setLayoutParams(new RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.main_item_space) * 2) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     @Override
