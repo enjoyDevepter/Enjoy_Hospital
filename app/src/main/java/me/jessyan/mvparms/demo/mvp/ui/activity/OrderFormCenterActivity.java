@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderFormCenterComponent;
 import me.jessyan.mvparms.demo.di.module.OrderFormCenterModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderFormCenterContract;
@@ -21,6 +24,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresenter> implements OrderFormCenterContract.View {
+
+    @BindView(R.id.title_Layout)
+    View title_Layout;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,7 +45,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        new TitleUtil(title_Layout,this,"订单中心");
     }
 
     @Override
