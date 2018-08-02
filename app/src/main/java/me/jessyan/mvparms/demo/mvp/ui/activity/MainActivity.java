@@ -107,10 +107,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
+        Class<? extends Activity> targetActivity = null;
         switch (position) {
             case 0:
                 break;
             case 1:
+                // 订单中心
+                targetActivity = OrderFormCenterActivity.class;
                 break;
             case 2:
                 break;
@@ -122,6 +125,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 break;
             case 6:
                 break;
+        }
+
+        if(targetActivity == null){
+            ArmsUtils.makeText(ArmsUtils.getContext(),"功能尚未实现");
+        }else{
+            ArmsUtils.startActivity(targetActivity);
         }
     }
 }

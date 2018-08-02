@@ -46,7 +46,8 @@
 
         <activity
             android:name=".mvp.ui.activity.MainActivity"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".mvp.ui.activity.OrderFormCenterActivity"></activity>
     </application>
 
 </manifest>
