@@ -16,6 +16,7 @@
 package com.jess.arms.base.delegate;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,6 +54,7 @@ public class ActivityDelegateImpl implements ActivityDelegate {
 
         //这里提供 AppComponent 对象给 BaseActivity 的子类, 用于 Dagger2 的依赖注入
         iActivity.setupActivityComponent(ArmsUtils.obtainAppComponentFromContext(mActivity));
+        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override

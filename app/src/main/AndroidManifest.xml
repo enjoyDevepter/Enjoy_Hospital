@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
-            android:screenOrientation="landscape">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +46,7 @@
 
         <activity
             android:name=".mvp.ui.activity.MainActivity"
-            android:screenOrientation="landscape" />
+            />
         <activity android:name=".mvp.ui.activity.OrderFormCenterActivity"></activity>
     </application>
 
