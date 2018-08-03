@@ -7,6 +7,7 @@
     android:layout_height="42dp">
 
     <TextView
+        android:id="@+id/code"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:visibility="visible"
@@ -17,6 +18,7 @@
         />
 
     <EditText
+        android:id="@+id/search_key"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_marginTop="11dp"

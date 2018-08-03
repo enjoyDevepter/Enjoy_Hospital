@@ -6,6 +6,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.utils.ArmsUtils;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -37,5 +38,9 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    public void doSearch(String key){
+        ArmsUtils.makeText(ArmsUtils.getContext(),"我假装搜索了"+key);
     }
 }
