@@ -6,5 +6,7 @@
     android:orientation="vertical">
 
     <include layout="@layout/title"/>
-
+    <View style="@style/divider"/>
+    <include layout="@layout/search_layout"/>
+    <View style="@style/divider"/>
 </LinearLayout>

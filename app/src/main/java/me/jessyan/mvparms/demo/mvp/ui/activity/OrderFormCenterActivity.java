@@ -27,6 +27,8 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
 
     @BindView(R.id.title_Layout)
     View title_Layout;
+    @BindView(R.id.search_layout)
+    View search_layout;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {

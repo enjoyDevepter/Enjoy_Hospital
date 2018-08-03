@@ -18,5 +18,21 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">13sp</item>
     </style>
+    
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">#EEEEEE</item>
+    </style>
 
+    <style name="search_btn_style">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">查询</item>
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">21dp</item>
+        <item name="android:background">@drawable/search_btn_bg</item>
+    </style>
 </resources>
