@@ -1,12 +1,16 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,14 +18,19 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderFormCenterComponent;
 import me.jessyan.mvparms.demo.di.module.OrderFormCenterModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderFormCenterContract;
+import me.jessyan.mvparms.demo.mvp.model.OrderFormCenterModel;
+import me.jessyan.mvparms.demo.mvp.model.entity.Order;
 import me.jessyan.mvparms.demo.mvp.presenter.OrderFormCenterPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderCenterListAdapter;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -52,11 +61,15 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     @BindView(R.id.all)
     TextView all;
 
+    @BindView(R.id.contentList)
+    RecyclerView contentList;
+
     private int normalColor = Color.parseColor("#333333");
     private int currColor = Color.parseColor("#3DBFE8");
 
     // 当前选中的textview
     private TextView currentTab;
+    private int currentSearchType;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -86,6 +99,8 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         code.setVisibility(View.GONE);
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
+
+        contentList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -122,7 +137,11 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             return;
         }
 
-        mPresenter.doSearch(s);
+        mPresenter.doSearch(s,currentSearchType);
+    }
+
+    public void updateList(List<Order> orderList){
+        contentList.setAdapter(new OrderCenterListAdapter(orderList));
     }
 
     private View.OnClickListener onSearchClickListener = new View.OnClickListener(){
@@ -135,8 +154,10 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
                     break;
                 case R.id.clear_btn:
                     searchKey.setText("");
+                    contentList.setAdapter(null);
                     break;
             }
+            hideImm();
         }
     };
 
@@ -151,15 +172,19 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             switch (v.getId()){
                 case R.id.appointment:
                     newText = appointment;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_APPOINTMENT;
                     break;
                 case R.id.all:
                     newText = all;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_ALL;
                     break;
                 case R.id.over:
                     newText = over;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_OVER;
                     break;
                 case R.id.cancel:
                     newText = cancel;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_CANCEL;
                     break;
             }
 
@@ -170,4 +195,10 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             currentTab.setTextColor(currColor);
         }
     };
+
+    private void hideImm(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 隐藏软键盘
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+    }
 }

@@ -41,6 +41,7 @@ public class OrderCenterListAdapter extends DefaultAdapter<Order> {
 
     public OrderCenterListAdapter(List<Order> ordres) {
         super(ordres);
+        ordres.add(0,new Order());
     }
 
     @Override
@@ -71,4 +72,5 @@ public class OrderCenterListAdapter extends DefaultAdapter<Order> {
     public interface OnChildItemClickLinstener {
         void onChildItemClick(View v, ViewName viewname, int position);
     }
+
 }

@@ -8,6 +8,9 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.util.List;
+
+import me.jessyan.mvparms.demo.mvp.model.entity.Order;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -40,7 +43,8 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
         this.mApplication = null;
     }
 
-    public void doSearch(String key){
-        ArmsUtils.makeText(ArmsUtils.getContext(),"我假装搜索了"+key);
+    public void doSearch(String key,int searchType){
+        List<Order> orders = mModel.doSearch(key, searchType);
+        mRootView.updateList(orders);
     }
 }

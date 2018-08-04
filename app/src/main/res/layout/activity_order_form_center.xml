@@ -36,4 +36,10 @@
             style="@style/tab_item" />
     </LinearLayout>
     <View style="@style/divider_1"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/contentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

@@ -41,4 +41,5 @@
         android:textColor="#FA6767"
         android:background="@drawable/search_clear_btn_bg"
         />
+
 </LinearLayout>

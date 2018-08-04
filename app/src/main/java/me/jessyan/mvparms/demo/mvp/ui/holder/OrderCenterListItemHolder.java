@@ -15,6 +15,7 @@
  */
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,6 +37,8 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderCenterListAdapter;
  */
 public class OrderCenterListItemHolder extends BaseHolder<Order> {
 
+    @BindView(R.id.parent)
+    View parent;
     @BindView(R.id.order_id)
     TextView orderIdTV;
     @BindView(R.id.order_phone)
@@ -52,6 +55,8 @@ public class OrderCenterListItemHolder extends BaseHolder<Order> {
     View detailV;
     @BindView(R.id.pay)
     View payV;
+    @BindView(R.id.button_group)
+    View buttonGroup;
 
     private OrderCenterListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
@@ -64,6 +69,25 @@ public class OrderCenterListItemHolder extends BaseHolder<Order> {
 
     @Override
     public void setData(Order order, int position) {
+        if(position == 0){
+            orderIdTV.setText("编号");
+            phoneTV.setText("手机");
+            priceTV.setText("金额");
+            projectTV.setText("项目");
+            statusTV.setText("状态");
+            timeTV.setText("时间");
+            buttonGroup.setVisibility(View.INVISIBLE);
+            parent.setBackgroundColor(Color.parseColor("#E4E4E4"));
+        }else{
+            parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            buttonGroup.setVisibility(View.VISIBLE);
+            orderIdTV.setText(order.getOrderId());
+            phoneTV.setText(order.getPhone());
+            priceTV.setText(order.getPrice());
+            projectTV.setText(order.getProject());
+            statusTV.setText(order.getStatus());
+            timeTV.setText(order.getTime());
+        }
 //        Observable.just(data.getName())
 //                .subscribe(s -> mName.setText(s));
 //        Observable.just(data.getImageId())
