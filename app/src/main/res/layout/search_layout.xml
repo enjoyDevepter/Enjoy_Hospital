@@ -3,6 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:paddingLeft="25dp"
     android:paddingRight="25dp"
+    android:background="@color/white"
     android:id="@+id/search_layout"
     android:layout_height="42dp">
 

@@ -24,9 +24,9 @@ public class OrderFormCenterModel extends BaseModel implements OrderFormCenterCo
     @Inject
     Application mApplication;
 
-    public static final int SEARCH_TYPE_APPOINTMENT = 1;
-    public static final int SEARCH_TYPE_OVER = 2;
-    public static final int SEARCH_TYPE_CANCEL = 3;
+    public static final int SEARCH_TYPE_UNPAID = 1;
+    public static final int SEARCH_TYPE_SECEND = 2;
+    public static final int SEARCH_TYPE_OK = 3;
     public static final int SEARCH_TYPE_ALL = 4;
 
     @Inject

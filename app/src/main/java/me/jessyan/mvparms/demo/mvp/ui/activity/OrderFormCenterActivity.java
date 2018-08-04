@@ -21,7 +21,6 @@ import com.jess.arms.utils.ArmsUtils;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderFormCenterComponent;
 import me.jessyan.mvparms.demo.di.module.OrderFormCenterModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderFormCenterContract;
@@ -52,12 +51,12 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     @BindView(R.id.search_key)
     EditText searchKey;
 
-    @BindView(R.id.appointment)
-    TextView appointment;
+    @BindView(R.id.unpaid)
+    TextView unpaid;
+    @BindView(R.id.secend)
+    TextView secend;
     @BindView(R.id.over)
     TextView over;
-    @BindView(R.id.cancel)
-    TextView cancel;
     @BindView(R.id.all)
     TextView all;
 
@@ -89,11 +88,11 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title_Layout,this,"订单中心");
-        appointment.setOnClickListener(onTabClickListener);
+        unpaid.setOnClickListener(onTabClickListener);
         all.setOnClickListener(onTabClickListener);
+        secend.setOnClickListener(onTabClickListener);
         over.setOnClickListener(onTabClickListener);
-        cancel.setOnClickListener(onTabClickListener);
-        currentTab = appointment;
+        currentTab = unpaid;
         currentTab.setTextColor(currColor);
 
         code.setVisibility(View.GONE);
@@ -141,7 +140,25 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     }
 
     public void updateList(List<Order> orderList){
-        contentList.setAdapter(new OrderCenterListAdapter(orderList));
+        OrderCenterListAdapter adapter = new OrderCenterListAdapter(orderList);
+        adapter.setOnChildItemClickLinstener(new OrderCenterListAdapter.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, OrderCenterListAdapter.ViewName viewname, int position) {
+                if(position == 0){
+                    return;
+                }
+                switch (viewname){
+                    case DETAIL:
+                        Intent intent = new Intent(OrderFormCenterActivity.this,OrderInfoActivity.class);
+                        intent.putExtra(OrderInfoActivity.KEY_FOR_DATA,adapter.getItem(position));
+                        launchActivity(intent);
+                        break;
+                    case PAY:
+                        break;
+                }
+            }
+        });
+        contentList.setAdapter(adapter);
     }
 
     private View.OnClickListener onSearchClickListener = new View.OnClickListener(){
@@ -170,21 +187,21 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             currentTab.setTextColor(normalColor);
             TextView newText = null;
             switch (v.getId()){
-                case R.id.appointment:
-                    newText = appointment;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_APPOINTMENT;
+                case R.id.unpaid:
+                    newText = unpaid;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
                     break;
                 case R.id.all:
                     newText = all;
                     currentSearchType = OrderFormCenterModel.SEARCH_TYPE_ALL;
                     break;
+                case R.id.secend:
+                    newText = secend;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_SECEND;
+                    break;
                 case R.id.over:
                     newText = over;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_OVER;
-                    break;
-                case R.id.cancel:
-                    newText = cancel;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_CANCEL;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_OK;
                     break;
             }
 

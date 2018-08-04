@@ -37,6 +37,16 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.OrderCenterListItemHolder;
  */
 public class OrderCenterListAdapter extends DefaultAdapter<Order> {
 
+    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+        setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int viewType, Object data, int position) {
+
+            }
+        });
+    }
+
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
     public OrderCenterListAdapter(List<Order> ordres) {

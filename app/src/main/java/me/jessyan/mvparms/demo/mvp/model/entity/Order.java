@@ -1,10 +1,12 @@
 package me.jessyan.mvparms.demo.mvp.model.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by guomin on 2018/8/3.
  */
 
-public class Order {
+public class Order implements Serializable{
     private String orderId;
     private String phone;
     private String price;
