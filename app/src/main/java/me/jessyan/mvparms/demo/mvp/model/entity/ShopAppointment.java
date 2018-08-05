@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity;
 
-public class ShopAppointment {
+import java.io.Serializable;
+
+public class ShopAppointment implements Serializable {
     private String orderId;
     private String phone;
     private String related;

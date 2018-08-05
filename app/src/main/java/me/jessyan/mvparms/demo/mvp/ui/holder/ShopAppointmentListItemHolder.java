@@ -107,8 +107,11 @@ public class ShopAppointmentListItemHolder extends BaseHolder<ShopAppointment> {
                 case R.id.detail:
                     onChildItemClickLinstener.onChildItemClick(view, ViewName.DETAIL, getAdapterPosition());
                     return;
-                case R.id.pay:
-                    onChildItemClickLinstener.onChildItemClick(view, ViewName.PAY, getAdapterPosition());
+                case R.id.related:
+                    onChildItemClickLinstener.onChildItemClick(view, ViewName.RELATED, getAdapterPosition());
+                    return;
+                case R.id.cancel:
+                    onChildItemClickLinstener.onChildItemClick(view,ViewName.CANCEL,getAdapterPosition());
                     return;
             }
         }

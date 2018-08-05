@@ -45,7 +45,8 @@
         <activity android:name=".mvp.ui.activity.MainActivity" />
         <activity android:name=".mvp.ui.activity.OrderFormCenterActivity" />
         <activity android:name=".mvp.ui.activity.OrderInfoActivity" />
-        <activity android:name=".mvp.ui.activity.ShopAppointmentActivity"></activity>
+        <activity android:name=".mvp.ui.activity.ShopAppointmentActivity" />
+        <activity android:name=".mvp.ui.activity.ShopAppointmentInfoActivity"></activity>
     </application>
 
 </manifest>
