@@ -37,7 +37,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class OrderCenterListItemHolder extends BaseHolder<Order> {
+public class ShopAppointmentListItemHolder extends BaseHolder<Order> {
 
     @BindView(R.id.parent)
     View parent;
@@ -62,7 +62,7 @@ public class OrderCenterListItemHolder extends BaseHolder<Order> {
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public OrderCenterListItemHolder(View itemView, OnChildItemClickLinstener onChildItemClickLinstener) {
+    public ShopAppointmentListItemHolder(View itemView, OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         detailV.setOnClickListener(this);
         payV.setOnClickListener(this);

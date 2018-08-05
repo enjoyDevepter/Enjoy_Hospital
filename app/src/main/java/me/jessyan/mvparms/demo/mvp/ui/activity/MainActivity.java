@@ -116,6 +116,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 targetActivity = OrderFormCenterActivity.class;
                 break;
             case 2:
+                targetActivity = ShopAppointmentActivity.class;
                 break;
             case 3:
                 break;

@@ -25,6 +25,7 @@ import java.util.List;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Order;
 import me.jessyan.mvparms.demo.mvp.ui.holder.OrderCenterListItemHolder;
+import me.jessyan.mvparms.demo.mvp.ui.holder.ShopAppointmentListItemHolder;
 
 /**
  * ================================================
@@ -35,7 +36,7 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.OrderCenterListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class OrderCenterListAdapter extends DefaultAdapter<Order> {
+public class ShopAppointmentListAdapter extends DefaultAdapter<Order> {
 
     public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
@@ -49,14 +50,14 @@ public class OrderCenterListAdapter extends DefaultAdapter<Order> {
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public OrderCenterListAdapter(List<Order> ordres) {
+    public ShopAppointmentListAdapter(List<Order> ordres) {
         super(ordres);
         ordres.add(0,new Order());
     }
 
     @Override
     public BaseHolder<Order> getHolder(View v, int viewType) {
-        return new OrderCenterListItemHolder(v, new OnChildItemClickLinstener() {
+        return new ShopAppointmentListItemHolder(v, new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
@@ -68,11 +69,10 @@ public class OrderCenterListAdapter extends DefaultAdapter<Order> {
 
     @Override
     public int getLayoutId(int viewType) {
-        return R.layout.order_center_item;
+        return R.layout.shop_appointment_item;
     }
 
     public OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
-
 }
