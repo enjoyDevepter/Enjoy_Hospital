@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/title"/>
+    <View style="@style/divider_3"/>
+    <include layout="@layout/search_layout"/>
+    <View style="@style/divider_3"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:showDividers="middle"
+        android:divider="@null"
+        android:dividerPadding="2dp"
+        android:layout_height="40dp">
+        <TextView
+            android:text="新预约"
+            android:id="@+id/new_appointment"
+            style="@style/tab_item" />
+        <View style="@style/tab_divider"/>
+        <TextView
+            android:text="已确认"
+            android:id="@+id/confirmed"
+            style="@style/tab_item" />
+        <View style="@style/tab_divider"/>
+        <TextView
+            android:text="已完成"
+            android:id="@+id/over"
+            style="@style/tab_item" />
+        <View style="@style/tab_divider"/>
+        <TextView
+            android:text="全部"
+            android:id="@+id/all"
+            style="@style/tab_item" />
+    </LinearLayout>
+    <View style="@style/divider_1"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/contentList"
+        android:layout_margin="9dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

@@ -19,6 +19,7 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.UserAppointment;
 import me.jessyan.mvparms.demo.mvp.presenter.MainPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MainAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
@@ -119,6 +120,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 targetActivity = ShopAppointmentActivity.class;
                 break;
             case 3:
+                targetActivity = UserAppointmentActivity.class;
                 break;
             case 4:
                 break;
