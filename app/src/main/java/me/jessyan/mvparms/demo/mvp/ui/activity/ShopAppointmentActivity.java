@@ -200,13 +200,16 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                 if(position == 0){
                     return;
                 }
+                Intent intent;
                 switch (viewname){
                     case DETAIL:
-                        Intent intent = new Intent(ShopAppointmentActivity.this,ShopAppointmentInfoActivity.class);
+                        intent = new Intent(ShopAppointmentActivity.this,ShopAppointmentInfoActivity.class);
                         intent.putExtra(ShopAppointmentInfoActivity.KEY_FOR_DATA,adapter.getItem(position));
                         launchActivity(intent);
                         break;
                     case RELATED:
+                        intent = new Intent(ShopAppointmentActivity.this,RelatedListActivity.class);
+                        launchActivity(intent);
                         break;
                     case CANCEL:
                         break;

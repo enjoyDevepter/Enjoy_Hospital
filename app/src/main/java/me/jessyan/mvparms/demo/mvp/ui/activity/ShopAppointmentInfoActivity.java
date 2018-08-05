@@ -32,6 +32,9 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     @BindView(R.id.title_Layout)
     View title;
 
+    @BindView(R.id.related)
+    View related;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerShopAppointmentInfoComponent //如找不到该类,请编译一下项目
@@ -52,7 +55,13 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"预约详细");
-
+        related.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShopAppointmentInfoActivity.this,RelatedListActivity.class);
+                launchActivity(intent);
+            }
+        });
         Intent intent = getIntent();
         Serializable serializableExtra = intent.getSerializableExtra(KEY_FOR_DATA);
         if(serializableExtra == null || !(serializableExtra instanceof ShopAppointment)){

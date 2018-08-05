@@ -47,7 +47,8 @@
         <activity android:name=".mvp.ui.activity.OrderInfoActivity" />
         <activity android:name=".mvp.ui.activity.ShopAppointmentActivity" />
         <activity android:name=".mvp.ui.activity.ShopAppointmentInfoActivity" />
-        <activity android:name=".mvp.ui.activity.UserAppointmentActivity"></activity>
+        <activity android:name=".mvp.ui.activity.UserAppointmentActivity" />
+        <activity android:name=".mvp.ui.activity.RelatedListActivity"></activity>
     </application>
 
 </manifest>
