@@ -75,4 +75,5 @@ public class OrderCenterListAdapter extends DefaultAdapter<Order> {
         return onChildItemClickLinstener;
     }
 
+
 }

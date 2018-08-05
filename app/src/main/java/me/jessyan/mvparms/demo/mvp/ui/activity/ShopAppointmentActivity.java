@@ -26,11 +26,13 @@ import me.jessyan.mvparms.demo.di.module.ShopAppointmentModule;
 import me.jessyan.mvparms.demo.mvp.contract.ShopAppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.ShopAppointmentModel;
 import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.ShopAppointment;
 import me.jessyan.mvparms.demo.mvp.presenter.ShopAppointmentPresenter;
 
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OnChildItemClickLinstener;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderCenterListAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.adapter.ShopAppointmentListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
 
 
@@ -190,8 +192,8 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
     };
 
 
-    public void updateList(List<Order> orderList){
-        OrderCenterListAdapter adapter = new OrderCenterListAdapter(orderList);
+    public void updateList(List<ShopAppointment> orderList){
+        ShopAppointmentListAdapter adapter = new ShopAppointmentListAdapter(orderList);
         adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {

@@ -29,10 +29,8 @@
         />
 
     <TextView
-        style="@style/recycler_item_style"
-        android:id="@+id/order_price"
-        />
-
+        android:id="@+id/order_related"
+        style="@style/recycler_item_style"/>
 
     <TextView
         style="@style/recycler_item_style"
@@ -73,13 +71,24 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/pay"
+            android:id="@+id/related"
             android:layout_width="36dp"
             android:layout_height="19dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/order_center_btn_bg"
             android:gravity="center"
-            android:text="支付"
+            android:text="关联"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="36dp"
+            android:layout_height="19dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/order_center_btn_bg"
+            android:gravity="center"
+            android:text="取消"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>

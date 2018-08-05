@@ -10,6 +10,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.ShopAppointment;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -43,7 +44,7 @@ public class ShopAppointmentPresenter extends BasePresenter<ShopAppointmentContr
     }
 
     public void doSearch(String key,int searchType){
-        List<Order> orders = mModel.doSearch(key, searchType);
-        mRootView.updateList(orders);
+        List<ShopAppointment> shopAppointments = mModel.doSearch(key, searchType);
+        mRootView.updateList(shopAppointments);
     }
 }

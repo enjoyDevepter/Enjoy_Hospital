@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import me.jessyan.mvparms.demo.mvp.contract.ShopAppointmentContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.ShopAppointment;
 
 
 @ActivityScope
@@ -41,11 +42,11 @@ public class ShopAppointmentModel extends BaseModel implements ShopAppointmentCo
         this.mApplication = null;
     }
 
-    public List<Order> doSearch(String searchKey, int SearchType){
+    public List<ShopAppointment> doSearch(String searchKey, int SearchType){
         // 啥也别说，先造点假数据
-        List<Order> list = new ArrayList<>();
+        List<ShopAppointment> list = new ArrayList<>();
         for(int i = 0;i<10;i++){
-            list.add(new Order(i+"","1234567890","12345","有关于"+searchKey+"的一些项目","未支付","20180808"));
+            list.add(new ShopAppointment(i+"","1234567890","未关联","有关于"+searchKey+"的一些项目","未支付","20180808"));
         }
         return list;
     }

@@ -24,6 +24,7 @@ import com.jess.arms.base.BaseHolder;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.ShopAppointment;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OnChildItemClickLinstener;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderCenterListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
@@ -37,7 +38,7 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class ShopAppointmentListItemHolder extends BaseHolder<Order> {
+public class ShopAppointmentListItemHolder extends BaseHolder<ShopAppointment> {
 
     @BindView(R.id.parent)
     View parent;
@@ -45,18 +46,20 @@ public class ShopAppointmentListItemHolder extends BaseHolder<Order> {
     TextView orderIdTV;
     @BindView(R.id.order_phone)
     TextView phoneTV;
-    @BindView(R.id.order_price)
-    TextView priceTV;
     @BindView(R.id.order_project)
     TextView projectTV;
+    @BindView(R.id.order_related)
+    TextView order_related;
     @BindView(R.id.order_status)
     TextView statusTV;
     @BindView(R.id.order_time)
     TextView timeTV;
+    @BindView(R.id.related)
+    View related;
+    @BindView(R.id.cancel)
+    View cancel;
     @BindView(R.id.detail)
     View detailV;
-    @BindView(R.id.pay)
-    View payV;
     @BindView(R.id.button_group)
     View buttonGroup;
 
@@ -65,16 +68,17 @@ public class ShopAppointmentListItemHolder extends BaseHolder<Order> {
     public ShopAppointmentListItemHolder(View itemView, OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         detailV.setOnClickListener(this);
-        payV.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        related.setOnClickListener(this);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
     @Override
-    public void setData(Order order, int position) {
+    public void setData(ShopAppointment shopAppointment, int position) {
         if(position == 0){
             orderIdTV.setText("编号");
             phoneTV.setText("手机");
-            priceTV.setText("金额");
+            order_related.setText("关联");
             projectTV.setText("项目");
             statusTV.setText("状态");
             timeTV.setText("时间");
@@ -83,12 +87,12 @@ public class ShopAppointmentListItemHolder extends BaseHolder<Order> {
         }else{
             parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
             buttonGroup.setVisibility(View.VISIBLE);
-            orderIdTV.setText(order.getOrderId());
-            phoneTV.setText(order.getPhone());
-            priceTV.setText(order.getPrice());
-            projectTV.setText(order.getProject());
-            statusTV.setText(order.getStatus());
-            timeTV.setText(order.getTime());
+            orderIdTV.setText(shopAppointment.getOrderId());
+            phoneTV.setText(shopAppointment.getPhone());
+            order_related.setText(shopAppointment.getRelated());
+            projectTV.setText(shopAppointment.getProject());
+            statusTV.setText(shopAppointment.getStatus());
+            timeTV.setText(shopAppointment.getTime());
         }
 //        Observable.just(data.getName())
 //                .subscribe(s -> mName.setText(s));
@@ -115,11 +119,12 @@ public class ShopAppointmentListItemHolder extends BaseHolder<Order> {
     protected void onRelease() {
         this.orderIdTV = null;
         this.phoneTV = null;
-        this.priceTV = null;
+        this.order_related = null;
         this.projectTV = null;
         this.statusTV = null;
         this.timeTV = null;
         this.detailV = null;
-        this.payV = null;
+        this.cancel = null;
+        this.related = null;
     }
 }
