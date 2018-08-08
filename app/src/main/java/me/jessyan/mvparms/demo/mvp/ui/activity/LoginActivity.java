@@ -1,10 +1,12 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.jess.arms.base.BaseActivity;
@@ -35,6 +37,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Inject
     RxPermissions mRxPermissions;
 
+    @BindView(R.id.parent)
+    View parent;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -55,6 +59,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void initData(Bundle savedInstanceState) {
         loginV.setOnClickListener(this);
         mPresenter.requestPermissions();
+        parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideImm();
+            }
+        });
     }
 
     @Override
@@ -113,6 +123,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         return mRxPermissions;
     }
 
-    // 随便加点注释，测测能不能提交代码
-    // 又加了点日志
+    private void hideImm(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 隐藏软键盘
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+    }
 }

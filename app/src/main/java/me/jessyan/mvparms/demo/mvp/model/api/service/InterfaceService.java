@@ -2,7 +2,9 @@ package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MemberInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MemberInfoResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -14,5 +16,8 @@ public interface InterfaceService {
 
     @POST("gateway")
     Observable<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("gateway")
+    Observable<MemberInfoResponse> requestMemberInfo(@Body MemberInfoRequest request);
 
 }

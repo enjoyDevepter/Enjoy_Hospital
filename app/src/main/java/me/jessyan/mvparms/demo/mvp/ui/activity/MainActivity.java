@@ -111,6 +111,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         Class<? extends Activity> targetActivity = null;
         switch (position) {
             case 0:
+                targetActivity = BuyCenterActivity.class;
                 break;
             case 1:
                 // 订单中心
@@ -125,6 +126,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             case 4:
                 break;
             case 5:
+                targetActivity = HospitalInfoActivity.class;
                 break;
             case 6:
                 break;

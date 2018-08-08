@@ -3,17 +3,26 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 import android.app.Application;
 
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
+import me.jessyan.mvparms.demo.util.GlobalConfig;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -67,24 +76,27 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         LoginRequest request = new LoginRequest();
         request.setUsername(username);
         request.setPassword(password);
+////
+//        mRootView.killMyself();
+//        mRootView.goMainPage();
 
-        mRootView.killMyself();
-        mRootView.goMainPage();
-
-//        mModel.login(request)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<LoginResponse>() {
-//                    @Override
-//                    public void accept(LoginResponse response) throws Exception {
-//                        if (response.isSuccess()) {
-//                            mRootView.killMyself();
-//                            mRootView.goMainPage();
-//                        } else {
-//                            mRootView.showMessage(response.getRetDesc());
-//                        }
-//                    }
-//                });
+        mModel.login(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<LoginResponse>() {
+                    @Override
+                    public void accept(LoginResponse response) {
+                        if (response.isSuccess()) {
+                            Cache<String,Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+                            UserBean userBean = new UserBean(username,response.getToken(),response.getSignkey());
+                            cache.put(GlobalConfig.CACHE_KEY_USER,userBean);
+                            mRootView.killMyself();
+                            mRootView.goMainPage();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
 
     }
 }

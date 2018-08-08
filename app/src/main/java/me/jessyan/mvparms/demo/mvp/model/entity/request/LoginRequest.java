@@ -7,7 +7,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.request;
 public class LoginRequest extends BaseRequest {
     private String username;
     private String password;
-    private int cmd = 102;
+    private int cmd = 5001;
 
     public String getUsername() {
         return username;

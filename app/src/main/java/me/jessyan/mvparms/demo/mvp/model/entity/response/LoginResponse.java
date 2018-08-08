@@ -9,6 +9,14 @@ public class LoginResponse extends BaseResponse {
     private String token;
     private String signkey;
 
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+                "token='" + token + '\'' +
+                ", signkey='" + signkey + '\'' +
+                '}';
+    }
+
     public String getToken() {
         return token;
     }
