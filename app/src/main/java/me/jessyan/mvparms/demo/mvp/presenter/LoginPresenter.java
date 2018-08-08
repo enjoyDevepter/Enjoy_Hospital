@@ -73,6 +73,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
 
 
     public void login(String username, String password) {
+        mRootView.showLoading();
         LoginRequest request = new LoginRequest();
         request.setUsername(username);
         request.setPassword(password);
@@ -86,6 +87,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribe(new Consumer<LoginResponse>() {
                     @Override
                     public void accept(LoginResponse response) {
+                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             Cache<String,Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
                             UserBean userBean = new UserBean(username,response.getToken(),response.getSignkey());

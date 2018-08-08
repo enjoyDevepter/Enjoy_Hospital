@@ -1,6 +1,7 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -67,14 +69,23 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         });
     }
 
+    private ProgressDialog progressDialog;
+
     @Override
     public void showLoading() {
-
+        if(progressDialog == null){
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("正在登录");
+            progressDialog.show();
+        }
     }
 
     @Override
     public void hideLoading() {
-
+        if(progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 
     @Override
