@@ -50,7 +50,8 @@
         <activity android:name=".mvp.ui.activity.UserAppointmentActivity" />
         <activity android:name=".mvp.ui.activity.RelatedListActivity" />
         <activity android:name=".mvp.ui.activity.HospitalInfoActivity" />
-        <activity android:name=".mvp.ui.activity.BuyCenterActivity"></activity>
+        <activity android:name=".mvp.ui.activity.BuyCenterActivity" />
+        <activity android:name=".mvp.ui.activity.GoodsListActivity"></activity>
     </application>
 
 </manifest>
