@@ -1,7 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -24,6 +22,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerLoginComponent;
 import me.jessyan.mvparms.demo.di.module.LoginModule;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.presenter.LoginPresenter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -41,6 +40,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @BindView(R.id.parent)
     View parent;
+
+    CustomProgressDailog progressDailog;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -69,23 +70,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         });
     }
 
-    private ProgressDialog progressDialog;
 
     @Override
     public void showLoading() {
-        if(progressDialog == null){
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("正在登录");
-            progressDialog.show();
-        }
+        progressDailog = new CustomProgressDailog(this);
+        progressDailog.show();
     }
 
     @Override
     public void hideLoading() {
-        if(progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        progressDailog.dismiss();
     }
 
     @Override
@@ -134,7 +128,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         return mRxPermissions;
     }
 
-    private void hideImm(){
+    private void hideImm() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         // 隐藏软键盘
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);

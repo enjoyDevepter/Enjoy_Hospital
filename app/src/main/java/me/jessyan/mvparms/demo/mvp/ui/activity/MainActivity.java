@@ -19,9 +19,9 @@ import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.di.component.DaggerMainComponent;
 import me.jessyan.mvparms.demo.di.module.MainModule;
 import me.jessyan.mvparms.demo.mvp.contract.MainContract;
-import me.jessyan.mvparms.demo.mvp.model.entity.UserAppointment;
 import me.jessyan.mvparms.demo.mvp.presenter.MainPresenter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.MainAdapter;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Inject
     MainAdapter mAdapter;
 
+    CustomDialog dialog;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -129,12 +130,37 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 targetActivity = HospitalInfoActivity.class;
                 break;
             case 6:
-                break;
+                dialog = CustomDialog.create(getSupportFragmentManager())
+                        .setViewListener(new CustomDialog.ViewListener() {
+                            @Override
+                            public void bindView(View view) {
+                                view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        provideCache().put("nums", 0);
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        })
+                        .setLayoutRes(R.layout.dialog)
+                        .setDimAmount(0.5f)
+                        .isCenter(true)
+                        .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+                        .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+                        .show();
+                return;
         }
 
-        if(targetActivity == null){
-            ArmsUtils.makeText(ArmsUtils.getContext(),"功能尚未实现");
-        }else{
+        if (targetActivity == null) {
+            ArmsUtils.makeText(ArmsUtils.getContext(), "功能尚未实现");
+        } else {
             ArmsUtils.startActivity(targetActivity);
         }
     }
