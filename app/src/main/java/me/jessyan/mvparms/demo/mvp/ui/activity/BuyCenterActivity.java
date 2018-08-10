@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,7 +21,7 @@ import me.jessyan.mvparms.demo.mvp.contract.BuyCenterContract;
 import me.jessyan.mvparms.demo.mvp.presenter.BuyCenterPresenter;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.util.GlobalConfig;
+import me.jessyan.mvparms.demo.util.CacheUtil;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -128,8 +127,7 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
         buy.setVisibility(codeIsRight ? View.VISIBLE : View.GONE);
 
         if(codeIsRight){
-            Cache<String, Object> extras = ArmsUtils.obtainAppComponentFromContext(BuyCenterActivity.this).extras();
-            extras.put(GlobalConfig.CACHE_KEY_MEMBER_CODE,memberCode);
+            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER_CODE,memberCode);
         }
     }
 }

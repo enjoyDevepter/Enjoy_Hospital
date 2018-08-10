@@ -2,8 +2,8 @@ package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
 
+import com.bumptech.glide.load.Option;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.http.GlobalHttpHandler;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
@@ -22,7 +22,7 @@ import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
-import me.jessyan.mvparms.demo.util.GlobalConfig;
+import me.jessyan.mvparms.demo.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
@@ -89,9 +89,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     public void accept(LoginResponse response) {
                         mRootView.hideLoading();
                         if (response.isSuccess()) {
-                            Cache<String,Object> cache = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
-                            UserBean userBean = new UserBean(username,response.getToken(),response.getSignkey());
-                            cache.put(GlobalConfig.CACHE_KEY_USER,userBean);
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
                             mRootView.killMyself();
                             mRootView.goMainPage();
                         } else {

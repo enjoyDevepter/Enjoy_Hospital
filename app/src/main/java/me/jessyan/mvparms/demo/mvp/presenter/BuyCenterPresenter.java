@@ -1,8 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -16,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MemberInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MemberInfoResponse;
-import me.jessyan.mvparms.demo.util.GlobalConfig;
+import me.jessyan.mvparms.demo.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -51,15 +49,13 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
 
     public void requestHospitalInfo(String username){
         MemberInfoRequest memberInfoRequest = new MemberInfoRequest();
-        UserBean user = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(GlobalConfig.CACHE_KEY_USER);
+        UserBean user = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         memberInfoRequest.setUsername(username);
         memberInfoRequest.setToken(user.getToken());
         mModel.requestMemberinfo(memberInfoRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MemberInfoResponse>() {
-                    @Override
-                    public void accept(MemberInfoResponse response) {
+                .subscribe(response -> {
                         if (response.isSuccess()) {
                             mRootView.updateCodeisRight(true);
                         }else{
@@ -67,6 +63,6 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }
-                });;
+                );;
     }
 }

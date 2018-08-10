@@ -10,31 +10,35 @@ import me.jessyan.mvparms.demo.BuildConfig;
 
 public class CacheUtil {
 
-    private static Cache<String, Object> extras;
+    // 保存用户信息
+    public static final String CACHE_KEY_USER = "cache_key_user";
 
-    static {
-        extras = ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
+    // 保存当前的用户code
+    public static final String CACHE_KEY_MEMBER_CODE = "cache_key_member_code";
+
+    private static Cache getExtras(){
+        return ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras();
     }
 
     public static void saveCache(String key,Object value){
-        extras.put(key,value);
+        getExtras().put(key,value);
     }
 
     /**自动以常量的方式存储，适合生命周期等同于应用的属性*/
     public static void saveConstant(String key,Object value){
-        extras.put(IntelligentCache.KEY_KEEP+key,value);
+        getExtras().put(IntelligentCache.KEY_KEEP+key,value);
     }
 
     public static void clearConstant(String key){
-        extras.remove(IntelligentCache.KEY_KEEP+key);
+        getExtras().remove(IntelligentCache.KEY_KEEP+key);
     }
 
-    public static Object getCaChe(String key){
-        return extras.get(key);
+    public static <T> T getCaChe(String key){
+        return (T)getExtras().get(key);
     }
 
-    public static Object getConstant(String key){
-        return extras.get(IntelligentCache.KEY_KEEP + key);
+    public static <T> T getConstant(String key){
+        return (T)getExtras().get(IntelligentCache.KEY_KEEP + key);
     }
 
     /**自动获取属性，优先获取全局常量，如果没有获取到才获取局部常量*/
