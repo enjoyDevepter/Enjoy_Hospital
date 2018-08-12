@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.holder;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import io.reactivex.Observable;
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsListBean;
+import me.jessyan.mvparms.demo.mvp.ui.activity.OrderConfirmActivity;
 
 public class GoodsListHolder extends BaseHolder<GoodsListBean> {
 
@@ -72,7 +74,9 @@ public class GoodsListHolder extends BaseHolder<GoodsListBean> {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArmsUtils.makeText(ArmsUtils.getContext(),data.getName());
+                Intent intent = new Intent(ArmsUtils.getContext(), OrderConfirmActivity.class);
+                intent.putExtra(OrderConfirmActivity.KEY_FOR_GOODS_INFO,data);
+                ArmsUtils.startActivity(intent);
             }
         });
     }

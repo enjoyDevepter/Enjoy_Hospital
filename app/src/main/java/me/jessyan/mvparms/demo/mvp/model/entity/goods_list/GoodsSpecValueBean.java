@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.goods_list;
 
-public class GoodsSpecValueBean {
+import java.io.Serializable;
+
+public class GoodsSpecValueBean implements Serializable{
     private String specValueId;
     private String specValueName;
 

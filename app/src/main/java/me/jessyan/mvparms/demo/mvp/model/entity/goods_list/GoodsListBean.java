@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.entity.goods_list;
 
-public class GoodsListBean {
+import java.io.Serializable;
+
+public class GoodsListBean implements Serializable{
     private int attention;
     private int cnt;
     private float costPrice;
