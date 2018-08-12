@@ -4,7 +4,6 @@
     
     <ImageView
         android:id="@+id/image"
-        android:background="#ffff00"
         android:layout_centerVertical="true"
         android:layout_marginLeft="21dp"
         android:layout_alignParentLeft="true"
@@ -25,29 +24,50 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/title2"
-        android:text="规格：刘医生"
+        android:id="@+id/title2_title"
+        android:text="规格："
         android:textSize="14sp"
         android:textColor="#666666"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:layout_alignLeft="@id/title"
         android:layout_below="@id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_alignLeft="@id/title2"
-        android:text="数量：4"
+        android:id="@+id/title2"
+        android:text="刘医生"
         android:textSize="14sp"
         android:textColor="#666666"
-        android:layout_marginTop="11dp"
-        android:layout_below="@id/title2"
+        android:layout_alignTop="@id/title2_title"
+        android:layout_toRightOf="@id/title2_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_alignLeft="@id/title2_title"
+        android:text="已售："
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginTop="6dp"
+        android:layout_below="@id/title2_title"
+        android:id="@+id/count_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="4"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_toRightOf="@id/count_title"
+        android:layout_alignTop="@id/count_title"
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text="¥256"
+        android:text="¥"
+        android:id="@+id/price_title"
         android:textColor="#ff0000"
         android:textSize="15sp"
         android:layout_marginLeft="20dp"
@@ -55,8 +75,19 @@
         android:layout_alignBottom="@id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="228.00"
+        android:id="@+id/price"
+        android:textColor="#ff0000"
+        android:textSize="15sp"
+        android:layout_toRightOf="@id/price_title"
+        android:layout_alignTop="@id/price_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     
     <TextView
+        android:id="@+id/buy"
         android:textColor="@color/white"
         android:textSize="13sp"
         android:text="立即下单"

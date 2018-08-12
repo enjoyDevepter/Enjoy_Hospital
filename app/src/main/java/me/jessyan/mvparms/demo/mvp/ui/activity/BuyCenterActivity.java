@@ -1,11 +1,13 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -74,12 +76,13 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArmsUtils.startActivity(GoodsListActivity.class);
             }
         });
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideImm();
                 String s = search_key.getText().toString();
                 if(TextUtils.isEmpty(s)){
                     ArmsUtils.makeText(BuyCenterActivity.this,"请输入会员编号后查询");
@@ -129,5 +132,11 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
         if(codeIsRight){
             CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER_CODE,memberCode);
         }
+    }
+
+    private void hideImm() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 隐藏软键盘
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 }

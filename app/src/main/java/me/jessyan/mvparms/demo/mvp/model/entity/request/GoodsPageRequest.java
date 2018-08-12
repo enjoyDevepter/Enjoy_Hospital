@@ -4,15 +4,26 @@ import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.OrderBy;
 
 public class GoodsPageRequest extends BaseRequest {
     private int pageIndex;  // 从1开始
-//    private int pageSize;
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    private int pageSize;
     private OrderBy orderBy;
     private String token;
     private int cmd = 5101;
+
 
     @Override
     public String toString() {
         return "GoodsPageRequest{" +
                 "pageIndex=" + pageIndex +
+                ", pageSize=" + pageSize +
                 ", orderBy=" + orderBy +
                 ", token='" + token + '\'' +
                 ", cmd=" + cmd +
