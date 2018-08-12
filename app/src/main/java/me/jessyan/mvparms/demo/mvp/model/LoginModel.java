@@ -12,7 +12,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.InterfaceService;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
 
 
@@ -35,4 +37,9 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
                 .login(loginRequest);
     }
 
+    @Override
+    public Observable<HospitalInfoResponse> requestHospitalInfo(HospitalInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .requestHosptialInfo(request);
+    }
 }

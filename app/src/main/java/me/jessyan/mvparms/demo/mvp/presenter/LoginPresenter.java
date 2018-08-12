@@ -20,8 +20,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.contract.LoginContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.user.HospitalInfoBean;
 import me.jessyan.mvparms.demo.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -87,12 +89,37 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribe(new Consumer<LoginResponse>() {
                     @Override
                     public void accept(LoginResponse response) {
-                        mRootView.hideLoading();
                         if (response.isSuccess()) {
                             CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
-                            mRootView.killMyself();
-                            mRootView.goMainPage();
+                            HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
+                            hospitalInfoRequest.setToken(response.getToken());
+                            mModel.requestHospitalInfo(hospitalInfoRequest)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(s -> {
+                                        mRootView.hideLoading();
+                                        if(s.isSuccess()){
+                                            HospitalInfoBean hospitalInfoBean = new HospitalInfoBean();
+                                            hospitalInfoBean.setAddress(s.getAddress());
+                                            hospitalInfoBean.setCity(s.getCity());
+                                            hospitalInfoBean.setCityName(s.getCityName());
+                                            hospitalInfoBean.setCounty(s.getCounty());
+                                            hospitalInfoBean.setCountyName(s.getCountyName());
+                                            hospitalInfoBean.setDistance(s.getDistance());
+                                            hospitalInfoBean.setDistanceDesc(s.getDistanceDesc());
+                                            hospitalInfoBean.setHospitalId(s.getHospitalId());
+                                            hospitalInfoBean.setName(s.getName());
+                                            hospitalInfoBean.setProvince(s.getProvince());
+                                            hospitalInfoBean.setProvinceName(s.getProvinceName());
+                                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO,hospitalInfoBean);
+                                            mRootView.killMyself();
+                                            mRootView.goMainPage();
+                                        }else{
+                                            mRootView.showMessage(s.getRetDesc());
+                                        }
+                                    });
                         } else {
+                            mRootView.hideLoading();
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }

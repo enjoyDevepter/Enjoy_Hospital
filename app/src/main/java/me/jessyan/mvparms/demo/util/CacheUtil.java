@@ -12,6 +12,7 @@ public class CacheUtil {
 
     // 保存用户信息
     public static final String CACHE_KEY_USER = "cache_key_user";
+    public static final String CACHE_KEY_USER_HOSPITAL_INFO = "CACHE_KEY_USER_HOSPITAL_INFO";
 
     // 保存当前的用户code
     public static final String CACHE_KEY_MEMBER_CODE = "cache_key_member_code";

@@ -7,7 +7,9 @@ import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
 
 
@@ -26,6 +28,7 @@ public interface LoginContract {
     interface Model extends IModel {
 
         Observable<LoginResponse> login(LoginRequest request);
+        Observable<HospitalInfoResponse> requestHospitalInfo(HospitalInfoRequest request);
 
     }
 }
