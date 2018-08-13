@@ -49,6 +49,11 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
         super(model, rootView);
     }
 
+    public void makeSureOrder(){
+        mRootView.makeSure(true);
+//        mModel.makeSureOrder(null);
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void commitOrder(){
         Intent intent = mRootView.getActivity().getIntent();

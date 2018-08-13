@@ -7,7 +7,9 @@ import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsBuyRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MakeSureRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsBuyResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MakeSureResponse;
 
 
 public interface CommitOrderContract {
@@ -15,10 +17,12 @@ public interface CommitOrderContract {
     interface View extends IView {
         Activity getActivity();
         void update(GoodsBuyResponse response);
+        void makeSure(boolean ok);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GoodsBuyResponse> goodsBuy(GoodsBuyRequest request);
+        Observable<MakeSureResponse> makeSureOrder(MakeSureRequest request);
     }
 }

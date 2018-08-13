@@ -6,12 +6,14 @@ import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsConfirmRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsPageRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MakeSureRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MemberInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsBuyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsPageResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.HospitalInfoResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MakeSureResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MemberInfoResponse;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -39,4 +41,7 @@ public interface InterfaceService {
 
     @POST("gateway")
     Observable<GoodsBuyResponse> buyGoods(@Body GoodsBuyRequest request);
+
+    @POST("gateway")
+    Observable<MakeSureResponse> makeSureOrder(@Body MakeSureRequest request);
 }

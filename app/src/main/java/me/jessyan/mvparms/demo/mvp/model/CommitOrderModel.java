@@ -15,8 +15,10 @@ import me.jessyan.mvparms.demo.mvp.contract.CommitOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.api.service.InterfaceService;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsBuyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsConfirmRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.MakeSureRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsBuyResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsConfirmResponse;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.MakeSureResponse;
 
 
 @ActivityScope
@@ -42,5 +44,11 @@ public class CommitOrderModel extends BaseModel implements CommitOrderContract.M
     public Observable<GoodsBuyResponse> goodsBuy(GoodsBuyRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .buyGoods(request);
+    }
+
+    @Override
+    public Observable<MakeSureResponse> makeSureOrder(MakeSureRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .makeSureOrder(request);
     }
 }

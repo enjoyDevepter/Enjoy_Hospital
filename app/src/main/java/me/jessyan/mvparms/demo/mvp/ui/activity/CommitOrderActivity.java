@@ -127,7 +127,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         make_sure_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mPresenter.makeSureOrder();
             }
         });
     }
@@ -166,19 +166,26 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
 
     private CustomDialog payOkDialog;
 
-    private void showCancelDailog(String text) {
+    private void showCancelDailog() {
         payOkDialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override
                     public void bindView(View view) {
-
                     }
                 })
                 .setLayoutRes(R.layout.pay_ok_dialog_layout)
                 .setDimAmount(0.5f)
                 .isCenter(true)
                 .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this,228))
-                .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this,221))
+                .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this,240))
                 .show();
+    }
+
+    public void makeSure(boolean ok){
+        if(ok){
+            showCancelDailog();
+        }else{
+            ArmsUtils.makeText(this,"支付未完成");
+        }
     }
 }
