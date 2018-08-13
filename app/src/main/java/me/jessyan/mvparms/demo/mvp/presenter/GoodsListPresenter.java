@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +71,9 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
         GoodsPageRequest request = new GoodsPageRequest();
         request.setPageIndex(1);
         request.setPageSize(10);
-        request.setToken(((UserBean)CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER)).getToken());
+        UserBean cacheUserBean = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER);
+        System.out.println("user -> cacheUserBean = "+cacheUserBean);
+        request.setToken(cacheUserBean.getToken());
 
         OrderBy orderBy = new OrderBy();
         orderBy.setField("sales");

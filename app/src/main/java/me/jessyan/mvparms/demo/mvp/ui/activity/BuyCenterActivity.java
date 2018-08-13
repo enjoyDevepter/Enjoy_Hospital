@@ -128,10 +128,6 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
 
         hide.setText(codeIsRight ? "会员编号正确，请继续下单" : "会员编号错误，请重新查询！");
         buy.setVisibility(codeIsRight ? View.VISIBLE : View.GONE);
-
-        if(codeIsRight){
-            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER_CODE,memberCode);
-        }
     }
 
     private void hideImm() {

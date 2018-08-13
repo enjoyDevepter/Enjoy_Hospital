@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +16,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.io.Serializable;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,10 @@ import me.jessyan.mvparms.demo.di.component.DaggerOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.OrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderConfirmContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsListBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsSpecValueBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.hospital.HospitaInfoBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.member_info.MemberBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.OrderConfirmPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -39,21 +44,30 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
 
     @BindView(R.id.title_Layout)
     View title;
-
     @BindView(R.id.member_code)
     TextView member_code;
-
     @BindView(R.id.hosptial)
-    TextView hosptial;  // 等待接口
-
+    TextView hosptial;
     @BindView(R.id.remark_edit)
     EditText remark_edit;
-
     @BindView(R.id.image)
     ImageView image;
-
     @BindView(R.id.price)
-    TextView price;
+    TextView price;  // 项目中的金额
+    @BindView(R.id.order_name)
+    TextView order_name;
+    @BindView(R.id.goods_price)
+    TextView goods_price;  // 商品金额
+    @BindView(R.id.all_price)
+    TextView all_price;  // 订单总金额
+    @BindView(R.id.skill)
+    TextView skill;
+    @BindView(R.id.xiaofeibi_shengyu)
+    TextView xiaofeibi_shengyu;
+    @BindView(R.id.xiaofeibi_count)
+    TextView xiaofeibi_count;
+    @BindView(R.id.member_phone)
+    TextView member_phone;
 
     @Inject
     ImageLoader mImageLoader;
@@ -73,33 +87,40 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         return R.layout.activity_order_confirm; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    private GoodsListBean goodsListBean;
+    public void update(GoodsConfirmResponse goodsConfirmResponse){
 
-    @Override
-    public void initData(@Nullable Bundle savedInstanceState) {
-        GoodsListBean serializableExtra = (GoodsListBean) getIntent().getSerializableExtra(KEY_FOR_GOODS_INFO);
-        if(serializableExtra instanceof GoodsListBean){
-            goodsListBean = serializableExtra;
-            fillGoodsList();
-        }
-
-        new TitleUtil(title,this,"确认订单");
-        String memberCode = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER_CODE);
-        member_code.setText(memberCode);
-    }
-
-    private void fillGoodsList(){
-        if(goodsListBean == null){
-            return;
-        }
-
+        GoodsListBean goods = goodsConfirmResponse.getGoods();
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
-                        .url(goodsListBean.getImage())
+                        .url(goods.getImage())
                         .imageView(image)
                         .build());
+
+        order_name.setText(goods.getName());
+        price.setText(String.format("%.2f",goods.getSalePrice()));
+        List<GoodsSpecValueBean> goodsSpecValueList = goodsConfirmResponse.getGoodsSpecValueList();
+        if(goodsSpecValueList != null && goodsSpecValueList.size() != 0){
+            skill.setText(goodsSpecValueList.get(0).getSpecValueName());
+        }
+        xiaofeibi_shengyu.setText(""+goodsConfirmResponse.getBalance());
+        goods_price.setText(String.format("%.2f",goodsConfirmResponse.getPrice() * 1.0 / 100));
+        xiaofeibi_count.setText(String.format("%.2f",goodsConfirmResponse.getMoney() * 1.0 / 100));
+        all_price.setText(String.format("%.2f",goodsConfirmResponse.getPayMoney() * 1.0 / 100));
     }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        new TitleUtil(title,this,"确认订单");
+        MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
+        System.out.println("member = "+memberBean);
+        member_code.setText(memberBean.getUserName());
+        member_phone.setText(memberBean.getMobile());
+
+        HospitaInfoBean hospitalInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
+        hosptial.setText(hospitalInfoBean.getName());
+    }
+
 
     @Override
     public void showLoading() {
@@ -126,5 +147,10 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     @Override
     public void killMyself() {
         finish();
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
 
@@ -40,7 +42,28 @@
                     android:textColor="#666666"
                     android:textSize="13sp" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="27dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手机号码："
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/member_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,6 +127,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/order_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/image"
@@ -230,7 +254,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:text="400"
+                        android:text="0"
                         android:textColor="#ffb5b5b5"
                         android:textSize="12sp" />
 
@@ -315,48 +339,48 @@
             </LinearLayout>
 
 
+            <View style="@style/divider_3" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="38dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="合计："
+                    android:layout_marginLeft="21dp"
+                    android:textColor="#ff333333"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¥"
+                    android:textColor="#ff666666"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:id="@+id/all_price"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:layout_height="wrap_content"
+                    android:text="3280.00"
+                    android:textColor="#ff666666"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:id="@+id/confirm_order"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:text="确认订单"
+                    android:layout_width="123dp"
+                    android:layout_height="38dp"
+                    android:background="#ffff5656"
+                />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <View style="@style/divider_3" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_height="38dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="合计："
-            android:layout_marginLeft="21dp"
-            android:textColor="#ff333333"
-            android:textSize="13sp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="¥"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            />
-        <TextView
-            android:id="@+id/all_price"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:layout_height="wrap_content"
-            android:text="3280.00"
-            android:textColor="#ff666666"
-            android:textSize="13sp"
-            />
-        <TextView
-            android:id="@+id/confirm_order"
-            android:textColor="#ffffff"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:text="确认订单"
-            android:layout_width="123dp"
-            android:layout_height="38dp"
-            android:background="#ffff5656"
-        />
-    </LinearLayout>
 </LinearLayout>

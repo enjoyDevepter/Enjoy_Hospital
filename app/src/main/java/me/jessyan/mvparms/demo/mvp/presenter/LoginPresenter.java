@@ -7,6 +7,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
+import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
@@ -23,7 +24,6 @@ import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.HospitalInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.LoginRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.LoginResponse;
-import me.jessyan.mvparms.demo.mvp.model.entity.user.HospitalInfoBean;
 import me.jessyan.mvparms.demo.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -90,7 +90,12 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     @Override
                     public void accept(LoginResponse response) {
                         if (response.isSuccess()) {
-                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
+//                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
+                            ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().put(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
+
+                            UserBean cacheUserBean = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER);
+//                            UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+                            System.out.println("Login -> cacheUserBean = "+cacheUserBean);
                             HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
                             hospitalInfoRequest.setToken(response.getToken());
                             mModel.requestHospitalInfo(hospitalInfoRequest)
@@ -99,19 +104,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                                     .subscribe(s -> {
                                         mRootView.hideLoading();
                                         if(s.isSuccess()){
-                                            HospitalInfoBean hospitalInfoBean = new HospitalInfoBean();
-                                            hospitalInfoBean.setAddress(s.getAddress());
-                                            hospitalInfoBean.setCity(s.getCity());
-                                            hospitalInfoBean.setCityName(s.getCityName());
-                                            hospitalInfoBean.setCounty(s.getCounty());
-                                            hospitalInfoBean.setCountyName(s.getCountyName());
-                                            hospitalInfoBean.setDistance(s.getDistance());
-                                            hospitalInfoBean.setDistanceDesc(s.getDistanceDesc());
-                                            hospitalInfoBean.setHospitalId(s.getHospitalId());
-                                            hospitalInfoBean.setName(s.getName());
-                                            hospitalInfoBean.setProvince(s.getProvince());
-                                            hospitalInfoBean.setProvinceName(s.getProvinceName());
-                                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO,hospitalInfoBean);
+                                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO,s.getHospital());
                                             mRootView.killMyself();
                                             mRootView.goMainPage();
                                         }else{

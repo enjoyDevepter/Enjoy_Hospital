@@ -1,12 +1,23 @@
 package me.jessyan.mvparms.demo.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsConfirmBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsListBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.member_info.MemberBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsConfirmRequest;
+import me.jessyan.mvparms.demo.mvp.ui.activity.OrderConfirmActivity;
+import me.jessyan.mvparms.demo.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
@@ -37,5 +48,31 @@ public class OrderConfirmPresenter extends BasePresenter<OrderConfirmContract.Mo
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void requestConfirmInfo(){
+        GoodsListBean goodsListBean = (GoodsListBean) mRootView.getActivity().getIntent().getSerializableExtra(OrderConfirmActivity.KEY_FOR_GOODS_INFO);
+        GoodsConfirmRequest goodsConfirmRequest = new GoodsConfirmRequest();
+        MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
+        goodsConfirmRequest.setMemberId(memberBean.getMemberId());
+        GoodsConfirmBean goodsConfirmBean = new GoodsConfirmBean();
+        goodsConfirmBean.setGoodsId(goodsListBean.getGoodsId());
+        goodsConfirmBean.setMerchId(goodsListBean.getMerchId());
+        goodsConfirmBean.setNums(1);
+        goodsConfirmBean.setSalesPrice(goodsListBean.getSalePrice());
+        goodsConfirmRequest.setGoods(goodsConfirmBean);
+        goodsConfirmRequest.setToken(((UserBean)CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER)).getToken());
+
+        mModel.confirmGoods(goodsConfirmRequest).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> {
+                    if (s.isSuccess()) {
+                        mRootView.update(s);
+                    } else {
+                        mRootView.showMessage(s.getRetDesc());
+                        mRootView.killMyself();
+                    }
+                });
     }
 }

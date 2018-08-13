@@ -12,6 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.member_info.MemberBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.MemberInfoRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.MemberInfoResponse;
 import me.jessyan.mvparms.demo.util.CacheUtil;
@@ -57,6 +58,9 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                         if (response.isSuccess()) {
+                            MemberBean member = response.getMember();
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
+                            System.out.println("member = "+member);
                             mRootView.updateCodeisRight(true);
                         }else{
                             mRootView.updateCodeisRight(false);
