@@ -24,6 +24,7 @@ import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderConfirmComponent;
 import me.jessyan.mvparms.demo.di.module.OrderConfirmModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderConfirmContract;
+import me.jessyan.mvparms.demo.mvp.model.entity.Order;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsListBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsSpecValueBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.HospitaInfoBean;
@@ -68,6 +69,8 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     TextView xiaofeibi_count;
     @BindView(R.id.member_phone)
     TextView member_phone;
+    @BindView(R.id.confirm_order)
+    TextView confirm_order;
 
     @Inject
     ImageLoader mImageLoader;
@@ -87,7 +90,11 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         return R.layout.activity_order_confirm; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    private GoodsConfirmResponse goodsConfirmResponse;
+
     public void update(GoodsConfirmResponse goodsConfirmResponse){
+
+        this.goodsConfirmResponse = goodsConfirmResponse;
 
         GoodsListBean goods = goodsConfirmResponse.getGoods();
         mImageLoader.loadImage(this,
@@ -119,6 +126,15 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
 
         HospitaInfoBean hospitalInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
         hosptial.setText(hospitalInfoBean.getName());
+        confirm_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ArmsUtils.getContext(),CommitOrderActivity.class);
+                intent.putExtra(CommitOrderActivity.KEY_FOR_ORDER_INDO,goodsConfirmResponse);
+                intent.putExtra(CommitOrderActivity.KEY_FOR_REMARK,remark_edit.getText().toString());
+                ArmsUtils.startActivity(intent);
+            }
+        });
     }
 
 

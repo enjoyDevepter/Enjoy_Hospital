@@ -3,6 +3,7 @@ package me.jessyan.mvparms.demo.mvp.model.entity.response;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsListBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsOrderBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.PayEntry;
 
 public class GoodsBuyResponse extends BaseResponse {
@@ -10,6 +11,66 @@ public class GoodsBuyResponse extends BaseResponse {
     private long orderTime;
     private long payMoney;
     private String payStatus;
-    private List<GoodsListBean> goodsList;
+    private GoodsOrderBean goods;
     private List<PayEntry> payEntryList;
+
+    @Override
+    public String toString() {
+        return "GoodsBuyResponse{" +
+                "orderId='" + orderId + '\'' +
+                ", orderTime=" + orderTime +
+                ", payMoney=" + payMoney +
+                ", payStatus='" + payStatus + '\'' +
+                ", goods=" + goods +
+                ", payEntryList=" + payEntryList +
+                '}';
+    }
+
+    public GoodsOrderBean getGoods() {
+        return goods;
+    }
+
+    public void setGoods(GoodsOrderBean goods) {
+        this.goods = goods;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public long getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(long orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public long getPayMoney() {
+        return payMoney;
+    }
+
+    public void setPayMoney(long payMoney) {
+        this.payMoney = payMoney;
+    }
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public List<PayEntry> getPayEntryList() {
+        return payEntryList;
+    }
+
+    public void setPayEntryList(List<PayEntry> payEntryList) {
+        this.payEntryList = payEntryList;
+    }
 }
