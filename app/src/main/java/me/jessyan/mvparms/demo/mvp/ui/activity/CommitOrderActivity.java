@@ -22,6 +22,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerCommitOrderComponent;
 import me.jessyan.mvparms.demo.di.module.CommitOrderModule;
 import me.jessyan.mvparms.demo.mvp.contract.CommitOrderContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.PayEntry;
 import me.jessyan.mvparms.demo.mvp.model.entity.hospital.HospitaInfoBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.member_info.MemberBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsBuyResponse;
@@ -62,6 +63,12 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     TextView member_code;  // 会员名
     @BindView(R.id.addr)
     TextView addr;
+    @BindView(R.id.pay_title)
+    TextView pay_title;
+    @BindView(R.id.pay_image)
+    ImageView pay_image;
+    @BindView(R.id.make_sure_btn)
+    TextView make_sure_btn;
 
     @Inject
     ImageLoader mImageLoader;
@@ -88,8 +95,16 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                         .url(response.getGoods().getImage())
                         .imageView(image)
                         .build());
+        PayEntry payEntry = response.getPayEntryList().get(0);
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .url(payEntry.getImage())
+                        .imageView(pay_image)
+                        .build());
         order_name.setText(response.getGoods().getName());
         price.setText(String.format("%.2f",response.getPayMoney() * 1.0 / 100));
+        pay_title.setText(payEntry.getName());
     }
 
     @Override
@@ -109,6 +124,12 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         hospital.setText(hospitaInfoBean.getName());
         addr.setText(hospitaInfoBean.getAddress());
         member_code.setText(memberBean.getUserName());
+        make_sure_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
