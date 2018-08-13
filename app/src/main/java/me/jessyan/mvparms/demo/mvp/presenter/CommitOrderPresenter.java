@@ -4,14 +4,18 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.utils.ArmsUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.mvparms.demo.R;
 import me.jessyan.mvparms.demo.mvp.model.entity.UserBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsConfirmBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.goods_list.GoodsListBean;
@@ -20,6 +24,7 @@ import me.jessyan.mvparms.demo.mvp.model.entity.member_info.MemberBean;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsBuyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsConfirmResponse;
 import me.jessyan.mvparms.demo.mvp.ui.activity.CommitOrderActivity;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import me.jessyan.mvparms.demo.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -55,7 +60,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
         GoodsBuyRequest goodsBuyRequest = new GoodsBuyRequest();
         GoodsListBean goods = goodsConfirmResponse.getGoods();
         GoodsConfirmBean goodsConfirmBean = new GoodsConfirmBean();
-        goodsConfirmBean.setSalesPrice(goods.getSalePrice());
+        goodsConfirmBean.setSalePrice(goods.getSalePrice());
         goodsConfirmBean.setNums(goods.getNums());
         goodsConfirmBean.setMerchId(goods.getMerchId());
         goodsConfirmBean.setGoodsId(goods.getGoodsId());

@@ -28,12 +28,15 @@ import me.jessyan.mvparms.demo.mvp.model.entity.response.GoodsBuyResponse;
 import me.jessyan.mvparms.demo.mvp.presenter.CommitOrderPresenter;
 
 import me.jessyan.mvparms.demo.R;
+import me.jessyan.mvparms.demo.mvp.ui.widget.CustomDialog;
 import me.jessyan.mvparms.demo.util.CacheUtil;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**
+ * 显示订单信息并提供支付入口（支付二维码）
+ * */
 public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View {
 
     public static final String KEY_FOR_ORDER_INDO = "key_for_order_indo";
@@ -138,5 +141,23 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     @Override
     public Activity getActivity(){
         return this;
+    }
+
+    private CustomDialog payOkDialog;
+
+    private void showCancelDailog(String text) {
+        payOkDialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+
+                    }
+                })
+                .setLayoutRes(R.layout.pay_ok_dialog_layout)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this,228))
+                .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this,221))
+                .show();
     }
 }

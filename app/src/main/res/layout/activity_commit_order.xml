@@ -16,7 +16,6 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="18dp"
             android:layout_marginLeft="22dp"
-            android:background="#ff0000"
             android:id="@+id/head_image"
             android:layout_width="64dp"
             android:layout_height="64dp" />
@@ -98,7 +97,6 @@
             android:id="@+id/image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="#ff0000"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="22dp"

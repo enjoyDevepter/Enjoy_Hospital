@@ -4,7 +4,7 @@ public class GoodsConfirmBean {
     private String goodsId;
     private String merchId;
     private int nums;
-    private double salesPrice;
+    private double salePrice;
 
     @Override
     public String toString() {
@@ -12,8 +12,16 @@ public class GoodsConfirmBean {
                 "goodsId='" + goodsId + '\'' +
                 ", merchId='" + merchId + '\'' +
                 ", nums=" + nums +
-                ", salesPrice=" + salesPrice +
+                ", salePrice=" + salePrice +
                 '}';
+    }
+
+    public double getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(double salePrice) {
+        this.salePrice = salePrice;
     }
 
     public String getGoodsId() {
@@ -38,13 +46,5 @@ public class GoodsConfirmBean {
 
     public void setNums(int nums) {
         this.nums = nums;
-    }
-
-    public double getSalesPrice() {
-        return salesPrice;
-    }
-
-    public void setSalesPrice(double salesPrice) {
-        this.salesPrice = salesPrice;
     }
 }
