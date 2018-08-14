@@ -42,6 +42,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
 
     public static final String KEY_FOR_ORDER_INDO = "key_for_order_indo";
     public static final String KEY_FOR_REMARK = "KEY_FOR_REMARK";  // 留言
+    public static final String KEY_FOR_MONEY = "key_for_money";  // 用户输入的消费币
 
     @BindView(R.id.title_Layout)
     View title;

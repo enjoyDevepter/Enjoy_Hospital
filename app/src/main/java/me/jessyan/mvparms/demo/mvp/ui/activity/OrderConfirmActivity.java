@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,7 +39,7 @@ import me.jessyan.mvparms.demo.util.CacheUtil;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**确认订单页面，支付页面前通过这个页面确定订单*/
 public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> implements OrderConfirmContract.View {
 
     public static final String KEY_FOR_GOODS_INFO = "key_for_goods_info";
@@ -71,6 +72,8 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     TextView member_phone;
     @BindView(R.id.confirm_order)
     TextView confirm_order;
+    @BindView(R.id.xiaofeibi_edit)
+    EditText xiaofeibi_edit;
 
     @Inject
     ImageLoader mImageLoader;
@@ -91,6 +94,7 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     }
 
     private GoodsConfirmResponse goodsConfirmResponse;
+    private long balance;  // 用户当前剩余的消费币（单位分）
 
     public void update(GoodsConfirmResponse goodsConfirmResponse){
 
@@ -110,7 +114,8 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         if(goodsSpecValueList != null && goodsSpecValueList.size() != 0){
             skill.setText(goodsSpecValueList.get(0).getSpecValueName());
         }
-        xiaofeibi_shengyu.setText(""+goodsConfirmResponse.getBalance());
+        balance = goodsConfirmResponse.getBalance();
+        xiaofeibi_shengyu.setText(""+ balance);
         goods_price.setText(String.format("%.2f",goodsConfirmResponse.getPrice() * 1.0 / 100));
         xiaofeibi_count.setText(String.format("%.2f",goodsConfirmResponse.getMoney() * 1.0 / 100));
         all_price.setText(String.format("%.2f",goodsConfirmResponse.getPayMoney() * 1.0 / 100));
@@ -132,6 +137,15 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
                 Intent intent = new Intent(ArmsUtils.getContext(),CommitOrderActivity.class);
                 intent.putExtra(CommitOrderActivity.KEY_FOR_ORDER_INDO,goodsConfirmResponse);
                 intent.putExtra(CommitOrderActivity.KEY_FOR_REMARK,remark_edit.getText().toString());
+                String s = xiaofeibi_edit.getText().toString();
+                if(!TextUtils.isEmpty(s)){
+                    int money = Integer.parseInt(s);
+                    if(money * 100 > balance){
+                        ArmsUtils.makeText(OrderConfirmActivity.this,"消费币不足");
+                        return;
+                    }
+                    intent.putExtra(CommitOrderActivity.KEY_FOR_MONEY,money);
+                }
                 ArmsUtils.startActivity(intent);
             }
         });
