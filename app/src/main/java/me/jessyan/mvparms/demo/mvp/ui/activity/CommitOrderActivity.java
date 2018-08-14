@@ -172,6 +172,12 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override
                     public void bindView(View view) {
+                        view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ArmsUtils.startActivity(GoodsListActivity.class);
+                            }
+                        });
                     }
                 })
                 .setLayoutRes(R.layout.pay_ok_dialog_layout)

@@ -188,8 +188,11 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
 
                 view.setSelected(true);
                 if(view instanceof ViewGroup && ((ViewGroup) view).getChildAt(0) instanceof TextView){
-                    ((TextView)((ViewGroup) view).getChildAt(0)).setTextColor(Color.WHITE);
+                    TextView childAt1 = (TextView) ((ViewGroup) view).getChildAt(0);
+                    childAt1.setTextColor(Color.WHITE);
+                    skill.setText(childAt1.getText());
                 }
+
                 return true;
             }
         });

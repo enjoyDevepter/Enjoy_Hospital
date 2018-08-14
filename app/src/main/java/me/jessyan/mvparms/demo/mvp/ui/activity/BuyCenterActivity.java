@@ -76,7 +76,9 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                killMyself();
                 ArmsUtils.startActivity(GoodsListActivity.class);
+
             }
         });
         search_btn.setOnClickListener(new View.OnClickListener() {
