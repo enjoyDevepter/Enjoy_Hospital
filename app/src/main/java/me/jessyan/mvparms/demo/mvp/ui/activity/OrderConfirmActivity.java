@@ -2,11 +2,14 @@ package me.jessyan.mvparms.demo.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,8 +19,13 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -74,6 +82,23 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     TextView confirm_order;
     @BindView(R.id.xiaofeibi_edit)
     EditText xiaofeibi_edit;
+    @BindView(R.id.three_point)
+    View three_point;
+
+    @BindView(R.id.expend)
+    View expend;
+    @BindView(R.id.expend_image)
+    ImageView expend_image;
+    @BindView(R.id.expend_project_name)
+    TextView expend_project_name;
+    @BindView(R.id.expend_price)
+    TextView expend_price;
+    @BindView(R.id.expend_project_id)
+    TextView expend_project_id;
+    @BindView(R.id.skill_list)
+    TagFlowLayout skill_list;
+    @BindView(R.id.expend_close)
+    View expend_close;
 
     @Inject
     ImageLoader mImageLoader;
@@ -87,6 +112,8 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
                 .build()
                 .inject(this);
     }
+
+    private GoodsSpecValueBean goodsSpecValueBean;
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
@@ -107,23 +134,82 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
                         .url(goods.getImage())
                         .imageView(image)
                         .build());
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .url(goods.getImage())
+                        .imageView(expend_image)
+                        .build());
 
         order_name.setText(goods.getName());
+        expend_project_name.setText(goods.getName());
         price.setText(String.format("%.2f",goods.getSalePrice()));
+        expend_price.setText(String.format("%.2f",goods.getSalePrice()));
         List<GoodsSpecValueBean> goodsSpecValueList = goodsConfirmResponse.getGoodsSpecValueList();
         if(goodsSpecValueList != null && goodsSpecValueList.size() != 0){
-            skill.setText(goodsSpecValueList.get(0).getSpecValueName());
+            goodsSpecValueBean = goodsSpecValueList.get(0);
+            skill.setText(goodsSpecValueBean.getSpecValueName());
         }
         balance = goodsConfirmResponse.getBalance();
         xiaofeibi_shengyu.setText(""+ balance);
         goods_price.setText(String.format("%.2f",goodsConfirmResponse.getPrice() * 1.0 / 100));
         xiaofeibi_count.setText(String.format("%.2f",goodsConfirmResponse.getMoney() * 1.0 / 100));
         all_price.setText(String.format("%.2f",goodsConfirmResponse.getPayMoney() * 1.0 / 100));
+        expend_project_id.setText(goodsConfirmResponse.getGoods().getMerchId());
+
+        TagAdapter<GoodsSpecValueBean> adapter = new TagAdapter<GoodsSpecValueBean>(new ArrayList<>(goodsSpecValueList)) {
+            @Override
+            public View getView(FlowLayout parent, int position, GoodsSpecValueBean s) {
+                TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.order_confirm_skill_item, null, false);
+                tv.setText(s.getSpecValueName());
+                tv.setTextColor(Color.BLACK);
+                return tv;
+            }
+        };
+        skill_list.setAdapter(adapter);
+        skill_list.setMaxSelectCount(1);
+        ViewGroup childAt = (ViewGroup) skill_list.getChildAt(0);
+        childAt.setSelected(true);
+        ((TextView)childAt.getChildAt(0)).setTextColor(Color.WHITE);
+        skill_list.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(view.isSelected()){
+                    return true;
+                }
+                int childCount = parent.getChildCount();
+                for(int i = 0;i<childCount;i++){
+                    View childAt = parent.getChildAt(i);
+                    childAt.setSelected(false);
+                    if(childAt instanceof ViewGroup && ((ViewGroup) childAt).getChildAt(0) instanceof TextView){
+                        ((TextView)((ViewGroup) childAt).getChildAt(0)).setTextColor(Color.BLACK);
+                    }
+                }
+
+                view.setSelected(true);
+                if(view instanceof ViewGroup && ((ViewGroup) view).getChildAt(0) instanceof TextView){
+                    ((TextView)((ViewGroup) view).getChildAt(0)).setTextColor(Color.WHITE);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"确认订单");
+        expend_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expend.setVisibility(View.GONE);
+            }
+        });
+        three_point.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expend.setVisibility(View.VISIBLE);
+            }
+        });
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
         System.out.println("member = "+memberBean);
         member_code.setText(memberBean.getUserName());

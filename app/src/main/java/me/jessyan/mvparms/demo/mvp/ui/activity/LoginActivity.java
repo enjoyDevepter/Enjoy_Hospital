@@ -127,10 +127,4 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
     }
-
-    private void hideImm() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // 隐藏软键盘
-        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-    }
 }

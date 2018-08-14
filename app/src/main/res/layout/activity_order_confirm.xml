@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
+    <include layout="@layout/title" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +21,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/title" />
+
 
             <View style="@style/divider_3" />
 
@@ -384,3 +389,119 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+    <RelativeLayout
+        android:clickable="true"
+        android:visibility="gone"
+        android:id="@+id/expend"
+        android:background="#55000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:id="@+id/expend_back"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="207dp"/>
+        <View
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp"
+            android:layout_alignTop="@id/expend_back"
+            android:layout_alignRight="@id/expend_back"
+            android:id="@+id/expend_close"
+            android:background="@mipmap/order_confirm_expend_close_icon"
+            android:layout_width="9dp"
+            android:layout_height="9dp"/>
+
+        <ImageView
+            android:layout_marginBottom="19dp"
+            android:layout_alignTop="@id/expend_back"
+            android:id="@+id/expend_image"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="19dp"
+            android:layout_width="86dp"
+            android:layout_height="86dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:id="@+id/expend_project_name"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@id/expend_image"
+            android:layout_alignTop="@id/expend_image"
+            android:text="【超级水宝宝】拯救沙漠肌 还原水润嫩滑 让肌肤喝饱水"
+            android:textColor="#ff000000"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/expend_price_title"
+            android:layout_below="@id/expend_project_name"
+            android:layout_toRightOf="@id/expend_image"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_alignLeft="@id/expend_project_name"
+            android:layout_height="wrap_content"
+            android:text="¥"
+            android:textColor="#ffff0000"
+            android:textSize="13sp"
+            />
+        <TextView
+            android:id="@+id/expend_price"
+            android:layout_alignBottom="@id/expend_price_title"
+            android:layout_toRightOf="@id/expend_price_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2399.00"
+            android:textColor="#ffff0000"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:id="@+id/expend_project_id_title"
+            android:layout_alignBottom="@id/expend_image"
+            android:layout_alignLeft="@id/expend_project_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="项目编号："
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:id="@+id/expend_project_id"
+            android:layout_alignBottom="@id/expend_project_id_title"
+            android:layout_toRightOf="@id/expend_project_id_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1234567"
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            />
+        <View
+            android:id="@+id/expend_divider"
+            android:layout_below="@id/expend_image"
+            style="@style/divider_1"/>
+
+        <TextView
+            android:id="@+id/texttttt"
+            android:layout_marginLeft="21dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="14dp"
+            android:layout_below="@id/expend_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="规格"
+            android:textColor="#ff666666"
+            android:textSize="14sp"
+            />
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:layout_below="@id/texttttt"
+            android:layout_marginTop="11dp"
+            android:id="@+id/skill_list"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</FrameLayout>

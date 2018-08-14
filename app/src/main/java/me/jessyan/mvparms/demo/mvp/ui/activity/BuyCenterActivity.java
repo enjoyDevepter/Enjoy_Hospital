@@ -28,7 +28,7 @@ import me.jessyan.mvparms.demo.util.CacheUtil;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**订单中心，查询会员编号页面*/
 public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implements BuyCenterContract.View {
 
     @BindView(R.id.title)
@@ -128,11 +128,5 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
 
         hide.setText(codeIsRight ? "会员编号正确，请继续下单" : "会员编号错误，请重新查询！");
         buy.setVisibility(codeIsRight ? View.VISIBLE : View.GONE);
-    }
-
-    private void hideImm() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // 隐藏软键盘
-        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 }

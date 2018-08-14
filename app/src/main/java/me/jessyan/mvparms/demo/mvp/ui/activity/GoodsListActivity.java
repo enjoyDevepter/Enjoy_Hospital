@@ -32,7 +32,7 @@ import me.jessyan.mvparms.demo.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**商品列表页面*/
 public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implements GoodsListContract.View {
 
     @BindView(R.id.title_Layout)
@@ -99,11 +99,5 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     @Override
     public Activity getActivity() {
         return this;
-    }
-
-    private void hideImm() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // 隐藏软键盘
-        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 }

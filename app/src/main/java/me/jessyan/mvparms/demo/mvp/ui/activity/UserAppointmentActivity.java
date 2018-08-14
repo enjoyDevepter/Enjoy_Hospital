@@ -213,9 +213,4 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         contentList.setAdapter(adapter);
     }
 
-    private void hideImm(){
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // 隐藏软键盘
-        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-    }
 }
