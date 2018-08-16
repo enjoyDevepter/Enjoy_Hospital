@@ -1,6 +1,8 @@
 package me.jessyan.mvparms.demo.mvp.model.api.service;
 
 import io.reactivex.Observable;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderListRequest;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderListResponse;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsBuyRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsConfirmRequest;
 import me.jessyan.mvparms.demo.mvp.model.entity.request.GoodsPageRequest;
@@ -44,4 +46,8 @@ public interface InterfaceService {
 
     @POST("gateway")
     Observable<MakeSureResponse> makeSureOrder(@Body MakeSureRequest request);
+
+    // 订单列表相关接口
+    @POST("gateway")
+    Observable<OrderListResponse> requestOrderListPage(@Body OrderListRequest request);
 }
