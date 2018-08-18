@@ -21,11 +21,14 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.GoodsOrderBean;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderBean;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.OnChildItemClickLinstener;
-import me.jessyan.mvparms.demo.mvp.ui.adapter.OrderCenterListAdapter;
 import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
 
 /**
@@ -37,7 +40,9 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class OrderCenterListItemHolder extends BaseHolder<Order> {
+public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @BindView(R.id.parent)
     View parent;
@@ -70,7 +75,7 @@ public class OrderCenterListItemHolder extends BaseHolder<Order> {
     }
 
     @Override
-    public void setData(Order order, int position) {
+    public void setData(OrderBean order, int position) {
         if(position == 0){
             orderIdTV.setText("编号");
             phoneTV.setText("手机");
@@ -84,11 +89,14 @@ public class OrderCenterListItemHolder extends BaseHolder<Order> {
             parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
             buttonGroup.setVisibility(View.VISIBLE);
             orderIdTV.setText(order.getOrderId());
-            phoneTV.setText(order.getPhone());
-            priceTV.setText(order.getPrice());
-            projectTV.setText(order.getProject());
-            statusTV.setText(order.getStatus());
-            timeTV.setText(order.getTime());
+            phoneTV.setText("13112345678");
+            GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
+            if(goodsOrderBean != null){
+                priceTV.setText(String.format("人民币%.2f", goodsOrderBean.getSalePrice()));
+                projectTV.setText(goodsOrderBean.getTitle());
+            }
+            statusTV.setText(order.getOrderStatus());
+            timeTV.setText(SIMPLE_DATE_FORMAT.format(new Date(order.getOrderTime())));
         }
 //        Observable.just(data.getName())
 //                .subscribe(s -> mName.setText(s));

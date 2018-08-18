@@ -1,5 +1,6 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,12 +20,14 @@ import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import me.jessyan.mvparms.demo.di.component.DaggerOrderFormCenterComponent;
 import me.jessyan.mvparms.demo.di.module.OrderFormCenterModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderFormCenterContract;
 import me.jessyan.mvparms.demo.mvp.model.OrderFormCenterModel;
-import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderBean;
 import me.jessyan.mvparms.demo.mvp.presenter.OrderFormCenterPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -36,8 +38,13 @@ import me.jessyan.mvparms.demo.mvp.ui.adapter.ViewName;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**订单中心页面*/
 public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresenter> implements OrderFormCenterContract.View {
+
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    RecyclerView.Adapter mAdapter;
 
     @BindView(R.id.title_Layout)
     View title_Layout;
@@ -101,7 +108,8 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
 
-        contentList.setLayoutManager(new LinearLayoutManager(this));
+        contentList.setLayoutManager(mLayoutManager);
+        contentList.setAdapter(mAdapter);
     }
 
     @Override
@@ -138,10 +146,9 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             return;
         }
 
-        mPresenter.doSearch(s,currentSearchType);
     }
 
-    public void updateList(List<Order> orderList){
+    public void updateList(List<OrderBean> orderList){
         OrderCenterListAdapter adapter = new OrderCenterListAdapter(orderList);
         adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
             @Override
@@ -214,4 +221,8 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             currentTab.setTextColor(currColor);
         }
     };
+
+    public Activity getActivity(){
+        return this;
+    }
 }

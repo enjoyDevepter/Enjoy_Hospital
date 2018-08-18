@@ -15,6 +15,7 @@ import me.jessyan.mvparms.demo.di.component.DaggerOrderInfoComponent;
 import me.jessyan.mvparms.demo.di.module.OrderInfoModule;
 import me.jessyan.mvparms.demo.mvp.contract.OrderInfoContract;
 import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderBean;
 import me.jessyan.mvparms.demo.mvp.presenter.OrderInfoPresenter;
 
 import me.jessyan.mvparms.demo.R;
@@ -30,7 +31,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
     @BindView(R.id.title_Layout)
     View title;
 
-    private Order order;
+    private OrderBean order;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -57,7 +58,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
             return;
         }
 
-        order = (Order) data;
+        order = (OrderBean) data;
         showOrder();
     }
 

@@ -25,6 +25,11 @@ public class OrderListRequest extends BaseRequest {
     }
 
     public void setOrderStatus(String orderStatus) {
+        /*
+        * 不填时显示全部订单
+            1:待付款2:待二次付款;5:已完成
+
+        * */
         this.orderStatus = orderStatus;
     }
 

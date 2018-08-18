@@ -23,7 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import me.jessyan.mvparms.demo.R;
-import me.jessyan.mvparms.demo.mvp.model.entity.Order;
+import me.jessyan.mvparms.demo.mvp.model.entity.order.OrderBean;
 import me.jessyan.mvparms.demo.mvp.ui.holder.OrderCenterListItemHolder;
 
 /**
@@ -35,7 +35,14 @@ import me.jessyan.mvparms.demo.mvp.ui.holder.OrderCenterListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class OrderCenterListAdapter extends DefaultAdapter<Order> {
+public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
+
+    public enum ListType{
+        NO_PAY,  // 未支付
+        DOUBLE_PAY,  // 二次付款
+        OVER,  // 已完成
+        ALL,  // 所有
+    }
 
     public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
@@ -49,13 +56,13 @@ public class OrderCenterListAdapter extends DefaultAdapter<Order> {
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public OrderCenterListAdapter(List<Order> ordres) {
+    public OrderCenterListAdapter(List<OrderBean> ordres) {
         super(ordres);
-        ordres.add(0,new Order());
+        ordres.add(0,new OrderBean());
     }
 
     @Override
-    public BaseHolder<Order> getHolder(View v, int viewType) {
+    public BaseHolder<OrderBean> getHolder(View v, int viewType) {
         return new OrderCenterListItemHolder(v, new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {

@@ -91,11 +91,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     public void accept(LoginResponse response) {
                         if (response.isSuccess()) {
 //                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
-                            ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().put(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
-
-                            UserBean cacheUserBean = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER);
-//                            UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
-                            System.out.println("Login -> cacheUserBean = "+cacheUserBean);
+                            UserBean value = new UserBean(username, response.getToken(), response.getSignkey());
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,value);
                             HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
                             hospitalInfoRequest.setToken(response.getToken());
                             mModel.requestHospitalInfo(hospitalInfoRequest)
