@@ -17,7 +17,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mvp.ui.activity.LoginActivity">
+        <activity
+            android:name=".mvp.ui.activity.LoginActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,21 +44,43 @@
             android:name="me.jessyan.mvparms.demo.app.GlobalConfiguration"
             android:value="ConfigModule" />
 
-        <activity android:name=".mvp.ui.activity.MainActivity" />
-        <activity android:name=".mvp.ui.activity.OrderFormCenterActivity" />
-        <activity android:name=".mvp.ui.activity.OrderInfoActivity" />
-        <activity android:name=".mvp.ui.activity.ShopAppointmentActivity" />
-        <activity android:name=".mvp.ui.activity.ShopAppointmentInfoActivity" />
-        <activity android:name=".mvp.ui.activity.UserAppointmentActivity" />
-        <activity android:name=".mvp.ui.activity.RelatedListActivity" />
-        <activity android:name=".mvp.ui.activity.HospitalInfoActivity" />
-        <activity android:name=".mvp.ui.activity.BuyCenterActivity" />
+        <activity
+            android:name=".mvp.ui.activity.MainActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.OrderFormCenterActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.OrderInfoActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.ShopAppointmentActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.ShopAppointmentInfoActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.UserAppointmentActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.RelatedListActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.HospitalInfoActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.BuyCenterActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.GoodsListActivity"
             android:launchMode="singleTask"
-            />
-        <activity android:name=".mvp.ui.activity.OrderConfirmActivity" />
-        <activity android:name=".mvp.ui.activity.CommitOrderActivity"></activity>
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.OrderConfirmActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.CommitOrderActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>
