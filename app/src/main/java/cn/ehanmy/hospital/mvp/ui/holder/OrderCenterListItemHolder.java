@@ -79,12 +79,20 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
 
     @Override
     public void setData(OrderBean order, int position) {
-        String orderStatus = order.getSearchType();
-        if(orderStatus == OrderFormCenterModel.SEARCH_TYPE_ALL || OrderFormCenterModel.SEARCH_TYPE_SECEND.equals(orderStatus)){
+        String searchType = order.getSearchType();
+        if(searchType == OrderFormCenterModel.SEARCH_TYPE_ALL || OrderFormCenterModel.SEARCH_TYPE_SECEND.equals(searchType)){
             order_secend_price.setVisibility(View.VISIBLE);
         }else{
             order_secend_price.setVisibility(View.GONE);
         }
+
+        String orderType = order.getOrderType();
+        if(OrderFormCenterModel.SEARCH_TYPE_OK.equals(orderType)){
+            payV.setVisibility(View.GONE);
+        }else{
+            payV.setVisibility(View.VISIBLE);
+        }
+
         if(position == 0){
             orderIdTV.setText("编号");
             phoneTV.setText("手机");

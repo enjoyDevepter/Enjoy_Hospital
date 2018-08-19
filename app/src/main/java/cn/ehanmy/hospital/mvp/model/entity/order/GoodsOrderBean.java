@@ -1,11 +1,12 @@
 package cn.ehanmy.hospital.mvp.model.entity.order;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsSpecValueBean;
 
 /**用于订单接口中表示商品的类*/
-public class GoodsOrderBean {
+public class GoodsOrderBean implements Serializable{
     private String goodsId;
     private String merchId;
     private String image;

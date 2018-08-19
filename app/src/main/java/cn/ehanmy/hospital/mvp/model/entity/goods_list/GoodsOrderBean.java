@@ -1,8 +1,9 @@
 package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GoodsOrderBean {
+public class GoodsOrderBean implements Serializable{
     private String goodsId;
     private String merchId;
     private String code;

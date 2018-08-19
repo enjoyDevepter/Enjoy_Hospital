@@ -147,6 +147,25 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
 
+        OrderCenterListAdapter orderCenterListAdapter = (OrderCenterListAdapter) mAdapter;
+        orderCenterListAdapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, ViewName viewname, int position) {
+                if(position == 0){
+                    return;
+                }
+                switch (viewname){
+                    case DETAIL:
+                        Intent intent = new Intent(OrderFormCenterActivity.this,OrderInfoActivity.class);
+                        intent.putExtra(OrderInfoActivity.KEY_FOR_DATA,orderCenterListAdapter.getItem(position));
+                        startActivity(intent);
+                        break;
+                    case PAY:
+                        break;
+                }
+            }
+        });
+
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
 

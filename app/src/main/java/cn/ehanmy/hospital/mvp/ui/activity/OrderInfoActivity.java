@@ -52,7 +52,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"订单详情");
         Object data = getIntent().getSerializableExtra(KEY_FOR_DATA);
-        if(data == null || !(data instanceof Order)){
+        if(data == null || !(data instanceof OrderBean)){
             ArmsUtils.makeText(this,"详情信息不存在");
             killMyself();
             return;

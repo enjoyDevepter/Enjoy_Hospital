@@ -1,7 +1,9 @@
 package cn.ehanmy.hospital.mvp.model.entity.order;
 
+import java.io.Serializable;
+
 /**订单中套餐商品集合*/
-public class SetMealGoodsBean {
+public class SetMealGoodsBean implements Serializable{
     private String setMealId;
     private String image;
     private String name;

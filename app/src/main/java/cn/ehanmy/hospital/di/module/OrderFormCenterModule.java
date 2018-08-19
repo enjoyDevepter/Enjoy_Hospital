@@ -55,23 +55,6 @@ public class OrderFormCenterModule {
     @Provides
     RecyclerView.Adapter provideStoreAdapter(List<OrderBean> list) {
         OrderCenterListAdapter orderCenterListAdapter = new OrderCenterListAdapter(list);
-        orderCenterListAdapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
-                if(position == 0){
-                    return;
-                }
-                switch (viewname){
-                    case DETAIL:
-                        Intent intent = new Intent(ArmsUtils.getContext(),OrderInfoActivity.class);
-                        intent.putExtra(OrderInfoActivity.KEY_FOR_DATA,orderCenterListAdapter.getItem(position));
-                        ArmsUtils.startActivity(intent);
-                        break;
-                    case PAY:
-                        break;
-                }
-            }
-        });
         return orderCenterListAdapter;
     }
 
