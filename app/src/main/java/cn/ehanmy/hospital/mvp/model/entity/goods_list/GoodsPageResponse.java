@@ -1,8 +1,9 @@
-package cn.ehanmy.hospital.mvp.model.entity.response;
+package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
 import java.util.List;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
+import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 
 public class GoodsPageResponse extends BaseResponse {
     private List<GoodsListBean> goodsList;

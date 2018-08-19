@@ -14,9 +14,7 @@ import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.contract.OrderConfirmContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmRequest;
-import cn.ehanmy.hospital.mvp.model.entity.request.GoodsPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
-import cn.ehanmy.hospital.mvp.model.entity.response.GoodsPageResponse;
 
 
 @ActivityScope

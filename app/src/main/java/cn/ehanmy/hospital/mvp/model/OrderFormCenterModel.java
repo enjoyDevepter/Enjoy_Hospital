@@ -8,9 +8,6 @@ import com.jess.arms.mvp.BaseModel;
 
 import com.jess.arms.di.scope.ActivityScope;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -18,8 +15,6 @@ import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
-import cn.ehanmy.hospital.mvp.model.entity.request.GoodsPageRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.GoodsPageResponse;
 
 
 @ActivityScope

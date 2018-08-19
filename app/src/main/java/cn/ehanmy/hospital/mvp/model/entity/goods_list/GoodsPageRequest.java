@@ -1,6 +1,7 @@
-package cn.ehanmy.hospital.mvp.model.entity.request;
+package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
+import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
 public class GoodsPageRequest extends BaseRequest {
     private int pageIndex;  // 从1开始

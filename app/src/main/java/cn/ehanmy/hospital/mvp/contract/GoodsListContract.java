@@ -6,8 +6,8 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
-import cn.ehanmy.hospital.mvp.model.entity.request.GoodsPageRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.GoodsPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageResponse;
 
 
 public interface GoodsListContract {

@@ -12,7 +12,6 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,8 +20,8 @@ import io.reactivex.schedulers.Schedulers;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
-import cn.ehanmy.hospital.mvp.model.entity.request.GoodsPageRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.GoodsPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 

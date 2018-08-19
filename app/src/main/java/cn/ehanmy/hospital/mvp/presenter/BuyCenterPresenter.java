@@ -6,6 +6,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -52,18 +53,24 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
         memberInfoRequest.setToken(user.getToken());
         mModel.requestMemberinfo(memberInfoRequest)
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
-                        if (response.isSuccess()) {
-                            MemberBean member = response.getMember();
-                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
-                            System.out.println("member = "+member);
-                            mRootView.updateCodeisRight(true);
-                        }else{
-                            mRootView.updateCodeisRight(false);
-                            mRootView.showMessage(response.getRetDesc());
-                        }
+                    if (response.isSuccess()) {
+                        MemberBean member = response.getMember();
+                        CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
+                        System.out.println("member = "+member);
+                        mRootView.updateCodeisRight(true);
+                    }else{
+                        mRootView.updateCodeisRight(false);
+                        mRootView.showMessage(response.getRetDesc());
                     }
-                );;
+                });
     }
 }
