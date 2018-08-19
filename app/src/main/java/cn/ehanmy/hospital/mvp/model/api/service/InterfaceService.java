@@ -1,5 +1,7 @@
 package cn.ehanmy.hospital.mvp.model.api.service;
 
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -49,5 +51,8 @@ public interface InterfaceService {
 
     // 订单列表相关接口
     @POST("gateway")
-    Observable<OrderListResponse> requestOrderListPage(@Body OrderListRequest request);
+    Observable<OrderListResponse> requestOrderListPage(@Body OrderListRequest request);  // 请求订单列表
+
+    @POST("gateway")
+    Observable<OrderInfoResponse> orderInfo(@Body OrderInfoRequest request);  // 请求订单详情
 }

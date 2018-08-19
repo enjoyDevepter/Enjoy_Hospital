@@ -1,12 +1,14 @@
 package cn.ehanmy.hospital.mvp.model.entity.hospital;
 
-public class HospitaInfoBean {
+import java.io.Serializable;
+
+public class HospitaInfoBean implements Serializable{
     private String address;
     private String city;
     private String cityName;
     private String county;
     private String countyName;
-    private int distance;
+    private String distance;
     private String distanceDesc;
     private String hospitalId;
     private String name;
@@ -70,11 +72,11 @@ public class HospitaInfoBean {
         this.countyName = countyName;
     }
 
-    public int getDistance() {
+    public String getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(String distance) {
         this.distance = distance;
     }
 
