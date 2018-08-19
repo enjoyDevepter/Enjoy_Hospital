@@ -83,8 +83,10 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
         form_remark.setText(orderInfoBean.getRemark());
         time.setText(simpleDateFormat.format(new Date(orderInfoBean.getOrderTime())));
         OrderRecipientInfoBean orderRecipientInfo = orderInfoBean.getOrderRecipientInfo();
-        form_tel.setText(orderRecipientInfo.getMobile());
-        form_add.setText(orderRecipientInfo.getAddress());
+        if(orderRecipientInfo != null){
+            form_tel.setText(orderRecipientInfo.getMobile());
+            form_add.setText(orderRecipientInfo.getAddress());
+        }
         skill.setText(goodsOrderBean.getGoodsSpecValue().getSpecValueName());
         project_name.setText(goodsOrderBean.getName());
         order_time.setText(orderInfoBean.getAppointmentsDate()+"  "+orderInfoBean.getAppointmentsTime());

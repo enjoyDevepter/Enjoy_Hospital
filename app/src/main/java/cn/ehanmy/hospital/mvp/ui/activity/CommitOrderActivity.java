@@ -89,7 +89,10 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         return R.layout.activity_commit_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    private String orderId;
+
     public void update(GoodsBuyResponse response){
+        orderId = response.getOrderId();
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
@@ -172,6 +175,14 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override
                     public void bindView(View view) {
+                        view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(CommitOrderActivity.this,OrderInfoActivity.class);
+                                intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID,orderId);
+                                ArmsUtils.startActivity(intent);
+                            }
+                        });
                         view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
