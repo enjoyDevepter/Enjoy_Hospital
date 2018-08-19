@@ -1,12 +1,14 @@
 package cn.ehanmy.hospital.mvp.model.entity.member_info;
 
+import java.io.Serializable;
+
 /*
 * 		“rank”: {
 			“pointLevelId”: “1”,
 			“pointLevelName”: “普通会员”
 		},
 * */
-public class Rank {
+public class Rank implements Serializable{
     private String pointLevelId;
     private String pointLevelName;
 

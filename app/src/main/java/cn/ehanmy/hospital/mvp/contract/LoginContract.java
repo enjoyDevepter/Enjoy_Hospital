@@ -7,9 +7,9 @@ import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.Observable;
-import cn.ehanmy.hospital.mvp.model.entity.request.HospitalInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.HospitalInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
 
 

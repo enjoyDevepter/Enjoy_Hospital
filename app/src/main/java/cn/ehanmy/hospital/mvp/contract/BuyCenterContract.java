@@ -4,8 +4,8 @@ import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
 import io.reactivex.Observable;
-import cn.ehanmy.hospital.mvp.model.entity.request.MemberInfoRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
 
 
 public interface BuyCenterContract {

@@ -1,4 +1,6 @@
-package cn.ehanmy.hospital.mvp.model.entity.request;
+package cn.ehanmy.hospital.mvp.model.entity.member_info;
+
+import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
 public class MemberInfoRequest extends BaseRequest {
     private String token;

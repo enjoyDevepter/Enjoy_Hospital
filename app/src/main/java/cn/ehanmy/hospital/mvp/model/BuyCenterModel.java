@@ -13,8 +13,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.contract.BuyCenterContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
-import cn.ehanmy.hospital.mvp.model.entity.request.MemberInfoRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
 
 
 @ActivityScope

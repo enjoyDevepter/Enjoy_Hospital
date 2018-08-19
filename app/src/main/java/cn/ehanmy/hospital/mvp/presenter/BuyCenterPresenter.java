@@ -6,15 +6,12 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
-import cn.ehanmy.hospital.mvp.model.entity.request.MemberInfoRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
 import cn.ehanmy.hospital.util.CacheUtil;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 

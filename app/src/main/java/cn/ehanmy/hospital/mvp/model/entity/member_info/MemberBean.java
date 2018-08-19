@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.member_info;
 
 import java.io.Serializable;
 
+/**账号绑定的医院的详情信息。在登录后立刻请求*/
 public class MemberBean implements Serializable{
     private String userName;
     private Rank rank;

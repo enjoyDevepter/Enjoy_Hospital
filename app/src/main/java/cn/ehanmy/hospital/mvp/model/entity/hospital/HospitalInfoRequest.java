@@ -1,4 +1,6 @@
-package cn.ehanmy.hospital.mvp.model.entity.request;
+package cn.ehanmy.hospital.mvp.model.entity.hospital;
+
+import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
 public class HospitalInfoRequest extends BaseRequest {
     private final int cmd = 5051;

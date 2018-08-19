@@ -2,14 +2,10 @@ package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
 
-import com.bumptech.glide.load.Option;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
-import com.jess.arms.integration.cache.Cache;
-import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.PermissionUtil;
 
 import java.util.List;
@@ -21,7 +17,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import cn.ehanmy.hospital.mvp.contract.LoginContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
-import cn.ehanmy.hospital.mvp.model.entity.request.HospitalInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
 import cn.ehanmy.hospital.util.CacheUtil;

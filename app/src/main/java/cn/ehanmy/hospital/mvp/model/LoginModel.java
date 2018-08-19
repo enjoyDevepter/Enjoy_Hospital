@@ -12,9 +12,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.contract.LoginContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
-import cn.ehanmy.hospital.mvp.model.entity.request.HospitalInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.HospitalInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
 
 
