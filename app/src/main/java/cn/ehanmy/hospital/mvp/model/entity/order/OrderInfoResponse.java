@@ -3,7 +3,7 @@ package cn.ehanmy.hospital.mvp.model.entity.order;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 
 public class OrderInfoResponse extends BaseResponse {
-    private OrderInfoRequest order;
+    private OrderInfoBean order;
 
     @Override
     public String toString() {
@@ -12,11 +12,11 @@ public class OrderInfoResponse extends BaseResponse {
                 '}';
     }
 
-    public OrderInfoRequest getOrder() {
+    public OrderInfoBean getOrder() {
         return order;
     }
 
-    public void setOrder(OrderInfoRequest order) {
+    public void setOrder(OrderInfoBean order) {
         this.order = order;
     }
 }

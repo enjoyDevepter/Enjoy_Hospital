@@ -8,6 +8,8 @@ import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 
 /**订单详情*/
 public class OrderInfoBean implements Serializable{
+    private String appointmentsDate;
+    private String appointmentsTime;
     private long coupon;
     private long deductionMoney;
     private long freight;
@@ -31,7 +33,9 @@ public class OrderInfoBean implements Serializable{
     @Override
     public String toString() {
         return "OrderInfoBean{" +
-                "coupon=" + coupon +
+                "appointmentsDate='" + appointmentsDate + '\'' +
+                ", appointmentsTime='" + appointmentsTime + '\'' +
+                ", coupon=" + coupon +
                 ", deductionMoney=" + deductionMoney +
                 ", freight=" + freight +
                 ", money=" + money +
@@ -51,6 +55,22 @@ public class OrderInfoBean implements Serializable{
                 ", orderRecipientInfo=" + orderRecipientInfo +
                 ", hospital=" + hospital +
                 '}';
+    }
+
+    public String getAppointmentsDate() {
+        return appointmentsDate;
+    }
+
+    public void setAppointmentsDate(String appointmentsDate) {
+        this.appointmentsDate = appointmentsDate;
+    }
+
+    public String getAppointmentsTime() {
+        return appointmentsTime;
+    }
+
+    public void setAppointmentsTime(String appointmentsTime) {
+        this.appointmentsTime = appointmentsTime;
     }
 
     public long getCoupon() {
