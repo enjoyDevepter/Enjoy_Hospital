@@ -58,7 +58,6 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
 
     public OrderCenterListAdapter(List<OrderBean> ordres) {
         super(ordres);
-        ordres.add(0,new OrderBean());
     }
 
     @Override

@@ -79,7 +79,9 @@ public class OrderFormCenterModule {
     @ActivityScope
     @Provides
     List<OrderBean> provideOrderBeanList() {
-        return new ArrayList<>();
+        ArrayList<OrderBean> orderBeans = new ArrayList<>();
+        orderBeans.add(new OrderBean());
+        return orderBeans;
     }
 
     @ActivityScope

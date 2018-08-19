@@ -109,6 +109,7 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
                         if (response.isSuccess()) {
                             if(clear){
                                 orderBeanList.clear();
+                                orderBeanList.add(new OrderBean());
                             }
                             currType = type;
                             nextPageIndex = response.getNextPageIndex();
