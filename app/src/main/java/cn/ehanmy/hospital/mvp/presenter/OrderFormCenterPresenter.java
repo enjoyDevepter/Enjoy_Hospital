@@ -90,9 +90,9 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
         mModel.requestOrderListPage(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                    if (clear)
-                        mRootView.showLoading();//显示下拉刷新的进度条
-                    else
+                    if (clear) {
+//                        mRootView.showLoading();//显示下拉刷新的进度条
+                    }else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
