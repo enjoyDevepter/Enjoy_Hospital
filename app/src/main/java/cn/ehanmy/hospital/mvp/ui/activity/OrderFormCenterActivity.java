@@ -1,14 +1,12 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -29,7 +27,6 @@ import butterknife.BindView;
 import cn.ehanmy.hospital.di.component.DaggerOrderFormCenterComponent;
 import cn.ehanmy.hospital.di.module.OrderFormCenterModule;
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
-import cn.ehanmy.hospital.mvp.model.OrderConfirmModel;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
@@ -39,7 +36,6 @@ import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
-import me.jessyan.progressmanager.body.ProgressRequestBody;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -157,7 +153,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
                 switch (viewname){
                     case DETAIL:
                         Intent intent = new Intent(OrderFormCenterActivity.this,OrderInfoActivity.class);
-                        intent.putExtra(OrderInfoActivity.KEY_FOR_DATA,orderCenterListAdapter.getItem(position));
+                        intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID,orderCenterListAdapter.getItem(position).getOrderId());
                         startActivity(intent);
                         break;
                     case PAY:

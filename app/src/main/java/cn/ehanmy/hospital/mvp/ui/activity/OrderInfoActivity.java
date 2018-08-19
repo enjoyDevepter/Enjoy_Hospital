@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -23,15 +24,19 @@ import cn.ehanmy.hospital.R;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**订单详情页面*/
 public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implements OrderInfoContract.View {
 
-    public static final String KEY_FOR_DATA = "data";
+    public static final String KEY_FOR_ORDER_ID = "key_for_order_id";
 
     @BindView(R.id.title_Layout)
     View title;
-
-    private OrderBean order;
+    @BindView(R.id.form_id)
+    TextView form_id;
+    @BindView(R.id.form_state)
+    TextView form_state;
+    @BindView(R.id.form_remark)
+    TextView form_remark;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -51,20 +56,8 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"订单详情");
-        Object data = getIntent().getSerializableExtra(KEY_FOR_DATA);
-        if(data == null || !(data instanceof OrderBean)){
-            ArmsUtils.makeText(this,"详情信息不存在");
-            killMyself();
-            return;
-        }
-
-        order = (OrderBean) data;
-        showOrder();
     }
 
-    private void showOrder(){
-        System.out.println("order = "+order);
-    }
 
     @Override
     public void showLoading() {
