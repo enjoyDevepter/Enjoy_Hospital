@@ -12,6 +12,16 @@ public class OrderBean implements Serializable{
     private String orderType;
     private String orderTypeDesc;
     private String orderStatus;
+
+    public String getOrderStatusDesc() {
+        return orderStatusDesc;
+    }
+
+    public void setOrderStatusDesc(String orderStatusDesc) {
+        this.orderStatusDesc = orderStatusDesc;
+    }
+
+    private String orderStatusDesc;
     private long payMoney;
     private long price;
     private long totalPrice;

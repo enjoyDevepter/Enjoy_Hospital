@@ -29,10 +29,10 @@ public class OrderFormCenterModel extends BaseModel implements OrderFormCenterCo
     @Inject
     Application mApplication;
 
-    public static final int SEARCH_TYPE_UNPAID = 1;
-    public static final int SEARCH_TYPE_SECEND = 2;
-    public static final int SEARCH_TYPE_OK = 3;
-    public static final int SEARCH_TYPE_ALL = 4;
+    public static final String SEARCH_TYPE_UNPAID = "1";
+    public static final String SEARCH_TYPE_SECEND = "2";
+    public static final String SEARCH_TYPE_OK = "5";
+    public static final String SEARCH_TYPE_ALL = null;
 
     @Inject
     public OrderFormCenterModel(IRepositoryManager repositoryManager) {

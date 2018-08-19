@@ -1,13 +1,20 @@
 package cn.ehanmy.hospital.di.module;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ehanmy.hospital.mvp.ui.activity.OrderFormCenterActivity;
+import cn.ehanmy.hospital.mvp.ui.activity.OrderInfoActivity;
+import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
+import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 import dagger.Module;
 import dagger.Provides;
 
@@ -47,7 +54,25 @@ public class OrderFormCenterModule {
     @ActivityScope
     @Provides
     RecyclerView.Adapter provideStoreAdapter(List<OrderBean> list) {
-        return new OrderCenterListAdapter(list);
+        OrderCenterListAdapter orderCenterListAdapter = new OrderCenterListAdapter(list);
+        orderCenterListAdapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, ViewName viewname, int position) {
+                if(position == 0){
+                    return;
+                }
+                switch (viewname){
+                    case DETAIL:
+                        Intent intent = new Intent(ArmsUtils.getContext(),OrderInfoActivity.class);
+                        intent.putExtra(OrderInfoActivity.KEY_FOR_DATA,orderCenterListAdapter.getItem(position));
+                        ArmsUtils.startActivity(intent);
+                        break;
+                    case PAY:
+                        break;
+                }
+            }
+        });
+        return orderCenterListAdapter;
     }
 
 

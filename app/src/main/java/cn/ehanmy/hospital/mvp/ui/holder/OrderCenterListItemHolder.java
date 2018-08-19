@@ -93,9 +93,9 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
             if(goodsOrderBean != null){
                 priceTV.setText(String.format("人民币%.2f", goodsOrderBean.getSalePrice()));
-                projectTV.setText(goodsOrderBean.getTitle());
+                projectTV.setText(goodsOrderBean.getName());
             }
-            statusTV.setText(order.getOrderStatus());
+            statusTV.setText(order.getOrderStatusDesc());
             timeTV.setText(SIMPLE_DATE_FORMAT.format(new Date(order.getOrderTime())));
         }
 //        Observable.just(data.getName())

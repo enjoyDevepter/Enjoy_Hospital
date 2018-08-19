@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,8 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ import butterknife.BindView;
 import cn.ehanmy.hospital.di.component.DaggerOrderFormCenterComponent;
 import cn.ehanmy.hospital.di.module.OrderFormCenterModule;
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
+import cn.ehanmy.hospital.mvp.model.OrderConfirmModel;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
@@ -34,6 +38,8 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
+import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
+import me.jessyan.progressmanager.body.ProgressRequestBody;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -72,12 +78,45 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     @BindView(R.id.contentList)
     RecyclerView contentList;
 
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private CustomProgressDailog progressDailog;
+
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.nextPage();
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return isEnd;
+                }
+            };
+
+            mPaginate = Paginate.with(contentList, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
+
     private int normalColor = Color.parseColor("#333333");
     private int currColor = Color.parseColor("#3DBFE8");
 
     // 当前选中的textview
     private TextView currentTab;
-    private int currentSearchType;
+    private String currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -108,18 +147,34 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
 
-        contentList.setLayoutManager(mLayoutManager);
+        ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.requestOrderList(currentSearchType);
+            }
+        });
+        initPaginate();
     }
+
 
     @Override
     public void showLoading() {
-
+        if(progressDailog == null){
+            progressDailog = new CustomProgressDailog(this);
+            progressDailog.show();
+        }
     }
 
     @Override
     public void hideLoading() {
-
+        if(progressDailog != null && progressDailog.isShowing()){
+            progressDailog.dismiss();
+            progressDailog = null;
+        }
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -149,25 +204,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     }
 
     public void updateList(List<OrderBean> orderList){
-        OrderCenterListAdapter adapter = new OrderCenterListAdapter(orderList);
-        adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
-                if(position == 0){
-                    return;
-                }
-                switch (viewname){
-                    case DETAIL:
-                        Intent intent = new Intent(OrderFormCenterActivity.this,OrderInfoActivity.class);
-                        intent.putExtra(OrderInfoActivity.KEY_FOR_DATA,adapter.getItem(position));
-                        launchActivity(intent);
-                        break;
-                    case PAY:
-                        break;
-                }
-            }
-        });
-        contentList.setAdapter(adapter);
+        contentList.setAdapter(mAdapter);
     }
 
     private View.OnClickListener onSearchClickListener = new View.OnClickListener(){
@@ -219,10 +256,41 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             }
             currentTab = newText;
             currentTab.setTextColor(currColor);
+            mPresenter.requestOrderList(currentSearchType);
         }
     };
 
     public Activity getActivity(){
         return this;
+    }
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    private boolean isEnd;
+
+    @Override
+    public void setEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
+
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+        this.mPaginate = null;
     }
 }

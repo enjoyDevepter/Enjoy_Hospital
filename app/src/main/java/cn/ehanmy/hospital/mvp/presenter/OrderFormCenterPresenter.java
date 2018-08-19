@@ -11,9 +11,12 @@ import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
+import cn.ehanmy.hospital.mvp.model.entity.User;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -27,6 +30,10 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+
+import static cn.ehanmy.hospital.mvp.model.OrderFormCenterModel.SEARCH_TYPE_ALL;
 
 
 @ActivityScope
@@ -60,29 +67,56 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    void onCreate() {
-        getStores();
+    public void requestOrderList(String type){
+        requestOrderList(1,type,true);
     }
 
-    public void getStores() {
+    public void nextPage(){
+        requestOrderList(nextPageIndex,currType,false);
+    }
+
+    private String currType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
+    private int nextPageIndex = 1;
+
+    private void requestOrderList(int pageIndex,String type,final boolean clear) {
         OrderListRequest request = new OrderListRequest();
-        request.setPageIndex(1);
+        request.setPageIndex(pageIndex);
+        request.setOrderStatus(type);
         request.setPageSize(10);
+
         UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(cacheUserBean.getToken());
 
-
         mModel.requestOrderListPage(request)
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    if (clear)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    if (clear)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new Consumer<OrderListResponse>() {
                     @Override
                     public void accept(OrderListResponse response) throws Exception {
                         if (response.isSuccess()) {
-                            orderBeanList.clear();
-                            orderBeanList.addAll(response.getOrderList());
+                            if(clear){
+                                orderBeanList.clear();
+                            }
+                            currType = type;
+                            nextPageIndex = response.getNextPageIndex();
+                            mRootView.setEnd(nextPageIndex == -1);
+                            List<OrderBean> orderList = response.getOrderList();
+                            orderBeanList.addAll(orderList);
                             mAdapter.notifyDataSetChanged();
+                            mRootView.hideLoading();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
