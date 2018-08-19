@@ -3,6 +3,7 @@ package cn.ehanmy.hospital.mvp.model.entity.order;
 import java.io.Serializable;
 import java.util.List;
 
+import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 
 public class OrderBean implements Serializable{
@@ -12,6 +13,16 @@ public class OrderBean implements Serializable{
     private String orderType;
     private String orderTypeDesc;
     private String orderStatus;
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    private String searchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
 
     public String getOrderStatusDesc() {
         return orderStatusDesc;

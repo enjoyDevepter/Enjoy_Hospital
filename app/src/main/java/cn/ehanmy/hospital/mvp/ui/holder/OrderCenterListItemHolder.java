@@ -26,6 +26,7 @@ import java.util.Date;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
@@ -64,6 +65,8 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
     View payV;
     @BindView(R.id.button_group)
     View buttonGroup;
+    @BindView(R.id.order_secend_price)
+    TextView order_secend_price;
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
@@ -76,6 +79,12 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
 
     @Override
     public void setData(OrderBean order, int position) {
+        String orderStatus = order.getSearchType();
+        if(orderStatus == OrderFormCenterModel.SEARCH_TYPE_ALL || OrderFormCenterModel.SEARCH_TYPE_SECEND.equals(orderStatus)){
+            order_secend_price.setVisibility(View.VISIBLE);
+        }else{
+            order_secend_price.setVisibility(View.GONE);
+        }
         if(position == 0){
             orderIdTV.setText("编号");
             phoneTV.setText("手机");
@@ -83,16 +92,18 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             projectTV.setText("项目");
             statusTV.setText("状态");
             timeTV.setText("时间");
+            order_secend_price.setText("尾款");
             buttonGroup.setVisibility(View.INVISIBLE);
             parent.setBackgroundColor(Color.parseColor("#E4E4E4"));
         }else{
             parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
             buttonGroup.setVisibility(View.VISIBLE);
             orderIdTV.setText(order.getOrderId());
-            phoneTV.setText("13112345678");
             GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
+            order_secend_price.setText(String.format("¥%.0f", goodsOrderBean.getTailMoney()));
+            phoneTV.setText("13112345678");
             if(goodsOrderBean != null){
-                priceTV.setText(String.format("人民币%.2f", goodsOrderBean.getSalePrice()));
+                priceTV.setText(String.format("¥%.0f", goodsOrderBean.getSalePrice()));
                 projectTV.setText(goodsOrderBean.getName());
             }
             statusTV.setText(order.getOrderStatusDesc());
@@ -129,5 +140,6 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
         this.timeTV = null;
         this.detailV = null;
         this.payV = null;
+        order_secend_price = null;
     }
 }

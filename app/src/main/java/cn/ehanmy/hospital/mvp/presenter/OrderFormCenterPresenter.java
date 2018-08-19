@@ -116,6 +116,9 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
                             mRootView.setEnd(nextPageIndex == -1);
                             List<OrderBean> orderList = response.getOrderList();
                             orderBeanList.addAll(orderList);
+                            for(OrderBean ob : orderBeanList){
+                                ob.setSearchType(currType);
+                            }
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
                         } else {
