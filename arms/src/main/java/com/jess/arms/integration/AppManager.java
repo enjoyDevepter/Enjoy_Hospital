@@ -21,10 +21,13 @@ import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jess.arms.base.delegate.AppLifecycles;
@@ -167,8 +170,13 @@ public final class AppManager {
 
         Toast toast = Toast.makeText(getCurrentActivity(), message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        View view = toast.getView();
+        ViewGroup view = (ViewGroup) toast.getView();
         view.setBackgroundResource(android.R.color.white);
+        View childAt = view.getChildAt(0);
+        if(childAt != null && childAt instanceof TextView){
+            ((TextView) childAt).setTextColor(Color.BLACK);
+            childAt.setPadding(10,0,10,0);
+        }
         toast.setView(view);
         toast.show();
     }
