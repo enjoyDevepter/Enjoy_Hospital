@@ -283,6 +283,10 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
 //                typeStatusV.setBackground(typeV.isSelected() ? asceD : descD);
                 break;
             case R.id.sale_layout:
+                if(typeV.isSelected()){
+                    showFilter(false);
+                    return;
+                }
                 saleV.setSelected(!saleV.isSelected());
                 priceV.setSelected(false);
                 provideCache().put("orderByField", "sales");
@@ -295,6 +299,10 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 showFilter(false);
                 break;
             case R.id.price_layout:
+                if(typeV.isSelected()){
+                    showFilter(false);
+                    return;
+                }
                 priceV.setSelected(!priceV.isSelected());
                 saleV.setSelected(false);
                 provideCache().put("orderByField", "salesPrice");
@@ -325,6 +333,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
 
     private int currentSecentIndex = 0;
     private int currentThirdIndex = 0;
+    private int cacheSecendIndex = 0;
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
@@ -335,7 +344,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
                 }
-                currentSecentIndex = position;
+                cacheSecendIndex = position;
                 secondAdapter.notifyDataSetChanged();
                 if (position == 0) {
                     currentThirdIndex = -1;
@@ -360,6 +369,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 break;
             case R.layout.goods_filter_third_item:
                 currentThirdIndex = position;
+                currentSecentIndex = cacheSecendIndex;
                 for(Category c1 : secondAdapter.getInfos()){
                     if(c1 == null || c1.getGoodsCategoryList() == null){
                         continue;
