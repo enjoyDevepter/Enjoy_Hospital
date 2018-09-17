@@ -90,6 +90,9 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
                         if (response.isSuccess()) {
 //                            mRootView.refreshNaviTitle(response.getGoodsCategoryList());
                             categories.clear();
+                            Category e = new Category();
+                            e.setName("全部商品");
+                            categories.add(e);
                             Category category = response.getGoodsCategoryList().get(0);
                             if(category != null){
                                 categories.addAll(category.getGoodsCategoryList());
@@ -111,8 +114,11 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
 
         GoodsPageRequest request = new GoodsPageRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
-        request.setCategoryId((String) mRootView.getCache().get("categoryId"));
-        request.setSecondCategoryId((String) (mRootView.getCache().get("secondCategoryId")));
+        Object secondCategoryId = mRootView.getCache().get("secondCategoryId");
+        if(secondCategoryId != null){
+            request.setSecondCategoryId((String) secondCategoryId);
+            request.setCategoryId((String) mRootView.getCache().get("categoryId"));
+        }
         request.setPageIndex(1);
         request.setPageSize(10);
         UserBean cacheUserBean = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER);

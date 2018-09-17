@@ -54,8 +54,10 @@ import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**商品列表页面*/
-public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implements GoodsListContract.View ,View.OnClickListener,DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+/**
+ * 商品列表页面
+ */
+public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implements GoodsListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.title_Layout)
     View title;
@@ -129,10 +131,10 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"下单中心");
+        new TitleUtil(title, this, "下单中心");
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        thirdFilterRV.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        thirdFilterRV.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 //        ((GoodsListAdapter) mAdapter).setOnItemClickListener(this);
 
@@ -145,7 +147,8 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
-        mPresenter.getCategory();}
+        mPresenter.getCategory();
+    }
 
     @Override
     public void showLoading() {
@@ -178,6 +181,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     public Activity getActivity() {
         return this;
     }
+
     @Override
     public void refreshNaviTitle(List<Category> categories) {
     }
@@ -187,19 +191,21 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         if (show && secondAdapter.getInfos().size() > 0) {
             secondAdapter.notifyDataSetChanged();
             thirdCategoryList = new ArrayList<>();
-            thirdCategoryList.addAll(secondAdapter.getInfos().get(currentSecentIndex).getGoodsCategoryList());
+            if (currentSecentIndex != 0) {
+                thirdCategoryList.addAll(secondAdapter.getInfos().get(currentSecentIndex).getGoodsCategoryList());
+            }
             thirdAdapter = new GoodsFilterThirdAdapter(thirdCategoryList);
             ArmsUtils.configRecyclerView(thirdFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             List<Category> grands = thirdAdapter.getInfos();
             for (int i = 0; i < grands.size(); i++) {
                 grands.get(i).setChoice(i == currentThirdIndex ? true : false);
             }
+            thirdFilterRV.setAdapter(thirdAdapter);
+            thirdAdapter.setOnItemClickListener(this);
             List<Category> childs = secondAdapter.getInfos();
             for (int i = 0; i < childs.size(); i++) {
                 childs.get(i).setChoice(i == currentSecentIndex ? true : false);
             }
-            thirdFilterRV.setAdapter(thirdAdapter);
-            thirdAdapter.setOnItemClickListener(this);
             filterV.setVisibility(VISIBLE);
             filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_in));
             maskV.setVisibility(VISIBLE);
@@ -232,7 +238,6 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     public void setLoadedAllItems(boolean has) {
         this.hasLoadedAllItems = has;
     }
-
 
 
     /**
@@ -324,6 +329,13 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 }
                 currentSecentIndex = position;
                 secondAdapter.notifyDataSetChanged();
+                if (position == 0) {
+                    provideCache().put("secondCategoryId", null);
+                    showFilter(false);
+                    typeTV.setText("全部商品");
+                    mPresenter.getGoodsList(true);
+                    return;
+                }
                 thirdCategoryList.clear();
                 thirdCategoryList.addAll(childs.get(position).getGoodsCategoryList());
                 provideCache().put("secondCategoryId", childs.get(position).getCategoryId());
