@@ -25,6 +25,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
@@ -98,12 +99,17 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             e.printStackTrace();
         }
         StatusBarUtil.setStatusBarMode(this, true, android.R.color.white);
-
+        ImmersionBar.with(this)
+                .fitsSystemWindows(true)
+                .statusBarDarkFont(true)
+                .statusBarColor(android.R.color.white)
+                .init();
         initData(savedInstanceState);
     }
 
     @Override
     protected void onDestroy() {
+        ImmersionBar.with(this).destroy();
         super.onDestroy();
         if (mUnbinder != null && mUnbinder != Unbinder.EMPTY)
             mUnbinder.unbind();
