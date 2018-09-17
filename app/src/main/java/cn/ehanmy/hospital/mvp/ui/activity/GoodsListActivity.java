@@ -3,6 +3,7 @@ package cn.ehanmy.hospital.mvp.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -189,7 +190,6 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     private void showFilter(boolean show) {
         typeV.setSelected(show);
         if (show && secondAdapter.getInfos().size() > 0) {
-            secondAdapter.notifyDataSetChanged();
             thirdCategoryList = new ArrayList<>();
             if (currentSecentIndex != 0) {
                 thirdCategoryList.addAll(secondAdapter.getInfos().get(currentSecentIndex).getGoodsCategoryList());
@@ -200,12 +200,13 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
             for (int i = 0; i < grands.size(); i++) {
                 grands.get(i).setChoice(i == currentThirdIndex ? true : false);
             }
-            thirdFilterRV.setAdapter(thirdAdapter);
+            secondAdapter.notifyDataSetChanged();
             thirdAdapter.setOnItemClickListener(this);
             List<Category> childs = secondAdapter.getInfos();
             for (int i = 0; i < childs.size(); i++) {
                 childs.get(i).setChoice(i == currentSecentIndex ? true : false);
             }
+            thirdFilterRV.setAdapter(thirdAdapter);
             filterV.setVisibility(VISIBLE);
             filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_in));
             maskV.setVisibility(VISIBLE);
@@ -283,18 +284,25 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 break;
             case R.id.sale_layout:
                 saleV.setSelected(!saleV.isSelected());
+                priceV.setSelected(false);
                 provideCache().put("orderByField", "sales");
                 provideCache().put("orderByAsc", saleTV.isSelected());
-                saleTV.setTextColor(choiceColor);
+                saleTV.setTextColor(saleV.isSelected() ? choiceColor : Color.BLACK);
+                priceTV.setTextColor(Color.BLACK);
                 saleStatusV.setBackground(saleV.isSelected() ? asceD : descD);
+                priceStautsV.setBackground(descD);
                 mPresenter.getGoodsList(true);
+                showFilter(false);
                 break;
             case R.id.price_layout:
                 priceV.setSelected(!priceV.isSelected());
+                saleV.setSelected(false);
                 provideCache().put("orderByField", "salesPrice");
                 provideCache().put("orderByAsc", priceV.isSelected());
-                priceTV.setTextColor(choiceColor);
+                saleTV.setTextColor(Color.BLACK);
+                priceTV.setTextColor(priceV.isSelected() ? choiceColor : Color.BLACK);
                 priceStautsV.setBackground(priceV.isSelected() ? asceD : descD);
+                saleStatusV.setBackground(descD);
                 showFilter(false);
                 mPresenter.getGoodsList(true);
                 break;
@@ -330,19 +338,36 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 currentSecentIndex = position;
                 secondAdapter.notifyDataSetChanged();
                 if (position == 0) {
+                    currentThirdIndex = -1;
                     provideCache().put("secondCategoryId", null);
+                    provideCache().put("categoryId", null);
                     showFilter(false);
                     typeTV.setText("全部商品");
                     mPresenter.getGoodsList(true);
+                    for(Category c1 : secondAdapter.getInfos()){
+                        if(c1 == null || c1.getGoodsCategoryList() == null){
+                            continue;
+                        }
+                        for(Category c2 : c1.getGoodsCategoryList()){
+                            c2.setChoice(false);
+                        }
+                    }
                     return;
                 }
                 thirdCategoryList.clear();
                 thirdCategoryList.addAll(childs.get(position).getGoodsCategoryList());
-                provideCache().put("secondCategoryId", childs.get(position).getCategoryId());
                 thirdAdapter.notifyDataSetChanged();
                 break;
             case R.layout.goods_filter_third_item:
                 currentThirdIndex = position;
+                for(Category c1 : secondAdapter.getInfos()){
+                    if(c1 == null || c1.getGoodsCategoryList() == null){
+                        continue;
+                    }
+                    for(Category c2 : c1.getGoodsCategoryList()){
+                        c2.setChoice(false);
+                    }
+                }
                 List<Category> grands = thirdAdapter.getInfos();
                 for (int i = 0; i < grands.size(); i++) {
                     grands.get(i).setChoice(i == position ? true : false);
@@ -351,6 +376,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 typeTV.setTextColor(choiceColor);
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getCategoryId());
+                provideCache().put("secondCategoryId", secondAdapter.getInfos().get(currentSecentIndex).getCategoryId());
                 showFilter(false);
                 mPresenter.getGoodsList(true);
                 break;

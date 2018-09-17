@@ -115,9 +115,10 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
         GoodsPageRequest request = new GoodsPageRequest();
         Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         Object secondCategoryId = mRootView.getCache().get("secondCategoryId");
-        if(secondCategoryId != null){
+        Object categoryId = mRootView.getCache().get("categoryId");
+        if(secondCategoryId != null && categoryId != null){
             request.setSecondCategoryId((String) secondCategoryId);
-            request.setCategoryId((String) mRootView.getCache().get("categoryId"));
+            request.setCategoryId((String) categoryId);
         }
         request.setPageIndex(1);
         request.setPageSize(10);
