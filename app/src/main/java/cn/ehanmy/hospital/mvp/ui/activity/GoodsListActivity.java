@@ -187,9 +187,17 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         if (show && secondAdapter.getInfos().size() > 0) {
             secondAdapter.notifyDataSetChanged();
             thirdCategoryList = new ArrayList<>();
-            thirdCategoryList.addAll(secondAdapter.getInfos().get(0).getGoodsCategoryList());
+            thirdCategoryList.addAll(secondAdapter.getInfos().get(currentSecentIndex).getGoodsCategoryList());
             thirdAdapter = new GoodsFilterThirdAdapter(thirdCategoryList);
             ArmsUtils.configRecyclerView(thirdFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            List<Category> grands = thirdAdapter.getInfos();
+            for (int i = 0; i < grands.size(); i++) {
+                grands.get(i).setChoice(i == currentThirdIndex ? true : false);
+            }
+            List<Category> childs = secondAdapter.getInfos();
+            for (int i = 0; i < childs.size(); i++) {
+                childs.get(i).setChoice(i == currentSecentIndex ? true : false);
+            }
             thirdFilterRV.setAdapter(thirdAdapter);
             thirdAdapter.setOnItemClickListener(this);
             filterV.setVisibility(VISIBLE);
@@ -302,6 +310,9 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         return provideCache();
     }
 
+    private int currentSecentIndex = 0;
+    private int currentThirdIndex = 0;
+
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {
         // 如何区分
@@ -311,6 +322,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
                 }
+                currentSecentIndex = position;
                 secondAdapter.notifyDataSetChanged();
                 thirdCategoryList.clear();
                 thirdCategoryList.addAll(childs.get(position).getGoodsCategoryList());
@@ -318,6 +330,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 thirdAdapter.notifyDataSetChanged();
                 break;
             case R.layout.goods_filter_third_item:
+                currentThirdIndex = position;
                 List<Category> grands = thirdAdapter.getInfos();
                 for (int i = 0; i < grands.size(); i++) {
                     grands.get(i).setChoice(i == position ? true : false);
