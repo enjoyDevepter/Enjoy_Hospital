@@ -4,7 +4,26 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
 public class GoodsPageRequest extends BaseRequest {
+    private String secondCategoryId;
+    private String categoryId;
     private int pageIndex;  // 从1开始
+    private int pageSize;
+    private OrderBy orderBy;
+    private String token;
+    private int cmd = 5101;
+
+    @Override
+    public String toString() {
+        return "GoodsPageRequest{" +
+                "secondCategoryId='" + secondCategoryId + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", pageIndex=" + pageIndex +
+                ", pageSize=" + pageSize +
+                ", orderBy=" + orderBy +
+                ", token='" + token + '\'' +
+                ", cmd=" + cmd +
+                '}';
+    }
 
     public int getPageSize() {
         return pageSize;
@@ -14,21 +33,20 @@ public class GoodsPageRequest extends BaseRequest {
         this.pageSize = pageSize;
     }
 
-    private int pageSize;
-    private OrderBy orderBy;
-    private String token;
-    private int cmd = 5101;
+    public String getSecondCategoryId() {
+        return secondCategoryId;
+    }
 
+    public void setSecondCategoryId(String secondCategoryId) {
+        this.secondCategoryId = secondCategoryId;
+    }
 
-    @Override
-    public String toString() {
-        return "GoodsPageRequest{" +
-                "pageIndex=" + pageIndex +
-                ", pageSize=" + pageSize +
-                ", orderBy=" + orderBy +
-                ", token='" + token + '\'' +
-                ", cmd=" + cmd +
-                '}';
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public int getCmd() {

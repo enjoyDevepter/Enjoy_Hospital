@@ -79,6 +79,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
+
     private CustomProgressDailog progressDailog;
 
     private void initPaginate() {

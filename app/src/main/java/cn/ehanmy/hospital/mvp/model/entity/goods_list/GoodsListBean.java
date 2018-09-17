@@ -2,18 +2,19 @@ package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
 import java.io.Serializable;
 
+/**下单中心，在列表中展示的商品的实体类*/
 public class GoodsListBean implements Serializable{
     private int attention;
     private int cnt;
-    private float costPrice;
+    private double costPrice;
     private int favorite;
     private String goodsId;
     private GoodsSpecValueBean goodsSpecValue;
     private String image;
-    private float marketPrice;
+    private double marketPrice;
     private String merchId;
     private String name;
-    private float salePrice;
+    private double salePrice;
     private int sales;
     private String title;
 
@@ -63,11 +64,11 @@ public class GoodsListBean implements Serializable{
         this.cnt = cnt;
     }
 
-    public float getCostPrice() {
+    public double getCostPrice() {
         return costPrice;
     }
 
-    public void setCostPrice(float costPrice) {
+    public void setCostPrice(double costPrice) {
         this.costPrice = costPrice;
     }
 
@@ -103,11 +104,11 @@ public class GoodsListBean implements Serializable{
         this.image = image;
     }
 
-    public float getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public void setMarketPrice(float marketPrice) {
+    public void setMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
     }
 
@@ -127,11 +128,11 @@ public class GoodsListBean implements Serializable{
         this.name = name;
     }
 
-    public float getSalePrice() {
+    public double getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(float salePrice) {
+    public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
     }
 
