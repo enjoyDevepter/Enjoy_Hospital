@@ -4,6 +4,7 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -44,6 +45,9 @@ public interface InterfaceService {
 
     @POST("gateway")
     Observable<GoodsConfirmResponse> confirmGoods(@Body GoodsConfirmRequest request);
+
+    @POST("gateway")
+    Observable<GoodsConfirmResponse> confirmGoodsWithSpec(@Body GoodsConfirmWithSpecRequest request);
 
     @POST("gateway")
     Observable<GoodsBuyResponse> buyGoods(@Body GoodsBuyRequest request);

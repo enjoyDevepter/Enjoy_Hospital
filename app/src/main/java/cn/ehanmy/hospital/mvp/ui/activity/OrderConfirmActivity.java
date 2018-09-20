@@ -6,7 +6,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,35 +175,81 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         ViewGroup childAt = (ViewGroup) skill_list.getChildAt(0);
         childAt.setSelected(true);
         ((TextView)childAt.getChildAt(0)).setTextColor(Color.WHITE);
-        skill_list.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+        TagFlowLayout.OnTagClickListener onTagClickListener = new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                if(view.isSelected()){
+                if (view.isSelected()) {
                     return true;
                 }
-                int childCount = parent.getChildCount();
-                for(int i = 0;i<childCount;i++){
-                    View childAt = parent.getChildAt(i);
-                    childAt.setSelected(false);
-                    if(childAt instanceof ViewGroup && ((ViewGroup) childAt).getChildAt(0) instanceof TextView){
-                        ((TextView)((ViewGroup) childAt).getChildAt(0)).setTextColor(Color.BLACK);
-                    }
-                }
-
-                view.setSelected(true);
-                if(view instanceof ViewGroup && ((ViewGroup) view).getChildAt(0) instanceof TextView){
-                    TextView childAt1 = (TextView) ((ViewGroup) view).getChildAt(0);
-                    childAt1.setTextColor(Color.WHITE);
-                    skill.setText(childAt1.getText());
-                }
-
+                updateSpecSelect(view, parent);
+                currGoodsSpec = goodsSpecValueList.get(position);
+                currGoodsSpecIndex = position;
+                requestConfirmInfo();
+                expend.setVisibility(View.GONE);
                 return true;
             }
-        });
+        };
+        updateSpecSelect(skill_list.getChildAt(currGoodsSpecIndex),skill_list);
+        skill_list.setOnTagClickListener(onTagClickListener);
     }
+
+    private void updateSpecSelect(View view, FlowLayout parent) {
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = parent.getChildAt(i);
+            childAt.setSelected(false);
+            if (childAt instanceof ViewGroup && ((ViewGroup) childAt).getChildAt(0) instanceof TextView) {
+                ((TextView) ((ViewGroup) childAt).getChildAt(0)).setTextColor(Color.BLACK);
+            }
+        }
+
+        view.setSelected(true);
+        if (view instanceof ViewGroup && ((ViewGroup) view).getChildAt(0) instanceof TextView) {
+            TextView childAt1 = (TextView) ((ViewGroup) view).getChildAt(0);
+            childAt1.setTextColor(Color.WHITE);
+            skill.setText(childAt1.getText());
+        }
+    }
+
+    private void requestConfirmInfo(){
+        if(currGoodsSpec == null){
+            mPresenter.requestConfirmInfo(money);
+        }else{
+            mPresenter.requestConfirmInfoWithSpec(money,currGoodsSpec.getSpecValueId());
+        }
+    }
+
+    private GoodsSpecValueBean currGoodsSpec = null;
+    private int currGoodsSpecIndex = 0;
+    private long money = 0;
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        xiaofeibi_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateMoney(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        xiaofeibi_edit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    xiaofeibi_edit.setText(""+money);
+                    requestConfirmInfo();
+                }
+            }
+        });
         new TitleUtil(title,this,"确认订单");
         expend_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,20 +276,27 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
                 Intent intent = new Intent(ArmsUtils.getContext(),CommitOrderActivity.class);
                 intent.putExtra(CommitOrderActivity.KEY_FOR_ORDER_INDO,goodsConfirmResponse);
                 intent.putExtra(CommitOrderActivity.KEY_FOR_REMARK,remark_edit.getText().toString());
-                String s = xiaofeibi_edit.getText().toString();
-                if(!TextUtils.isEmpty(s)){
-                    int money = Integer.parseInt(s);
-                    if(money * 100 > balance){
-                        ArmsUtils.makeText(OrderConfirmActivity.this,"消费币不足");
-                        return;
-                    }
-                    intent.putExtra(CommitOrderActivity.KEY_FOR_MONEY,money);
-                }
+                updateMoney(xiaofeibi_edit.getText());
+                intent.putExtra(CommitOrderActivity.KEY_FOR_MONEY,money);
                 ArmsUtils.startActivity(intent);
             }
         });
     }
 
+    private void updateMoney(CharSequence text){
+        if(text == null || TextUtils.isEmpty(text.toString())){
+            money = 0;
+        }else{
+            try{
+                money = Integer.parseInt(text.toString());
+                if(money * 100 > balance){
+                    money = balance / 100;
+                }
+            }catch (Exception e){
+                money = 0;
+            }
+        }
+    }
 
     @Override
     public void showLoading() {

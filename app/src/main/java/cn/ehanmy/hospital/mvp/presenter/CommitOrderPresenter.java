@@ -59,7 +59,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
         Intent intent = mRootView.getActivity().getIntent();
         GoodsConfirmResponse goodsConfirmResponse = (GoodsConfirmResponse) intent.getSerializableExtra(CommitOrderActivity.KEY_FOR_ORDER_INDO);
         String remark = intent.getStringExtra(CommitOrderActivity.KEY_FOR_REMARK);
-        int money = intent.getIntExtra(CommitOrderActivity.KEY_FOR_MONEY,0);
+        long money = intent.getIntExtra(CommitOrderActivity.KEY_FOR_MONEY,0);
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
         UserBean userBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
 

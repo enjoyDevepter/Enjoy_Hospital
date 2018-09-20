@@ -1,22 +1,24 @@
 package cn.ehanmy.hospital.mvp.model.entity.request;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmBean;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmWithSpecBean;
 
 // 2.3.2	获取医美项目确认信息
-public class GoodsConfirmRequest extends BaseRequest {
+public class GoodsConfirmWithSpecRequest extends BaseRequest {
     private String token;
-    private GoodsConfirmBean goods;
+    private GoodsConfirmWithSpecBean goods;
     private String memberId;
     private long money;
-    private final int cmd = 5102;
+    private final int cmd = 5104;
 
     @Override
     public String toString() {
-        return "GoodsConfirmRequest{" +
+        return "GoodsConfirmWithSpecRequest{" +
                 "token='" + token + '\'' +
                 ", goods=" + goods +
                 ", memberId='" + memberId + '\'' +
                 ", money=" + money +
+                ", cmd=" + cmd +
                 '}';
     }
 
@@ -28,11 +30,11 @@ public class GoodsConfirmRequest extends BaseRequest {
         this.token = token;
     }
 
-    public GoodsConfirmBean getGoods() {
+    public GoodsConfirmWithSpecBean getGoods() {
         return goods;
     }
 
-    public void setGoods(GoodsConfirmBean goods) {
+    public void setGoods(GoodsConfirmWithSpecBean goods) {
         this.goods = goods;
     }
 
@@ -50,5 +52,9 @@ public class GoodsConfirmRequest extends BaseRequest {
 
     public void setMoney(long money) {
         this.money = money;
+    }
+
+    public int getCmd() {
+        return cmd;
     }
 }

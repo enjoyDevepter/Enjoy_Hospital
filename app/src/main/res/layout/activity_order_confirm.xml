@@ -266,6 +266,7 @@
                     <EditText
                         android:id="@+id/xiaofeibi_edit"
                         android:layout_width="36dp"
+                        android:inputType="number"
                         android:layout_height="17dp"
                         android:background="@drawable/xiaofeibi_edit_back" />
 

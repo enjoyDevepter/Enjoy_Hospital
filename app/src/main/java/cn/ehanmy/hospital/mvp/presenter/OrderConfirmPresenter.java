@@ -8,7 +8,11 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.utils.RxLifecycleUtils;
 
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmWithSpecBean;
+import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
+import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
@@ -23,6 +27,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.OrderConfirmContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 @ActivityScope
@@ -51,7 +56,11 @@ public class OrderConfirmPresenter extends BasePresenter<OrderConfirmContract.Mo
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void requestConfirmInfo(){
+    public void init() {
+        requestConfirmInfo(0);
+    }
+
+    public void requestConfirmInfo(long money) {
         GoodsListBean goodsListBean = (GoodsListBean) mRootView.getActivity().getIntent().getSerializableExtra(OrderConfirmActivity.KEY_FOR_GOODS_INFO);
         GoodsConfirmRequest goodsConfirmRequest = new GoodsConfirmRequest();
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
@@ -62,7 +71,8 @@ public class OrderConfirmPresenter extends BasePresenter<OrderConfirmContract.Mo
         goodsConfirmBean.setNums(1);
         goodsConfirmBean.setSalePrice(goodsListBean.getSalePrice());
         goodsConfirmRequest.setGoods(goodsConfirmBean);
-        goodsConfirmRequest.setToken(((UserBean)CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER)).getToken());
+        goodsConfirmRequest.setMoney(money);
+        goodsConfirmRequest.setToken(((UserBean) CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER)).getToken());
 
         mModel.confirmGoods(goodsConfirmRequest).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,6 +82,38 @@ public class OrderConfirmPresenter extends BasePresenter<OrderConfirmContract.Mo
                     } else {
                         mRootView.showMessage(s.getRetDesc());
                         mRootView.killMyself();
+                    }
+                });
+    }
+
+    public void requestConfirmInfoWithSpec(long money, String specValueId) {
+        GoodsListBean goodsListBean = (GoodsListBean) mRootView.getActivity().getIntent().getSerializableExtra(OrderConfirmActivity.KEY_FOR_GOODS_INFO);
+        GoodsConfirmWithSpecRequest goodsConfirmRequest = new GoodsConfirmWithSpecRequest();
+        MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
+        goodsConfirmRequest.setMemberId(memberBean.getMemberId());
+        GoodsConfirmWithSpecBean goodsConfirmBean = new GoodsConfirmWithSpecBean();
+        goodsConfirmBean.setSpecValueId(specValueId);
+        goodsConfirmBean.setGoodsId(goodsListBean.getGoodsId());
+        goodsConfirmBean.setMerchId(goodsListBean.getMerchId());
+        goodsConfirmBean.setNums(1);
+        goodsConfirmBean.setSalePrice(goodsListBean.getSalePrice());
+        goodsConfirmRequest.setGoods(goodsConfirmBean);
+        goodsConfirmRequest.setMoney(money);
+        goodsConfirmRequest.setToken(((UserBean) CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER)).getToken());
+
+        mModel.confirmGoodsWithSpec(goodsConfirmRequest).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoodsConfirmResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(GoodsConfirmResponse response) {
+
+                        if (response.isSuccess()) {
+                            mRootView.update(response);
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                            mRootView.killMyself();
+                        }
                     }
                 });
     }

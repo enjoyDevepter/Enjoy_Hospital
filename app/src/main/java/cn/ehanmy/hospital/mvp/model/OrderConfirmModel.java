@@ -10,6 +10,7 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.contract.OrderConfirmContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
@@ -40,5 +41,10 @@ public class OrderConfirmModel extends BaseModel implements OrderConfirmContract
     public Observable<GoodsConfirmResponse> confirmGoods(GoodsConfirmRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .confirmGoods(request);
+    }
+    @Override
+    public Observable<GoodsConfirmResponse> confirmGoodsWithSpec(GoodsConfirmWithSpecRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .confirmGoodsWithSpec(request);
     }
 }

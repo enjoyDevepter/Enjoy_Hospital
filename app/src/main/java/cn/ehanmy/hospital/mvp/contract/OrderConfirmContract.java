@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
+import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
@@ -20,5 +21,6 @@ public interface OrderConfirmContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GoodsConfirmResponse> confirmGoods(GoodsConfirmRequest request);
+        Observable<GoodsConfirmResponse> confirmGoodsWithSpec(GoodsConfirmWithSpecRequest request);
     }
 }

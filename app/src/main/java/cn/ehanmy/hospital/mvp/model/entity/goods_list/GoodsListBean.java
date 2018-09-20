@@ -18,6 +18,7 @@ public class GoodsListBean implements Serializable{
     private int sales;
     private String title;
 
+
     @Override
     public String toString() {
         return "GoodsListBean{" +
