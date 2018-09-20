@@ -10,8 +10,8 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.SimpleRequest;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.contract.GoodsListContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
@@ -47,7 +47,7 @@ public class GoodsListModel extends BaseModel implements GoodsListContract.Model
     }
 
     @Override
-    public Observable<CategoryResponse> getCategory(SimpleRequest request) {
+    public Observable<CategoryResponse> getCategory(CategoryRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .getCategory(request);
     }

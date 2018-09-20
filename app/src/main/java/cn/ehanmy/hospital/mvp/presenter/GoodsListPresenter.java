@@ -13,12 +13,11 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.SimpleRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -80,7 +79,7 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
             mRootView.refreshNaviTitle((List<Category>) cache.get("category"));
             return;
         }
-        SimpleRequest request = new SimpleRequest();
+        CategoryRequest request = new CategoryRequest();
         mModel.getCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

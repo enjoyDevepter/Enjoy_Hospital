@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.hospital;
 
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
+// 2.2.3	获取医院信息
 public class HospitalInfoRequest extends BaseRequest {
     private final int cmd = 5051;
     private String token;

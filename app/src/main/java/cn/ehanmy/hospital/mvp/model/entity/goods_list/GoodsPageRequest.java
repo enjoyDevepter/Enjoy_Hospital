@@ -2,7 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
-
+// 2.3.1	获取医美项目列表
 public class GoodsPageRequest extends BaseRequest {
     private String secondCategoryId;
     private String categoryId;

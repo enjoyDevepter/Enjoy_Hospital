@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.order;
 
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
+// 2.4.1	获取医美项目订单列表
 public class OrderListRequest extends BaseRequest {
     private final int cmd = 5151;
     private int pageIndex;

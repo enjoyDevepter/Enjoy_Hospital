@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.order;
 
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
+// 2.4.2	获取医美项目订单详情
 public class OrderInfoRequest extends BaseRequest {
     private String orderId;
     private String token;

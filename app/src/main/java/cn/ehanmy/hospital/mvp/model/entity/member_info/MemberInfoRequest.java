@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.member_info;
 
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
+// 2.2.2	获取APP会员信息
 public class MemberInfoRequest extends BaseRequest {
     private String token;
     private String username;

@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.model.entity.request;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmBean;
 
+// 2.3.2	获取医美项目确认信息
 public class GoodsConfirmRequest extends BaseRequest {
     private String token;
     private GoodsConfirmBean goods;

@@ -10,7 +10,7 @@ import java.util.List;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.SimpleRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageResponse;
@@ -30,6 +30,6 @@ public interface GoodsListContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GoodsPageResponse> requestGoodsPage(GoodsPageRequest request);
-        Observable<CategoryResponse> getCategory(SimpleRequest request);
+        Observable<CategoryResponse> getCategory(CategoryRequest request);
     }
 }

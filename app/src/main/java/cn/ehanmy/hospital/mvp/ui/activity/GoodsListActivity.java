@@ -348,6 +348,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 secondAdapter.notifyDataSetChanged();
                 if (position == 0) {
                     currentThirdIndex = -1;
+                    currentSecentIndex = 0;
                     provideCache().put("secondCategoryId", null);
                     provideCache().put("categoryId", null);
                     showFilter(false);

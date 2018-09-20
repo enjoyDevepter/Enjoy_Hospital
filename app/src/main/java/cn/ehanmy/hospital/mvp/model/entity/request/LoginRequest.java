@@ -4,10 +4,11 @@ package cn.ehanmy.hospital.mvp.model.entity.request;
  * Created by guomin on 2018/7/25.
  */
 
+// 2.2.1	APP用户名登录
 public class LoginRequest extends BaseRequest {
     private String username;
     private String password;
-    private int cmd = 5001;
+    private final int cmd = 5001;
 
     public String getUsername() {
         return username;
@@ -27,10 +28,6 @@ public class LoginRequest extends BaseRequest {
 
     public int getCmd() {
         return cmd;
-    }
-
-    public void setCmd(int cmd) {
-        this.cmd = cmd;
     }
 
     @Override
