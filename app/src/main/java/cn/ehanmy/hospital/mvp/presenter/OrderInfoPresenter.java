@@ -53,7 +53,7 @@ public class OrderInfoPresenter extends BasePresenter<OrderInfoContract.Model, O
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void init(){
         String orderId = mRootView.getActivity().getIntent().getStringExtra(OrderInfoActivity.KEY_FOR_ORDER_ID);
         requestOrderInfo(orderId);
