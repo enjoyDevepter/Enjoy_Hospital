@@ -4,23 +4,42 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import butterknife.BindView;
 import cn.ehanmy.hospital.di.component.DaggerChangePasswordComponent;
 import cn.ehanmy.hospital.di.module.ChangePasswordModule;
 import cn.ehanmy.hospital.mvp.contract.ChangePasswordContract;
 import cn.ehanmy.hospital.mvp.presenter.ChangePasswordPresenter;
 
 import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.util.EdittextUtil;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter> implements ChangePasswordContract.View {
+
+    @BindView(R.id.title_Layout)
+    View title_Layout;
+    @BindView(R.id.make_sure_btn)
+    View make_sure_btn;
+
+    @BindView(R.id.old_password)
+    EditText old_password;
+
+    @BindView(R.id.new_password)
+    EditText new_password;
+    @BindView(R.id.confirm_password)
+    EditText confirm_password;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,7 +58,26 @@ public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        new TitleUtil(title_Layout,this,"安全设置");
+        make_sure_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(EdittextUtil.isEmpty(old_password)){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入原密码");
+                    return;
+                }
 
+                if(EdittextUtil.isEmpty(new_password)){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入新密码");
+                    return;
+                }
+
+                if(EdittextUtil.isEmpty(confirm_password)){
+                    ArmsUtils.makeText(ArmsUtils.getContext(),"请重复新密码");
+                    return;
+                }
+            }
+        });
     }
 
     @Override
