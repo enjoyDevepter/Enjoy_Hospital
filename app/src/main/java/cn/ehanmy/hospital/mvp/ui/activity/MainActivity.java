@@ -103,6 +103,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.setting:
+                ArmsUtils.startActivity(SafeSettingActivity.class);
                 break;
         }
     }
