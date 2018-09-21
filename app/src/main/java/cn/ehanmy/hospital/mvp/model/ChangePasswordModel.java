@@ -11,6 +11,10 @@ import com.jess.arms.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ChangePasswordContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -30,5 +34,11 @@ public class ChangePasswordModel extends BaseModel implements ChangePasswordCont
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+	public Observable<ChangePasswordResponse> changePassword(ChangePasswordRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+	                .changePassword(request);
     }
 }

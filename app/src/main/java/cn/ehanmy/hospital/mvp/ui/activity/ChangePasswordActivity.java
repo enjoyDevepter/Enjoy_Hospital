@@ -76,6 +76,10 @@ public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter
                     ArmsUtils.makeText(ArmsUtils.getContext(),"请重复新密码");
                     return;
                 }
+
+                mPresenter.changePassword(old_password.getText().toString(),
+                        new_password.getText().toString(),
+                        confirm_password.getText().toString());
             }
         });
     }

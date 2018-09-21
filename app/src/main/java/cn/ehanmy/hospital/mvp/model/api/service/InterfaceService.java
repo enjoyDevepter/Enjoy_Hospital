@@ -5,6 +5,8 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -64,4 +66,9 @@ public interface InterfaceService {
 
     @POST("gateway")
     Observable<CategoryResponse> getCategory(@Body CategoryRequest request);  // 获取分类信息
+
+    @POST("gateway")
+    // 修改密码
+    Observable<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
+
 }
