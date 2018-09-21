@@ -83,6 +83,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ChangePasswordActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.SafeSettingActivity"
             android:screenOrientation="landscape"></activity>
     </application>
 
