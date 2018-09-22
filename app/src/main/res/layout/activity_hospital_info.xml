@@ -3,11 +3,128 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/content"
+    <include layout="@layout/title"/>
+    <View style="@style/divider_3"/>
+    
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_marginTop="11dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="92dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改>"
+            android:layout_gravity="center_vertical"
+            android:textColor="#ff333333"
+            android:textSize="8sp"
+            android:layout_marginRight="12dp"
+            />
+        
+    </LinearLayout>
+
+    <View style="@style/divider_3"/>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="11dp"
+            android:id="@+id/name"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="朝阳区北京市太和医疗美容医院"
+            android:textColor="#ff333333"
+            android:textSize="9sp"
+            />
+
+        <TextView
+            android:id="@+id/phone_title"
+            android:layout_alignLeft="@id/name"
+            android:layout_below="@id/name"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系电话："
+            android:textColor="#ff333333"
+            android:textSize="8sp"
+            />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_toRightOf="@id/phone_title"
+            android:layout_alignBottom="@id/phone_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="010-2321221"
+            android:textColor="#ff333333"
+            android:textSize="8sp"
+            />
+
+        <TextView
+            android:id="@+id/time_title"
+            android:layout_marginTop="7dp"
+            android:layout_alignLeft="@id/name"
+            android:layout_below="@id/phone_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="营业时间："
+            android:textColor="#ff333333"
+            android:textSize="8sp"
+            />
+        <TextView
+            android:layout_toRightOf="@id/time_title"
+            android:layout_alignBottom="@id/time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="早9:00-晚18:00"
+            android:textColor="#ff333333"
+            android:textSize="8sp"
+            />
+
+        <TextView
+            android:id="@+id/addr"
+            android:layout_marginBottom="16dp"
+            android:drawablePadding="3dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/time_title"
+            android:layout_alignLeft="@id/name"
+            android:drawableLeft="@mipmap/location_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="北京朝阳区朝阳门外大街138号"
+            android:textColor="#ff8a8a8a"
+            android:textSize="8sp"
+            />
+
+        <TextView
+            android:layout_alignBottom="@id/name"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改>"
+            android:textColor="#ff333333"
+            android:textSize="8sp"
+            />
+    </RelativeLayout>
 
 </LinearLayout>
