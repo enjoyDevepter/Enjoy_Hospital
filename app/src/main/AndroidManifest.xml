@@ -89,6 +89,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ProjectSettingActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.ActivityInfoActivity"
             android:screenOrientation="landscape"></activity>
     </application>
 
