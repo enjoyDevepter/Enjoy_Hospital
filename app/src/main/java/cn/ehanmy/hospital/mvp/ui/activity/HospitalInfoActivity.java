@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -15,6 +16,8 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
@@ -36,7 +39,17 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     @BindView(R.id.title_Layout)
     View title;
-
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.name)
+    TextView name;
+    @BindView(R.id.phone)
+    TextView phone;
+    @BindView(R.id.time)
+    TextView time;  // 早9:00-晚18:00
+    private static final String time_format = "早%s-晚%s";
+    @BindView(R.id.addr)
+    TextView addr;
     @Inject
     ImageLoader mImageLoader;
 
@@ -58,13 +71,17 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"医院信息");
-        HospitaInfoBean hospitaInfoBean = (HospitaInfoBean) CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
+        HospitaInfoBean hospitaInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
 
-//
+        name.setText(hospitaInfoBean.getName());
+        phone.setText(hospitaInfoBean.getTellphone());
+        time.setText(String.format(time_format,hospitaInfoBean.getStarTime(),hospitaInfoBean.getEndTime()));
+        addr.setText(hospitaInfoBean.getAddress());
+
 //        mImageLoader.loadImage(this,
 //                ImageConfigImpl
 //                        .builder()
-//                        .url(goodsOrderBean.getImage())
+//                        .url(hospitaInfoBean.get)
 //                        .imageView(image)
 //                        .build());
 

@@ -14,6 +14,9 @@ public class HospitaInfoBean implements Serializable{
     private String name;
     private String province;
     private String provinceName;
+    private String tellphone;
+    private String endTime;
+    private String starTime;
 
     @Override
     public String toString() {
@@ -23,12 +26,15 @@ public class HospitaInfoBean implements Serializable{
                 ", cityName='" + cityName + '\'' +
                 ", county='" + county + '\'' +
                 ", countyName='" + countyName + '\'' +
-                ", distance=" + distance +
+                ", distance='" + distance + '\'' +
                 ", distanceDesc='" + distanceDesc + '\'' +
                 ", hospitalId='" + hospitalId + '\'' +
                 ", name='" + name + '\'' +
                 ", province='" + province + '\'' +
                 ", provinceName='" + provinceName + '\'' +
+                ", tellphone='" + tellphone + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", starTime='" + starTime + '\'' +
                 '}';
     }
 
@@ -118,5 +124,29 @@ public class HospitaInfoBean implements Serializable{
 
     public void setProvinceName(String provinceName) {
         this.provinceName = provinceName;
+    }
+
+    public String getTellphone() {
+        return tellphone;
+    }
+
+    public void setTellphone(String tellphone) {
+        this.tellphone = tellphone;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStarTime() {
+        return starTime;
+    }
+
+    public void setStarTime(String starTime) {
+        this.starTime = starTime;
     }
 }

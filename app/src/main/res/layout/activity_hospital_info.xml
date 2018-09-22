@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         android:background="@color/white"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/image"
             android:layout_marginTop="11dp"
@@ -51,7 +52,6 @@
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="朝阳区北京市太和医疗美容医院"
             android:textColor="#ff333333"
             android:textSize="9sp"
             />
@@ -74,7 +74,6 @@
             android:layout_alignBottom="@id/phone_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="010-2321221"
             android:textColor="#ff333333"
             android:textSize="8sp"
             />
@@ -91,11 +90,11 @@
             android:textSize="8sp"
             />
         <TextView
+            android:id="@+id/time"
             android:layout_toRightOf="@id/time_title"
             android:layout_alignBottom="@id/time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="早9:00-晚18:00"
             android:textColor="#ff333333"
             android:textSize="8sp"
             />
@@ -110,7 +109,6 @@
             android:drawableLeft="@mipmap/location_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="北京朝阳区朝阳门外大街138号"
             android:textColor="#ff8a8a8a"
             android:textSize="8sp"
             />

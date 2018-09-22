@@ -126,6 +126,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 targetActivity = UserAppointmentActivity.class;
                 break;
             case 4:
+                targetActivity = ActivityInfoActivity.class;
                 break;
             case 5:
                 targetActivity = HospitalInfoActivity.class;
