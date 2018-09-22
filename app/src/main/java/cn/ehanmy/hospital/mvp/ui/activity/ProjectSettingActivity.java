@@ -17,8 +17,10 @@ import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.di.component.DaggerProjectSettingComponent;
@@ -98,9 +100,25 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
     private int currentIndex1 = 0;
     // 保存1级->2级页面的选中状态
     private Map<Integer,Integer> selectList1 = new HashMap<>();
-    private Map<Integer,List<Integer>> selectList2 = new HashMap<>();
+//    private Map<Integer,List<Integer>> selectList2 = new HashMap<>();
+    private Set<Category> selectItems = new HashSet<>();
 
-    public void updateCategory(List<Category> categoryList){
+    public void updateCategory(List<Category> categoryList,List<String> selectList){
+        selectItems.clear();
+        for(int i = 0;i<categoryList.size();i++){
+            Category category1 = categoryList.get(i);
+            List<Category> goodsCategoryList = category1.getGoodsCategoryList();
+            for(int j = 0; j< goodsCategoryList.size();j++){
+                Category category2 = goodsCategoryList.get(j);
+                List<Category> goodsCategoryList1 = category2.getGoodsCategoryList();
+                for(int k = 0;k<goodsCategoryList1.size();k++){
+                    Category category3 = goodsCategoryList1.get(k);
+                    if(selectList.contains(category3.getCategoryId())){
+                        selectItems.add(category3);
+                    }
+                }
+            }
+        }
         categoryList1.clear();
         categoryList1.addAll(categoryList);
         selectList1.put(currentIndex1,0);
@@ -228,18 +246,15 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         public void onBindViewHolder(@NonNull ListHolder holder, int position) {
             TextView content = holder.content;
             Integer key = selectList1.get(currentIndex1);
-            content.setText(categoryList1.get(currentIndex1).getGoodsCategoryList().get(key).getGoodsCategoryList().get(position).getName());
+            Category category = categoryList1.get(currentIndex1).getGoodsCategoryList().get(key).getGoodsCategoryList().get(position);
+            content.setText(category.getName());
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!selectList2.containsKey(key)) {
-                        selectList2.put(key,new ArrayList<>());
-                    }
-                    List<Integer> integers = selectList2.get(key);
-                    if(integers.contains(position)){
-                        integers.remove(Integer.valueOf(position));
+                    if(selectItems.contains(category)){
+                        selectItems.remove(category);
                     }else{
-                        integers.add(position);
+                        selectItems.add(category);
                     }
                     list3.setAdapter(list3Adapter);
                 }
@@ -249,10 +264,11 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         @Override
         public int getItemViewType(int position) {
             Integer key = selectList1.get(currentIndex1);
-            if(!selectList2.containsKey(key)){
+            Category category = categoryList1.get(currentIndex1).getGoodsCategoryList().get(key).getGoodsCategoryList().get(position);
+            if(!selectItems.contains(category)){
                 return ITEM_TYPE_NORMAL;
             }
-            return selectList2.get(key).contains(position) ? ITEM_TYPE_SELECT : ITEM_TYPE_NORMAL;
+            return ITEM_TYPE_SELECT;
         }
 
         @Override
@@ -263,6 +279,11 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         private int get2Index(){
             return selectList1.get(currentIndex1);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     private static final int ITEM_TYPE_SELECT = 1;

@@ -10,12 +10,17 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
+import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -24,6 +29,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ProjectSettingContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 @ActivityScope
@@ -57,12 +63,45 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
         CategoryRequest request = new CategoryRequest();
         mModel.getCategory(request)
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CategoryResponse>() {
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CategoryResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CategoryResponse response) throws Exception {
+                    public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.updateCategory(response.getGoodsCategoryList());
+                            getProjectSetting(response.getGoodsCategoryList());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    private void getProjectSetting(List<Category> list) {
+        ProjectSettingRequest request = new ProjectSettingRequest();
+
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.getProjectSetting(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ProjectSettingResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ProjectSettingResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.updateCategory(list, response.getCategoryList());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

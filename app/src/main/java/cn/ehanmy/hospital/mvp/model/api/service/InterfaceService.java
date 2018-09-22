@@ -7,6 +7,8 @@ import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -70,5 +72,9 @@ public interface InterfaceService {
     @POST("gateway")
     // 修改密码
     Observable<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
+
+    @POST("gateway")
+    // 获取用户设置
+    Observable<ProjectSettingResponse> getProjectSetting(@Body ProjectSettingRequest request);
 
 }
