@@ -131,32 +131,34 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 targetActivity = HospitalInfoActivity.class;
                 break;
             case 6:
-                dialog = CustomDialog.create(getSupportFragmentManager())
-                        .setViewListener(new CustomDialog.ViewListener() {
-                            @Override
-                            public void bindView(View view) {
-                                view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        provideCache().put("nums", 0);
-                                        dialog.dismiss();
-                                    }
-                                });
-                            }
-                        })
-                        .setLayoutRes(R.layout.dialog)
-                        .setDimAmount(0.5f)
-                        .isCenter(true)
-                        .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
-                        .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
-                        .show();
-                return;
+                targetActivity = ProjectSettingActivity.class;
+                break;
+//                dialog = CustomDialog.create(getSupportFragmentManager())
+//                        .setViewListener(new CustomDialog.ViewListener() {
+//                            @Override
+//                            public void bindView(View view) {
+//                                view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+//                                view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        provideCache().put("nums", 0);
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+//                            }
+//                        })
+//                        .setLayoutRes(R.layout.dialog)
+//                        .setDimAmount(0.5f)
+//                        .isCenter(true)
+//                        .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
+//                        .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
+//                        .show();
+//                return;
         }
 
         if (targetActivity == null) {

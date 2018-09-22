@@ -3,6 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
 
+    >
+
+    <include layout="@layout/title" />
+
+    <View style="@style/divider_3" />
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F0F0F0" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="7dp"
+            android:layout_weight="1"
+            android:background="#F0F0F0" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="7dp"
+            android:layout_weight="1"
+            android:background="#F0F0F0" />
+    </LinearLayout>
 </LinearLayout>

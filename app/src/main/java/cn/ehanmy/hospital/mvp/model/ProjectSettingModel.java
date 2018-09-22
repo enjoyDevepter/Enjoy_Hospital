@@ -11,6 +11,10 @@ import com.jess.arms.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ProjectSettingContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -30,5 +34,11 @@ public class ProjectSettingModel extends BaseModel implements ProjectSettingCont
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<CategoryResponse> getCategory(CategoryRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .getCategory(request);
     }
 }
