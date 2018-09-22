@@ -20,6 +20,8 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -104,6 +106,30 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
                             mRootView.updateCategory(list, response.getCategoryList());
                         } else {
                             mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    public void setProjectSetting(List<String> list) {
+        SettingProjectRequest request = new SettingProjectRequest();
+
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+        request.setCategoryList(list);
+
+        mModel.setProjectSetting(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .subscribe(new ErrorHandleSubscriber<SettingProjectResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(SettingProjectResponse response) {
+                        if (response.isSuccess()) {
+                        } else {
                         }
                     }
                 });

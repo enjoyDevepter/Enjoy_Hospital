@@ -283,6 +283,11 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
 
     @Override
     protected void onStop() {
+        List<String> list = new ArrayList<>();
+        for(Category c : selectItems){
+            list.add(c.getCategoryId());
+        }
+        mPresenter.setProjectSetting(list);
         super.onStop();
     }
 

@@ -16,6 +16,8 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
 import io.reactivex.Observable;
 
 
@@ -47,5 +49,11 @@ public class ProjectSettingModel extends BaseModel implements ProjectSettingCont
     public Observable<ProjectSettingResponse> getProjectSetting(ProjectSettingRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .getProjectSetting(request);
+    }
+
+    @Override
+    public Observable<SettingProjectResponse> setProjectSetting(SettingProjectRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .setProjectSetting(request);
     }
 }

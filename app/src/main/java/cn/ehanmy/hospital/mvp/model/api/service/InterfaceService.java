@@ -9,6 +9,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -76,5 +78,9 @@ public interface InterfaceService {
     @POST("gateway")
     // 获取用户设置
     Observable<ProjectSettingResponse> getProjectSetting(@Body ProjectSettingRequest request);
+
+    @POST("gateway")
+    // 获取用户设置
+    Observable<SettingProjectResponse> setProjectSetting(@Body SettingProjectRequest request);
 
 }
