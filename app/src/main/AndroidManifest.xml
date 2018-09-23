@@ -95,6 +95,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ChangeHospitalImageActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".mvp.ui.activity.ActivityAddActivity"
             android:screenOrientation="landscape"></activity>
     </application>
 
