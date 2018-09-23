@@ -1,5 +1,7 @@
 package cn.ehanmy.hospital.mvp.model.api.service;
 
+import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageRequest;
@@ -90,14 +92,20 @@ public interface InterfaceService {
     @POST("gateway")
     // 获取用户设置
     Observable<SettingProjectResponse> setProjectSetting(@Body SettingProjectRequest request);
-    @POST("gateway")
 
     // 修改医院信息设置
+    @POST("gateway")
     Observable<ChangeHospitalInfoResponse> changeHospitalInfo(@Body ChangeHospitalInfoRequest request);
 
 
     // 修改医院照片
+    @POST("gateway")
     Observable<ChangeHospitalImageResponse> changeHospitalImage(@Body ChangeHospitalImageRequest request);
+
+
+    // 修改医院照片
+    @POST("gateway")
+    Observable<GetActivityInfoResponse> getActivityInfo(@Body GetActivityInfoRequest request);
 
 
     @Multipart

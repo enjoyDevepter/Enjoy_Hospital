@@ -11,6 +11,10 @@ import com.jess.arms.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ActivityInfoContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -31,4 +35,11 @@ public class ActivityInfoModel extends BaseModel implements ActivityInfoContract
         this.mGson = null;
         this.mApplication = null;
     }
+
+      @Override
+	    public Observable<GetActivityInfoResponse> getActivityInfo(GetActivityInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+	                .getActivityInfo(request);
+    }
+
 }
