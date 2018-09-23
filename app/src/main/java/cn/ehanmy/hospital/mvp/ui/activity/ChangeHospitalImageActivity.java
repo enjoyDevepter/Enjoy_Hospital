@@ -42,6 +42,9 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
     @BindView(R.id.image)
     ImageView image;
 
+    @BindView(R.id.title_Layout)
+    View title;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerChangeHospitalImageComponent //如找不到该类,请编译一下项目
@@ -108,6 +111,7 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        new TitleUtil(title,this,"医院信息");
         go_to_gallry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
