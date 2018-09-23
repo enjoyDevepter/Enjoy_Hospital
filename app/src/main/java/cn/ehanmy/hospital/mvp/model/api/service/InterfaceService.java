@@ -2,11 +2,14 @@ package cn.ehanmy.hospital.mvp.model.api.service;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
+import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
@@ -30,8 +33,11 @@ import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.MakeSureResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 
 /**
@@ -89,4 +95,12 @@ public interface InterfaceService {
     // 修改医院信息设置
     Observable<ChangeHospitalInfoResponse> changeHospitalInfo(@Body ChangeHospitalInfoRequest request);
 
+
+    // 修改医院照片
+    Observable<ChangeHospitalImageResponse> changeHospitalImage(@Body ChangeHospitalImageRequest request);
+
+
+    @Multipart
+    @POST("file/imageUpload")
+    Observable<BaseResponse> uploadImage(@Part("type") String description, @Part MultipartBody.Part file);
 }

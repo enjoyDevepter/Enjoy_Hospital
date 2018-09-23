@@ -6,12 +6,28 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
+import java.io.File;
+
+import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
+import cn.ehanmy.hospital.util.CacheUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ChangeHospitalImageContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -37,5 +53,57 @@ public class ChangeHospitalImagePresenter extends BasePresenter<ChangeHospitalIm
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    public void uploadImage(File file) {
+//        File file = new File((String) mRootView.getCache().get("imagePath"));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+
+        mModel.uploadImage("3", body)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ErrorHandleSubscriber<BaseResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse response) {
+                        if (response.isSuccess()) {
+                            requestOrderList(response.getResult().getUrl());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+    private void requestOrderList(String uri) {
+
+        ChangeHospitalImageRequest request = new ChangeHospitalImageRequest();
+        request.setImage(uri);
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.changeHospitalImage(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ChangeHospitalImageResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ChangeHospitalImageResponse response) {
+                        if (response.isSuccess()) {
+                            ArmsUtils.makeText(ArmsUtils.getContext(), "上传成功");
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+
     }
 }

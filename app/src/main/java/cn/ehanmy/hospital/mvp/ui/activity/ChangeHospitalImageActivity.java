@@ -93,7 +93,7 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
                     }
                     break;
                 case CROP_IMAGE_REQUEST_CODE:
-                    provideCache().put("imagePath", mCropImgFilePath);
+                    mPresenter.uploadImage(new File(mCropImgFilePath));
                     image.setImageBitmap(BitmapFactory.decodeFile(mCropImgFilePath));
                     break;
             }

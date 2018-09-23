@@ -11,6 +11,14 @@ import com.jess.arms.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ChangeHospitalImageContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
+import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 
 
 @ActivityScope
@@ -30,5 +38,19 @@ public class ChangeHospitalImageModel extends BaseModel implements ChangeHospita
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+
+    @Override
+    public Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .uploadImage(type, imgs);
+    }
+
+
+    @Override
+    public Observable<ChangeHospitalImageResponse> changeHospitalImage(ChangeHospitalImageRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .changeHospitalImage(request);
     }
 }

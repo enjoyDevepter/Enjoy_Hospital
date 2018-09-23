@@ -40,6 +40,34 @@ public class BaseResponse implements Serializable {
     private String deviceNumber;
     private int retCode;
     private String retDesc;
+    private ImageUrl result;
+
+    public class ImageUrl {
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public String toString() {
+            return "ImageUrl{" +
+                    "url='" + url + '\'' +
+                    '}';
+        }
+    }
+
+    public ImageUrl getResult() {
+        return result;
+    }
+
+    public void setResult(ImageUrl result) {
+        this.result = result;
+    }
 
     public String getSequence() {
         return sequence;
