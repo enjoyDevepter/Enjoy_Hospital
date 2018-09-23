@@ -75,6 +75,8 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     @BindView(R.id.change2)
     View change2;
+    @BindView(R.id.change1)
+    View change1;
     @BindView(R.id.save)
     View save;
 
@@ -96,6 +98,12 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"医院信息");
+        change1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(ChangeHospitalImageActivity.class);
+            }
+        });
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

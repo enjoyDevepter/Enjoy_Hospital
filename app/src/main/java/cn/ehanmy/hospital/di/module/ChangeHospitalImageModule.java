@@ -1,6 +1,7 @@
 package cn.ehanmy.hospital.di.module;
 
 import com.jess.arms.di.scope.ActivityScope;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,5 +33,11 @@ public class ChangeHospitalImageModule {
     @Provides
     ChangeHospitalImageContract.Model provideChangeHospitalImageModel(ChangeHospitalImageModel model) {
         return model;
+    }
+
+    @ActivityScope
+    @Provides
+    RxPermissions provideRxPermissions() {
+        return new RxPermissions(view.getActivity());
     }
 }
