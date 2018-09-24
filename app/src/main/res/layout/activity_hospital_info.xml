@@ -21,13 +21,14 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:background="@mipmap/default_image"
                 android:id="@+id/image"
                 android:layout_width="0dp"
-                android:layout_height="92dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="7dp"
-                android:layout_marginTop="11dp"
+                android:layout_height="139dp"
+                android:layout_marginBottom="18dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="11dp"
+                android:layout_marginTop="16dp"
                 android:layout_weight="1" />
 
             <TextView
@@ -35,10 +36,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="19dp"
                 android:text="修改>"
                 android:textColor="#ff333333"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -55,10 +56,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="11dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginTop="18dp"
                 android:textColor="#ff333333"
-                android:textSize="9sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/phone_title"
@@ -66,10 +67,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/name"
                 android:layout_below="@id/name"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="13dp"
                 android:text="联系电话："
                 android:textColor="#ff333333"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/phone"
@@ -78,7 +79,7 @@
                 android:layout_alignBottom="@id/phone_title"
                 android:layout_toRightOf="@id/phone_title"
                 android:textColor="#ff333333"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/time_title"
@@ -86,10 +87,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/name"
                 android:layout_below="@id/phone_title"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
                 android:text="营业时间："
                 android:textColor="#ff333333"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/time"
@@ -98,7 +99,7 @@
                 android:layout_alignBottom="@id/time_title"
                 android:layout_toRightOf="@id/time_title"
                 android:textColor="#ff333333"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/addr"
@@ -106,12 +107,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/name"
                 android:layout_below="@id/time_title"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="11dp"
                 android:drawableLeft="@mipmap/location_icon"
-                android:drawablePadding="3dp"
+                android:drawablePadding="5dp"
                 android:textColor="#ff8a8a8a"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/change2"
@@ -119,10 +120,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/name"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="19dp"
                 android:text="修改>"
                 android:textColor="#ff333333"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
         </RelativeLayout>
 
 
