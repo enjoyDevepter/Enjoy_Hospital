@@ -112,7 +112,11 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                System.out.println("onTabSelected : "+tab.getText());
+                if(tab.getPosition() == 0){
+                    mPresenter.requestOrderList(ActivityInfoPresenter.SEARCY_TYPE_NO);
+                }else{
+                    mPresenter.requestOrderList(ActivityInfoPresenter.SEARCY_TYPE_YES);
+                }
             }
 
             @Override

@@ -47,7 +47,6 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/xiaofeibi_edit_back"
             android:paddingLeft="11dp"
-            android:text="heheheheh"
             android:textColor="#ff7b7b7b"
             android:textSize="13sp" />
 
@@ -88,7 +87,6 @@
             android:background="@drawable/xiaofeibi_edit_back"
             android:gravity="left|top"
             android:padding="11dp"
-            android:text="整形美容广告活动"
             android:textColor="#ff7b7b7b"
             android:textSize="13sp" />
 

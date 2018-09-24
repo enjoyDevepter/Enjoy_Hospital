@@ -59,21 +59,34 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
     List<ActivityInfoBean> orderBeanList;
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void requestOrderList(){
-        requestOrderList(1,true);
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void initData(){
+        requestOrderList(currentType);
     }
 
+    public void requestOrderList(String searcyType){
+        requestOrderList(1,searcyType,true);
+    }
+    public void requestOrderList(){
+        requestOrderList(1,currentType,true);
+    }
+    public static final String SEARCY_TYPE_NO = "0";  // 未审核
+    public static final String SEARCY_TYPE_YES = "1";  // 已审核
+
+    private String currentType = SEARCY_TYPE_NO;
+
     public void nextPage(){
-        requestOrderList(nextPageIndex,false);
+        requestOrderList(nextPageIndex,currentType,false);
     }
 
     private int nextPageIndex = 1;
 
-    private void requestOrderList(int pageIndex,final boolean clear) {
+    private void requestOrderList(int pageIndex,String searchType,final boolean clear) {
+        currentType = searchType;
         GetActivityInfoRequest request = new GetActivityInfoRequest();
         request.setPageIndex(pageIndex);
         request.setPageSize(10);
+        request.setStatus(searchType);
 
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(ub.getToken());

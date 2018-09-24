@@ -53,7 +53,7 @@
             android:background="@mipmap/default_image"
             android:layout_height="match_parent" />
 
-        <WebView
+        <TextView
             android:id="@+id/content"
             android:layout_marginRight="9dp"
             android:layout_marginLeft="9dp"

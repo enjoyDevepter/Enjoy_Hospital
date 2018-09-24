@@ -1,6 +1,7 @@
 package cn.ehanmy.hospital.mvp.ui.holder;
 
 
+import android.text.Html;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -23,7 +24,7 @@ public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.content)
-    WebView content;
+    TextView content;
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;
@@ -39,7 +40,7 @@ public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
     public void setData(ActivityInfoBean data, int position) {
 
         name.setText(data.getTitle());
-        content.loadData(data.getContent(),"text/html","utf-8");
+        content.setText(Html.fromHtml(data.getContent()));
 
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
