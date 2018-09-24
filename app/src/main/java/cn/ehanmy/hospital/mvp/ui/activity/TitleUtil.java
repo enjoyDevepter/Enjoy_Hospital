@@ -1,11 +1,9 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
-import com.jess.arms.utils.ArmsUtils;
 
 import cn.ehanmy.hospital.R;
 

@@ -26,51 +26,47 @@ import javax.inject.Inject;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerActivityAddComponent;
 import cn.ehanmy.hospital.di.module.ActivityAddModule;
 import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
 import cn.ehanmy.hospital.mvp.presenter.ActivityAddPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.widget.SpacesItemDecoration;
 import cn.ehanmy.hospital.util.ImageUploadUtils;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> implements ActivityAddContract.View, View.OnClickListener, ActionSheet.OnActionSheetSelected {
 
+    private static final int GALLERY_OPEN_REQUEST_CODE = 1;
+    private static final int CROP_IMAGE_REQUEST_CODE = 2;
+    private static final int CAMERA_OPEN_REQUEST_CODE = 3;
     @BindView(R.id.title_Layout)
     View title;
-
     @BindView(R.id.images)
     RecyclerView imagesRV;
     @BindView(R.id.add)
     View addV;
-
-
     @BindDimen(R.dimen.image_upload_width)
     int imageWdith;
     @BindDimen(R.dimen.image_upload_height)
     int imageHeight;
     @Inject
     ImageLoader mImageLoader;
-
-
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     RecyclerView.Adapter mAdapter;
-
     @Inject
     RxErrorHandler mErrorHandler;
     @Inject
     RxPermissions mRxPermissions;
-
     @Inject
     List<String> images;
+    private String mCameraFilePath = "";
+    private String mCropImgFilePath = "";
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -89,10 +85,10 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"添加活动");
+        new TitleUtil(title, this, "添加活动");
         addV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
-        imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.dip2px(ArmsUtils.getContext(),10),0));
+        imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.dip2px(ArmsUtils.getContext(), 10), 0));
         imagesRV.setAdapter(mAdapter);
     }
 
@@ -125,7 +121,7 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.add:
                 ActionSheet.showSheet(this, this, null);
                 break;
@@ -149,7 +145,6 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
         }
     }
 
-
     private void openAlbum() {
         //请求外部存储权限用于适配android6.0的权限管理机制
         PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
@@ -171,10 +166,6 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
 
     }
 
-    private static final int GALLERY_OPEN_REQUEST_CODE = 1;
-    private static final int CROP_IMAGE_REQUEST_CODE = 2;
-    private static final int CAMERA_OPEN_REQUEST_CODE = 3;
-
     private void openCamera() {
         //请求外部存储权限用于适配android6.0的权限管理机制
         PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
@@ -193,10 +184,6 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
         }, mRxPermissions, mErrorHandler);
         ImageUploadUtils.startCamera(this, CAMERA_OPEN_REQUEST_CODE, generateCameraFilePath());
     }
-
-    private String mCameraFilePath = "";
-    private String mCropImgFilePath = "";
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

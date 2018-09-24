@@ -22,10 +22,12 @@ import cn.ehanmy.hospital.mvp.presenter.BuyCenterPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**订单中心，查询会员编号页面*/
+/**
+ * 订单中心，查询会员编号页面
+ */
 public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implements BuyCenterContract.View {
 
-    @BindView(R.id.title)
+    @BindView(R.id.title_Layout)
     View title;
 
     @BindView(R.id.clear_btn)
@@ -65,7 +67,7 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"下单中心");
+        new TitleUtil(title, this, "下单中心");
         clear_btn.setVisibility(View.GONE);
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,9 +82,9 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
             public void onClick(View v) {
                 hideImm();
                 String s = search_key.getText().toString();
-                if(TextUtils.isEmpty(s)){
+                if (TextUtils.isEmpty(s)) {
                     showMessage("请输入会员编号后查询");
-                }else{
+                } else {
                     memberCode = s;
                     mPresenter.requestHospitalInfo(s);
                 }
@@ -92,7 +94,7 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
 
     @Override
     public void showLoading() {
-        
+
     }
 
     @Override
@@ -120,7 +122,7 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
     @Override
     public void updateCodeisRight(boolean codeIsRight) {
         image.setVisibility(View.VISIBLE);
-        image.setBackground(getResources().getDrawable(codeIsRight? R.mipmap.member_code_right : R.mipmap.member_code_wrong));
+        image.setBackground(getResources().getDrawable(codeIsRight ? R.mipmap.member_code_right : R.mipmap.member_code_wrong));
 
         hide.setText(codeIsRight ? "会员编号正确，请继续下单" : "会员编号错误，请重新查询！");
         buy.setVisibility(codeIsRight ? View.VISIBLE : View.GONE);

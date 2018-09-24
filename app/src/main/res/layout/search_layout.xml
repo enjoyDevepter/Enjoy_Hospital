@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp"
-    android:background="@color/white"
     android:id="@+id/search_layout"
-    android:layout_height="42dp">
+    android:layout_width="match_parent"
+    android:layout_height="42dp"
+    android:layout_marginTop="3dp"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp">
 
     <TextView
         android:id="@+id/code"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:layout_marginRight="13dp"
+        android:gravity="center"
         android:text="会员编号"
         android:textSize="13sp"
-        android:gravity="center"
-        android:layout_marginRight="13dp"
-        />
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/search_key"
         android:layout_width="0dp"
-        android:imeOptions="actionSearch"
-        android:layout_weight="1"
-        android:layout_marginTop="11dp"
+        android:layout_height="match_parent"
         android:layout_marginBottom="11dp"
+        android:layout_marginTop="11dp"
+        android:layout_weight="1"
         android:background="@drawable/search_edit_bg"
-        android:layout_height="match_parent" />
-    
+        android:imeOptions="actionSearch"
+        android:paddingLeft="5dp"
+        android:textSize="13sp" />
+
     <TextView
         android:id="@+id/search_btn"
         style="@style/search_btn_style"
-        android:layout_marginLeft="5dp"
-        />
+        android:layout_marginLeft="5dp" />
 
 
     <TextView
         android:id="@+id/clear_btn"
         style="@style/search_btn_style"
         android:layout_marginLeft="3dp"
-        android:text="重置"
-        android:textColor="#FA6767"
         android:background="@drawable/search_clear_btn_bg"
-        />
+        android:text="重置"
+        android:textColor="#FA6767" />
 
 </LinearLayout>
