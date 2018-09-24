@@ -13,14 +13,12 @@ import com.jess.arms.utils.ArmsUtils;
 import java.io.Serializable;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerShopAppointmentInfoComponent;
 import cn.ehanmy.hospital.di.module.ShopAppointmentInfoModule;
 import cn.ehanmy.hospital.mvp.contract.ShopAppointmentInfoContract;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentInfoPresenter;
-
-import cn.ehanmy.hospital.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -34,6 +32,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
 
     @BindView(R.id.related)
     View related;
+    private ShopAppointment shopAppointment;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -50,8 +49,6 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         return R.layout.activity_shop_appointment_info; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    private ShopAppointment shopAppointment;
-
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"预约详细");
@@ -65,7 +62,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         Intent intent = getIntent();
         Serializable serializableExtra = intent.getSerializableExtra(KEY_FOR_DATA);
         if(serializableExtra == null || !(serializableExtra instanceof ShopAppointment)){
-            ArmsUtils.makeText(this,"店铺预约数据不存在");
+            showMessage("店铺预约数据不存在");
             return;
         }
 

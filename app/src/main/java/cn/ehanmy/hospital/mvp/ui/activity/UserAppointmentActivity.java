@@ -22,16 +22,14 @@ import com.paginate.Paginate;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerUserAppointmentComponent;
 import cn.ehanmy.hospital.di.module.UserAppointmentModule;
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -52,13 +50,6 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     TextView over;
     @BindView(R.id.all)
     TextView all;
-
-    private TextView currTextView;
-    private String currType = UserAppointmentModel.SEARCH_TYPE_NEW;
-
-    private int normalColor = Color.parseColor("#333333");
-    private int currColor = Color.parseColor("#3DBFE8");
-
     @BindView(R.id.code)
     View code;
     @BindView(R.id.search_btn)
@@ -67,23 +58,75 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     View clear;
     @BindView(R.id.search_key)
     EditText searchKey;
-
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     UserAppointmentAdapter mAdapter;
-
     @BindView(R.id.contentList)
     RecyclerView contentList;
-
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
-
+    private TextView currTextView;
+    private String currType = UserAppointmentModel.SEARCH_TYPE_NEW;
+    private int normalColor = Color.parseColor("#333333");
+    private int currColor = Color.parseColor("#3DBFE8");
     private Paginate mPaginate;
     private boolean isLoadingMore;
 
     private CustomProgressDailog progressDailog;
+    private boolean isEnd;
+    private View.OnClickListener onTypeClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == currTextView.getId()) {
+                return;
+            }
+            currTextView.setTextColor(normalColor);
+            TextView newText = null;
+            switch (v.getId()) {
+                case R.id.new_appointment:
+                    newText = new_appointment;
+                    currType = UserAppointmentModel.SEARCH_TYPE_NEW;
+                    break;
+                case R.id.over:
+                    currType = UserAppointmentModel.SEARCH_TYPE_OVER;
+                    newText = over;
+                    break;
+                case R.id.confirmed:
+                    newText = confirmed;
+                    currType = UserAppointmentModel.SEARCH_TYPE_CONFIRMED;
+                    break;
+                case R.id.all:
+                    currType = UserAppointmentModel.SEARCH_TYPE_ALL;
+                    newText = all;
+                    break;
+            }
+
+            if (newText == null) {
+                return;
+            }
+
+            currTextView = newText;
+            currTextView.setTextColor(currColor);
+            mPresenter.requestOrderList(currType);
+        }
+    };
+    private View.OnClickListener onSearchClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.search_btn:
+                    doSearch();
+                    break;
+                case R.id.clear_btn:
+                    searchKey.setText("");
+                    contentList.setAdapter(null);
+                    break;
+            }
+            hideImm();
+        }
+    };
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -171,7 +214,6 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         finish();
     }
 
-
     /**
      * 开始加载更多
      */
@@ -188,49 +230,10 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         isLoadingMore = false;
     }
 
-    private boolean isEnd;
-
     @Override
     public void setEnd(boolean isEnd) {
         this.isEnd = isEnd;
     }
-
-    private View.OnClickListener onTypeClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(v.getId() == currTextView.getId()){
-                return;
-            }
-            currTextView.setTextColor(normalColor);
-            TextView newText = null;
-            switch (v.getId()){
-                case R.id.new_appointment:
-                    newText = new_appointment;
-                    currType = UserAppointmentModel.SEARCH_TYPE_NEW;
-                    break;
-                case R.id.over:
-                    currType = UserAppointmentModel.SEARCH_TYPE_OVER;
-                    newText = over;
-                    break;
-                case R.id.confirmed:
-                    newText = confirmed;
-                    currType = UserAppointmentModel.SEARCH_TYPE_CONFIRMED;
-                    break;
-                case R.id.all:
-                    currType = UserAppointmentModel.SEARCH_TYPE_ALL;
-                    newText = all;
-                    break;
-            }
-
-            if(newText == null){
-                return;
-            }
-
-            currTextView = newText;
-            currTextView.setTextColor(currColor);
-            mPresenter.requestOrderList(currType);
-        }
-    };
 
     public Activity getActivity(){
         return this;
@@ -239,27 +242,10 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     private void doSearch(){
         String s = searchKey.getText().toString();
         if(TextUtils.isEmpty(s)){
-            ArmsUtils.makeText(this,"请输入搜索关键字后重试");
+            showMessage("请输入搜索关键字后重试");
             return;
         }
     }
-
-    private View.OnClickListener onSearchClickListener = new View.OnClickListener(){
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.search_btn:
-                    doSearch();
-                    break;
-                case R.id.clear_btn:
-                    searchKey.setText("");
-                    contentList.setAdapter(null);
-                    break;
-            }
-            hideImm();
-        }
-    };
 
     @Override
     protected void onDestroy() {

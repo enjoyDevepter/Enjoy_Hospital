@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/parent"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -41,12 +40,13 @@
 
             <EditText
                 android:id="@+id/username"
-                android:imeOptions="actionNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入账号"
+                android:imeOptions="actionNext"
+                android:text="h0000001"
                 android:textSize="13sp" />
 
         </LinearLayout>
@@ -83,12 +83,13 @@
 
             <EditText
                 android:id="@+id/password"
-                android:imeOptions="actionDone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
                 android:background="@android:color/transparent"
                 android:hint="请输入密码"
+                android:imeOptions="actionDone"
+                android:text="123456"
                 android:textSize="13sp" />
 
         </LinearLayout>

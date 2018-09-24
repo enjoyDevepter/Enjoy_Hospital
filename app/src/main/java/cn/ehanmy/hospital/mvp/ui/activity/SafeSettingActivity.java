@@ -12,16 +12,13 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerSafeSettingComponent;
 import cn.ehanmy.hospital.di.module.SafeSettingModule;
 import cn.ehanmy.hospital.mvp.contract.SafeSettingContract;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
-import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.presenter.SafeSettingPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.util.CacheUtil;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -56,7 +53,7 @@ public class SafeSettingActivity extends BaseActivity<SafeSettingPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"安全设置");
+        new TitleUtil(title, this, "安全设置");
         go_to_change_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +62,8 @@ public class SafeSettingActivity extends BaseActivity<SafeSettingPresenter> impl
         });
 
         HospitaInfoBean hospitaInfoBean = (HospitaInfoBean) CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
-        id.setText(""+hospitaInfoBean.getHospitalId());
-        name.setText(""+hospitaInfoBean.getName());
+        id.setText("" + hospitaInfoBean.getHospitalId());
+        name.setText("" + hospitaInfoBean.getName());
     }
 
     @Override

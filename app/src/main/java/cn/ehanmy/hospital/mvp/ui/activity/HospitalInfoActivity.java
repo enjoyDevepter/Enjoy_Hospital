@@ -1,18 +1,16 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
-import android.app.TimePickerDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
+import com.bigkoo.pickerview.TimePickerView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -20,66 +18,49 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
-import org.w3c.dom.Text;
-
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerHospitalInfoComponent;
 import cn.ehanmy.hospital.di.module.HospitalInfoModule;
 import cn.ehanmy.hospital.mvp.contract.HospitalInfoContract;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.presenter.HospitalInfoPresenter;
-
-import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.util.CacheUtil;
-import cn.ehanmy.hospital.util.EdittextUtil;
-
+import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View {
+public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> implements HospitalInfoContract.View, View.OnClickListener {
 
-    @BindView(R.id.title_Layout)
-    View title;
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.modify_image)
+    View imageV;
     @BindView(R.id.image)
-    ImageView image;
+    ImageView imageIV;
     @BindView(R.id.name)
-    TextView name;
+    TextView nameTV;
     @BindView(R.id.phone)
-    TextView phone;
+    TextView phoneTV;
     @BindView(R.id.time)
-    TextView time;  // 早9:00-晚18:00
-    private static final String time_format = "早%s-晚%s";
-    @BindView(R.id.addr)
-    TextView addr;
+    TextView timeTV;  // 早9:00-晚18:00
+    @BindView(R.id.address)
+    TextView addressTV;
+    @BindView(R.id.modify_info)
+    View infoV;
     @Inject
     ImageLoader mImageLoader;
 
-    @BindView(R.id.edit_parent)
-    View edit_parent;
-    @BindView(R.id.name_double)
-    TextView name_double;
-    @BindView(R.id.et_phone)
-    EditText et_phone;
-    @BindView(R.id.addr_content)
-    TextView addr_content;
+    HospitaInfoBean hospitaInfoBean;
 
-    @BindView(R.id.et_time_start)
-    TextView et_time_start;
-    @BindView(R.id.et_time_end)
-    TextView et_time_end;
-
-    @BindView(R.id.change2)
-    View change2;
-    @BindView(R.id.change1)
-    View change1;
-    @BindView(R.id.save)
-    View save;
+    CustomDialog dialog = null;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -98,99 +79,10 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"医院信息");
-        change1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArmsUtils.startActivity(ChangeHospitalImageActivity.class);
-            }
-        });
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (EdittextUtil.isEmpty(et_phone)) {
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入电话号码");
-                    return;
-                }
-
-                if(TextUtils.isEmpty(et_time_start.getText())){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请设置开始营业时间");
-                    return;
-                }
-
-                if(TextUtils.isEmpty(et_time_end.getText())){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请设置结束营业时间");
-                    return;
-                }
-
-                mPresenter.changeHospitalInfo(et_phone.getText()+"",et_time_start.getText()+"",et_time_end.getText()+"");
-
-            }
-        });
-        edit_parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edit_parent.setVisibility(View.GONE);
-            }
-        });
-        HospitaInfoBean h = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
-        updateHosptial(h);
-
-        change2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edit_parent.setVisibility(View.VISIBLE);
-            }
-        });
-        et_time_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog time=new TimePickerDialog(HospitalInfoActivity.this, new TimePickerDialog.OnTimeSetListener() {
-
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        DecimalFormat decimalFormat = new DecimalFormat("00");
-                        et_time_start.setText(
-                                String.format("%s:%s",decimalFormat.format(hourOfDay),decimalFormat.format(minute)));
-                    }
-                }, 0,0, true);
-                time.show();
-            }
-        });
-
-        et_time_end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog time=new TimePickerDialog(HospitalInfoActivity.this, new TimePickerDialog.OnTimeSetListener() {
-
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        DecimalFormat decimalFormat = new DecimalFormat("00");
-                        et_time_end.setText(
-                                String.format("%2s:%2s",decimalFormat.format(hourOfDay),decimalFormat.format(minute)));
-                    }
-                }, 0,0, true);
-                time.show();
-            }
-        });
-
-//        mImageLoader.loadImage(this,
-//                ImageConfigImpl
-//                        .builder()
-//                        .url(hospitaInfoBean.get)
-//                        .imageView(image)
-//                        .build());
-
-    }
-
-    public void updateHosptial(HospitaInfoBean hospitaInfoBean){
-        name.setText(hospitaInfoBean.getName());
-        name_double.setText(hospitaInfoBean.getName());
-        phone.setText(hospitaInfoBean.getTellphone());
-        et_phone.setText(hospitaInfoBean.getTellphone());
-        time.setText(String.format(time_format,hospitaInfoBean.getStarTime(),hospitaInfoBean.getEndTime()));
-        addr.setText(hospitaInfoBean.getAddress());
-        addr_content.setText(hospitaInfoBean.getAddress());
+        titleTV.setText("医院信息");
+        backV.setOnClickListener(this);
+        imageV.setOnClickListener(this);
+        infoV.setOnClickListener(this);
     }
 
     @Override
@@ -220,17 +112,124 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         finish();
     }
 
-    public void changeHospitalInfoOk(boolean isOk){
-        if(isOk){
-            ArmsUtils.makeText(this,"修改成功");
-            HospitaInfoBean h = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
-            updateHosptial(h);
-        }else{
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
 
-        }
-        edit_parent.setVisibility(View.GONE);
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
 
+    @Override
+    public void updateUI(HospitalInfoResponse response) {
+        hospitaInfoBean = response.getHospital();
+        nameTV.setText(hospitaInfoBean.getName());
+        phoneTV.setText("联系电话：" + hospitaInfoBean.getTellphone());
+        timeTV.setText("营业时间：早" + hospitaInfoBean.getStarTime() + "-晚" + hospitaInfoBean.getEndTime());
+        addressTV.setText(hospitaInfoBean.getAddress());
+
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .url("")
+                        .placeholder(R.drawable.place_holder_img)
+                        .imageView(imageIV)
+                        .build());
     }
 
 
+    private void showChangeDialog() {
+        dialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.name)).setText("本店名称:" + hospitaInfoBean.getName());
+                        ((TextView) view.findViewById(R.id.address)).setText("地址:" + hospitaInfoBean.getAddress());
+                        EditText phone = view.findViewById(R.id.phone);
+                        phone.setText(hospitaInfoBean.getTellphone());
+                        TextView startTime = view.findViewById(R.id.start_time);
+                        startTime.setText(hospitaInfoBean.getStarTime());
+                        TextView endTime = view.findViewById(R.id.end_time);
+                        endTime.setText(hospitaInfoBean.getEndTime());
+                        startTime.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new TimePickerView.Builder(HospitalInfoActivity.this, new TimePickerView.OnTimeSelectListener() {
+
+                                    @Override
+                                    public void onTimeSelect(Date date, View v) {
+                                        startTime.setText(date.getHours() + ":" + date.getMinutes());
+                                        showMessage(date.getHours() + ":" + date.getMinutes());
+                                    }
+                                })
+                                        .isDialog(true)
+                                        .setType(new boolean[]{false, false, false, true, true, false})
+                                        .build().show();
+
+                            }
+                        });
+                        endTime.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new TimePickerView.Builder(HospitalInfoActivity.this, new TimePickerView.OnTimeSelectListener() {
+
+                                    @Override
+                                    public void onTimeSelect(Date date, View v) {
+                                        endTime.setText(date.getHours() + ":" + date.getMinutes());
+                                        showMessage(date.getHours() + ":" + date.getMinutes());
+                                    }
+                                })
+                                        .isDialog(true)
+                                        .setType(new boolean[]{false, false, false, true, true, false})
+                                        .build().show();
+                            }
+                        });
+                        view.findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (ArmsUtils.isEmpty(phone.getText().toString())) {
+                                    showMessage("请输入联系电话");
+                                    return;
+                                }
+                                if (ArmsUtils.isEmpty(startTime.getText().toString())) {
+                                    showMessage("请输入开始营业时间");
+                                    return;
+                                }
+                                if (ArmsUtils.isEmpty(endTime.getText().toString())) {
+                                    showMessage("请输入结束营业时间");
+                                    return;
+                                }
+                                provideCache().put("tellphone", phone.getText().toString());
+                                provideCache().put("startTime", startTime.getText());
+                                provideCache().put("endTime", endTime.getText());
+                                mPresenter.changeHospitalInfo();
+                            }
+                        });
+
+                    }
+                })
+                .setLayoutRes(R.layout.dialog_change_hospital_info)
+                .setWidth(ArmsUtils.getDimens(this, R.dimen.modify_hospital_width))
+                .setHeight(ArmsUtils.getDimens(this, R.dimen.modify_hospital_height))
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.modify_image:
+                ArmsUtils.startActivity(ChangeHospitalImageActivity.class);
+                break;
+            case R.id.modify_info:
+                showChangeDialog();
+                break;
+        }
+    }
 }

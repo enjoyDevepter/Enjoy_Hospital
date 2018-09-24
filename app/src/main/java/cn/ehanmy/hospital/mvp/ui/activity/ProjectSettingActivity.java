@@ -23,29 +23,40 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerProjectSettingComponent;
 import cn.ehanmy.hospital.di.module.ProjectSettingModule;
 import cn.ehanmy.hospital.mvp.contract.ProjectSettingContract;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.presenter.ProjectSettingPresenter;
 
-import cn.ehanmy.hospital.R;
-
-
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter> implements ProjectSettingContract.View {
+public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter> implements ProjectSettingContract.View, View.OnClickListener {
 
-    @BindView(R.id.title_Layout)
-    View title;
-
+    private static final int ITEM_TYPE_SELECT = 1;
+    private static final int ITEM_TYPE_NORMAL = 0;
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.finish)
+    View finishV;
     @BindView(R.id.list1)
     RecyclerView list1;
     @BindView(R.id.list2)
     RecyclerView list2;
     @BindView(R.id.list3)
     RecyclerView list3;
+    private int currentIndex1 = 0;
+    // 保存1级->2级页面的选中状态
+    private Map<Integer, Integer> selectList1 = new HashMap<>();
+    private Set<Category> selectItems = new HashSet<>();
+    private List<Category> categoryList1 = new ArrayList<>();
+    private List1Adapter list1Adapter = new List1Adapter();
+    private List2Adapter list2Adapter = new List2Adapter();
+    private List3Adapter list3Adapter = new List3Adapter();
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -64,7 +75,9 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"项目设置");
+        finishV.setOnClickListener(this);
+        backV.setOnClickListener(this);
+        titleTV.setText("项目设置");
         list1.setLayoutManager(new LinearLayoutManager(this));
         list2.setLayoutManager(new LinearLayoutManager(this));
         list3.setLayoutManager(new LinearLayoutManager(this));
@@ -97,23 +110,17 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         finish();
     }
 
-    private int currentIndex1 = 0;
-    // 保存1级->2级页面的选中状态
-    private Map<Integer,Integer> selectList1 = new HashMap<>();
-//    private Map<Integer,List<Integer>> selectList2 = new HashMap<>();
-    private Set<Category> selectItems = new HashSet<>();
-
-    public void updateCategory(List<Category> categoryList,List<String> selectList){
+    public void updateCategory(List<Category> categoryList, List<String> selectList) {
         selectItems.clear();
-        for(int i = 0;i<categoryList.size();i++){
+        for (int i = 0; i < categoryList.size(); i++) {
             Category category1 = categoryList.get(i);
             List<Category> goodsCategoryList = category1.getGoodsCategoryList();
-            for(int j = 0; j< goodsCategoryList.size();j++){
+            for (int j = 0; j < goodsCategoryList.size(); j++) {
                 Category category2 = goodsCategoryList.get(j);
                 List<Category> goodsCategoryList1 = category2.getGoodsCategoryList();
-                for(int k = 0;k<goodsCategoryList1.size();k++){
+                for (int k = 0; k < goodsCategoryList1.size(); k++) {
                     Category category3 = goodsCategoryList1.get(k);
-                    if(selectList.contains(category3.getCategoryId())){
+                    if (selectList.contains(category3.getCategoryId())) {
                         selectItems.add(category3);
                     }
                 }
@@ -121,14 +128,29 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         }
         categoryList1.clear();
         categoryList1.addAll(categoryList);
-        selectList1.put(currentIndex1,0);
+        selectList1.put(currentIndex1, 0);
         list1.setAdapter(list1Adapter);
         list2.setAdapter(list2Adapter);
         list3.setAdapter(list3Adapter);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.finish:
+                List<String> list = new ArrayList<>();
+                for (Category c : selectItems) {
+                    list.add(c.getCategoryId());
+                }
+                mPresenter.setProjectSetting(list);
+                break;
+        }
+    }
 
-    private class ListHolder extends RecyclerView.ViewHolder{
+    private class ListHolder extends RecyclerView.ViewHolder {
 
         TextView content;
 
@@ -137,19 +159,18 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
             content = itemView.findViewById(R.id.content);
         }
     }
-    private List<Category> categoryList1 = new ArrayList<>();
-    private List1Adapter list1Adapter = new List1Adapter();
-    private class List1Adapter extends RecyclerView.Adapter<ListHolder>{
+
+    private class List1Adapter extends RecyclerView.Adapter<ListHolder> {
 
         @NonNull
         @Override
         public ListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             int layoutId = R.layout.project_setting_normal_item;
-            if(viewType == ITEM_TYPE_SELECT){
+            if (viewType == ITEM_TYPE_SELECT) {
                 layoutId = R.layout.project_setting_selected_item;
             }
             View inflate = LayoutInflater.from(parent.getContext()).inflate(layoutId, null);
-            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ArmsUtils.dip2px(ArmsUtils.getContext(),30)));
+            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ArmsUtils.dip2px(ArmsUtils.getContext(), 30)));
             return new ListHolder(inflate);
         }
 
@@ -179,18 +200,17 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         }
     }
 
-    private List2Adapter list2Adapter = new List2Adapter();
-    private class List2Adapter extends RecyclerView.Adapter<ListHolder>{
+    private class List2Adapter extends RecyclerView.Adapter<ListHolder> {
 
         @NonNull
         @Override
         public ListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             int layoutId = R.layout.project_setting_normal_item;
-            if(viewType == ITEM_TYPE_SELECT){
+            if (viewType == ITEM_TYPE_SELECT) {
                 layoutId = R.layout.project_setting_selected_item;
             }
             View inflate = LayoutInflater.from(parent.getContext()).inflate(layoutId, null);
-            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ArmsUtils.dip2px(ArmsUtils.getContext(),30)));
+            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ArmsUtils.dip2px(ArmsUtils.getContext(), 30)));
             return new ListHolder(inflate);
         }
 
@@ -201,7 +221,7 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selectList1.put(currentIndex1,position);
+                    selectList1.put(currentIndex1, position);
                     list2.setAdapter(list2Adapter);
                     list3.setAdapter(list3Adapter);
                 }
@@ -210,8 +230,8 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
 
         @Override
         public int getItemViewType(int position) {
-            if(!selectList1.containsKey(currentIndex1)){
-                selectList1.put(currentIndex1,0);
+            if (!selectList1.containsKey(currentIndex1)) {
+                selectList1.put(currentIndex1, 0);
             }
             Integer integer = selectList1.get(currentIndex1);
             return position == integer ? ITEM_TYPE_SELECT : ITEM_TYPE_NORMAL;
@@ -222,23 +242,22 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
             return getList().size();
         }
 
-        private List<Category> getList(){
+        private List<Category> getList() {
             return categoryList1.get(currentIndex1).getGoodsCategoryList();
         }
     }
 
-    private List3Adapter list3Adapter = new List3Adapter();
-    private class List3Adapter extends RecyclerView.Adapter<ListHolder>{
+    private class List3Adapter extends RecyclerView.Adapter<ListHolder> {
 
         @NonNull
         @Override
         public ListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             int layoutId = R.layout.project_setting_normal_item;
-            if(viewType == ITEM_TYPE_SELECT){
+            if (viewType == ITEM_TYPE_SELECT) {
                 layoutId = R.layout.project_setting_choose_item;
             }
             View inflate = LayoutInflater.from(parent.getContext()).inflate(layoutId, null);
-            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ArmsUtils.dip2px(ArmsUtils.getContext(),30)));
+            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ArmsUtils.dip2px(ArmsUtils.getContext(), 30)));
             return new ListHolder(inflate);
         }
 
@@ -251,9 +270,9 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(selectItems.contains(category)){
+                    if (selectItems.contains(category)) {
                         selectItems.remove(category);
-                    }else{
+                    } else {
                         selectItems.add(category);
                     }
                     list3.setAdapter(list3Adapter);
@@ -265,7 +284,7 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         public int getItemViewType(int position) {
             Integer key = selectList1.get(currentIndex1);
             Category category = categoryList1.get(currentIndex1).getGoodsCategoryList().get(key).getGoodsCategoryList().get(position);
-            if(!selectItems.contains(category)){
+            if (!selectItems.contains(category)) {
                 return ITEM_TYPE_NORMAL;
             }
             return ITEM_TYPE_SELECT;
@@ -276,21 +295,8 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
             return categoryList1.get(currentIndex1).getGoodsCategoryList().get(get2Index()).getGoodsCategoryList().size();
         }
 
-        private int get2Index(){
+        private int get2Index() {
             return selectList1.get(currentIndex1);
         }
     }
-
-    @Override
-    protected void onStop() {
-        List<String> list = new ArrayList<>();
-        for(Category c : selectItems){
-            list.add(c.getCategoryId());
-        }
-        mPresenter.setProjectSetting(list);
-        super.onStop();
-    }
-
-    private static final int ITEM_TYPE_SELECT = 1;
-    private static final int ITEM_TYPE_NORMAL = 0;
 }

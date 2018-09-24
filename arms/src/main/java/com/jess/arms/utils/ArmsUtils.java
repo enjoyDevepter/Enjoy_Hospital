@@ -214,7 +214,7 @@ public class ArmsUtils {
      *
      * @param string
      */
-    public static void makeText(Context context, String string) {
+    public static void makeText1(Context context, String string) {
         if (mToast == null) {
             mToast = Toast.makeText(context, string, Toast.LENGTH_SHORT);
         }

@@ -1,30 +1,24 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerBuyCenterComponent;
 import cn.ehanmy.hospital.di.module.BuyCenterModule;
 import cn.ehanmy.hospital.mvp.contract.BuyCenterContract;
 import cn.ehanmy.hospital.mvp.presenter.BuyCenterPresenter;
-
-import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.util.CacheUtil;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -87,7 +81,7 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
                 hideImm();
                 String s = search_key.getText().toString();
                 if(TextUtils.isEmpty(s)){
-                    ArmsUtils.makeText(BuyCenterActivity.this,"请输入会员编号后查询");
+                    showMessage("请输入会员编号后查询");
                 }else{
                     memberCode = s;
                     mPresenter.requestHospitalInfo(s);

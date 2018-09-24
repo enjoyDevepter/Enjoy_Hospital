@@ -202,7 +202,7 @@ public class ImageUploadUtils {
         Uri mUri = null;
         File mFile = new File(filePath);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mUri = FileProvider.getUriForFile(context, "cn.ehanmy.fileprovider", mFile);
+            mUri = FileProvider.getUriForFile(context, "cn.ehanmy.hospital.fileprovider", mFile);
         } else {
             mUri = Uri.fromFile(mFile);
         }

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,14 +12,12 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerChangePasswordComponent;
 import cn.ehanmy.hospital.di.module.ChangePasswordModule;
 import cn.ehanmy.hospital.mvp.contract.ChangePasswordContract;
 import cn.ehanmy.hospital.mvp.presenter.ChangePasswordPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.util.EdittextUtil;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -63,17 +59,17 @@ public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter
             @Override
             public void onClick(View v) {
                 if(EdittextUtil.isEmpty(old_password)){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入原密码");
+                    showMessage("请输入原密码");
                     return;
                 }
 
                 if(EdittextUtil.isEmpty(new_password)){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请输入新密码");
+                    showMessage("请输入新密码");
                     return;
                 }
 
                 if(EdittextUtil.isEmpty(confirm_password)){
-                    ArmsUtils.makeText(ArmsUtils.getContext(),"请重复新密码");
+                    showMessage("请重复新密码");
                     return;
                 }
 

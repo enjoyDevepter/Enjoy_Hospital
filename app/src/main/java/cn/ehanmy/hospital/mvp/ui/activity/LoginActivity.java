@@ -1,12 +1,10 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.jess.arms.base.BaseActivity;
@@ -22,7 +20,6 @@ import cn.ehanmy.hospital.di.component.DaggerLoginComponent;
 import cn.ehanmy.hospital.di.module.LoginModule;
 import cn.ehanmy.hospital.mvp.contract.LoginContract;
 import cn.ehanmy.hospital.mvp.presenter.LoginPresenter;
-import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -40,8 +37,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @BindView(R.id.parent)
     View parent;
-
-    CustomProgressDailog progressDailog;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -61,25 +56,17 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void initData(Bundle savedInstanceState) {
         loginV.setOnClickListener(this);
+        parent.setOnClickListener(this);
         mPresenter.requestPermissions();
-        parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideImm();
-            }
-        });
     }
 
 
     @Override
     public void showLoading() {
-        progressDailog = new CustomProgressDailog(this);
-        progressDailog.show();
     }
 
     @Override
     public void hideLoading() {
-        progressDailog.dismiss();
     }
 
     @Override
@@ -104,13 +91,17 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login:
-                login();
+                mPresenter.login(userNameET.getText().toString(), passwordET.getText().toString());
+                break;
+            case R.id.parent:
+                hideImm();
                 break;
         }
     }
 
-    private void login() {
-        mPresenter.login(userNameET.getText().toString(), passwordET.getText().toString());
+    @Override
+    public boolean useImmersive() {
+        return false;
     }
 
     @Override

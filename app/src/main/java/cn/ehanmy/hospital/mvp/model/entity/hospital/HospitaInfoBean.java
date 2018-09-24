@@ -2,18 +2,18 @@ package cn.ehanmy.hospital.mvp.model.entity.hospital;
 
 import java.io.Serializable;
 
-public class HospitaInfoBean implements Serializable{
-    private String address;
-    private String city;
-    private String cityName;
-    private String county;
-    private String countyName;
-    private String distance;
-    private String distanceDesc;
+public class HospitaInfoBean implements Serializable {
     private String hospitalId;
     private String name;
     private String province;
     private String provinceName;
+    private String city;
+    private String cityName;
+    private String county;
+    private String countyName;
+    private String address;
+    private String distance;
+    private String distanceDesc;
     private String tellphone;
     private String endTime;
     private String starTime;

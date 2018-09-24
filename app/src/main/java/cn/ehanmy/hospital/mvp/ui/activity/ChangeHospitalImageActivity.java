@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -22,28 +23,36 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerChangeHospitalImageComponent;
 import cn.ehanmy.hospital.di.module.ChangeHospitalImageModule;
 import cn.ehanmy.hospital.mvp.contract.ChangeHospitalImageContract;
 import cn.ehanmy.hospital.mvp.presenter.ChangeHospitalImagePresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.util.ImageUploadUtils;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImagePresenter> implements ChangeHospitalImageContract.View {
+public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImagePresenter> implements ChangeHospitalImageContract.View, View.OnClickListener {
 
-    @BindView(R.id.go_to_gallry)
-    View go_to_gallry;
+    private static final int GALLERY_OPEN_REQUEST_CODE = 1;
+    private static final int CROP_IMAGE_REQUEST_CODE = 2;
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.album)
+    View albumV;
     @BindView(R.id.image)
     ImageView image;
-
     @BindView(R.id.title_Layout)
     View title;
+    @Inject
+    RxErrorHandler mErrorHandler;
+    @Inject
+    RxPermissions mRxPermissions;
+    private String mCropImgFilePath = "";
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -53,6 +62,45 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
                 .changeHospitalImageModule(new ChangeHospitalImageModule(this))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_change_hospital_image; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        titleTV.setText("医院信息");
+        backV.setOnClickListener(this);
+        albumV.setOnClickListener(this);
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
     }
 
     private BitmapFactory.Options getBitampOptions(String path) {
@@ -71,8 +119,6 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
         mCropImgFilePath = mCameraFileDirPath + File.separator + System.currentTimeMillis() + ".jgp";
         return mCropImgFilePath;
     }
-
-    private String mCropImgFilePath = "";
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -104,49 +150,6 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
 
     }
 
-    @Override
-    public int initView(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_change_hospital_image; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
-    }
-
-    @Override
-    public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"医院信息");
-        go_to_gallry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAlbum();
-            }
-        });
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(@NonNull String message) {
-        checkNotNull(message);
-        ArmsUtils.snackbarText(message);
-    }
-
-    @Override
-    public void launchActivity(@NonNull Intent intent) {
-        checkNotNull(intent);
-        ArmsUtils.startActivity(intent);
-    }
-
-    @Override
-    public void killMyself() {
-        finish();
-    }
-
 
     private void openAlbum() {
         //请求外部存储权限用于适配android6.0的权限管理机制
@@ -169,16 +172,19 @@ public class ChangeHospitalImageActivity extends BaseActivity<ChangeHospitalImag
 
     }
 
-    private static final int GALLERY_OPEN_REQUEST_CODE = 1;
-    private static final int CROP_IMAGE_REQUEST_CODE = 2;
-    private static final int CAMERA_OPEN_REQUEST_CODE = 3;
-
-    @Inject
-    RxErrorHandler mErrorHandler;
-    @Inject
-    RxPermissions mRxPermissions;
-
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.album:
+                openAlbum();
+                break;
+        }
     }
 }

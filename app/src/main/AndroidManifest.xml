@@ -20,7 +20,8 @@
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,6 +42,17 @@
              android:value="768" />
         -->
         <!-- arms配置 -->
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="cn.ehanmy.hospital.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+
         <meta-data
             android:name="cn.ehanmy.hospital.app.GlobalConfiguration"
             android:value="ConfigModule" />

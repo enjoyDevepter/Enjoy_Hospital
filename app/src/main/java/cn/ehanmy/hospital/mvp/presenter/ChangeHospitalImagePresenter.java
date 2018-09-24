@@ -2,15 +2,17 @@ package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
+import cn.ehanmy.hospital.mvp.contract.ChangeHospitalImageContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageResponse;
@@ -19,10 +21,6 @@ import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import cn.ehanmy.hospital.mvp.contract.ChangeHospitalImageContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import okhttp3.MediaType;
@@ -56,7 +54,6 @@ public class ChangeHospitalImagePresenter extends BasePresenter<ChangeHospitalIm
     }
 
     public void uploadImage(File file) {
-//        File file = new File((String) mRootView.getCache().get("imagePath"));
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/otcet-stream"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
 
@@ -98,7 +95,7 @@ public class ChangeHospitalImagePresenter extends BasePresenter<ChangeHospitalIm
                     @Override
                     public void onNext(ChangeHospitalImageResponse response) {
                         if (response.isSuccess()) {
-                            ArmsUtils.makeText(ArmsUtils.getContext(), "上传成功");
+                            mRootView.showMessage("上传成功");
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

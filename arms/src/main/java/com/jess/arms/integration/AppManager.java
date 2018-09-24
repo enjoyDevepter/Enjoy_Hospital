@@ -21,16 +21,11 @@ import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jess.arms.base.delegate.AppLifecycles;
+import com.jess.arms.widget.Toasty;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -160,25 +155,7 @@ public final class AppManager {
             Timber.tag(TAG).w("mCurrentActivity == null when showSnackbar(String,boolean)");
             return;
         }
-//        View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
-//        Snackbar.make(view, message, isLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT).show();
-
-//        SnackbarUtils.Short(getCurrentActivity().getWindow().getDecorView(),message)
-//                .gravityFrameLayout(Gravity.CENTER)
-//                .radius(20)
-//                .show();
-
-        Toast toast = Toast.makeText(getCurrentActivity(), message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        ViewGroup view = (ViewGroup) toast.getView();
-        view.setBackgroundResource(android.R.color.white);
-        View childAt = view.getChildAt(0);
-        if(childAt != null && childAt instanceof TextView){
-            ((TextView) childAt).setTextColor(Color.BLACK);
-            childAt.setPadding(10,0,10,0);
-        }
-        toast.setView(view);
-        toast.show();
+        Toasty.normal(getTopActivity().getApplication(), message).show();
     }
 
 

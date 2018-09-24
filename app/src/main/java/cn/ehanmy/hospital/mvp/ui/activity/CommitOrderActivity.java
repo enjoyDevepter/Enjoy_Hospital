@@ -18,20 +18,17 @@ import com.jess.arms.utils.ArmsUtils;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerCommitOrderComponent;
 import cn.ehanmy.hospital.di.module.CommitOrderModule;
 import cn.ehanmy.hospital.mvp.contract.CommitOrderContract;
-import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.PayEntry;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.presenter.CommitOrderPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
 import cn.ehanmy.hospital.util.CacheUtil;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -73,6 +70,8 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
 
     @Inject
     ImageLoader mImageLoader;
+    private String orderId;
+    private CustomDialog payOkDialog;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -88,8 +87,6 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     public int initView(@Nullable Bundle savedInstanceState) {
         return R.layout.activity_commit_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
-
-    private String orderId;
 
     public void update(GoodsBuyResponse response){
         orderId = response.getOrderId();
@@ -168,8 +165,6 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         return this;
     }
 
-    private CustomDialog payOkDialog;
-
     private void showCancelDailog() {
         payOkDialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
@@ -203,7 +198,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         if(ok){
             showCancelDailog();
         }else{
-            ArmsUtils.makeText(this,"支付未完成");
+            showMessage("支付未完成");
         }
     }
 }

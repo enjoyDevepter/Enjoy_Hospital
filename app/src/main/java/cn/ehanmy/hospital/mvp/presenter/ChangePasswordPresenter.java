@@ -2,13 +2,15 @@ package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import javax.inject.Inject;
+
+import cn.ehanmy.hospital.mvp.contract.ChangePasswordContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
@@ -16,10 +18,6 @@ import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import cn.ehanmy.hospital.mvp.contract.ChangePasswordContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
@@ -71,7 +69,7 @@ public class ChangePasswordPresenter extends BasePresenter<ChangePasswordContrac
                     @Override
                     public void onNext(ChangePasswordResponse response) {
                         if (response.isSuccess()) {
-                            ArmsUtils.makeText(ArmsUtils.getContext(),"密码修改成功");
+                            mRootView.showMessage("密码修改成功");
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -21,7 +22,6 @@ import cn.ehanmy.hospital.di.module.MainModule;
 import cn.ehanmy.hospital.mvp.contract.MainContract;
 import cn.ehanmy.hospital.mvp.presenter.MainPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.MainAdapter;
-import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
 import cn.ehanmy.hospital.mvp.ui.widget.SpacesItemDecoration;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -29,6 +29,10 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
 
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
     @BindView(R.id.setting)
     View settingV;
     @BindView(R.id.recyclerView)
@@ -38,8 +42,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     MainAdapter mAdapter;
-
-    CustomDialog dialog;
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
@@ -58,7 +60,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        titleTV.setText("医院中心");
+        settingV.setVisibility(View.VISIBLE);
         settingV.setOnClickListener(this);
+        backV.setVisibility(View.GONE);
         recyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.main_item_space)));
         ArmsUtils.configRecyclerView(recyclerView, mLayoutManager);
         recyclerView.setAdapter(mAdapter);
@@ -134,36 +139,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             case 6:
                 targetActivity = ProjectSettingActivity.class;
                 break;
-//                dialog = CustomDialog.create(getSupportFragmentManager())
-//                        .setViewListener(new CustomDialog.ViewListener() {
-//                            @Override
-//                            public void bindView(View view) {
-//                                view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-//                                view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        provideCache().put("nums", 0);
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-//                            }
-//                        })
-//                        .setLayoutRes(R.layout.dialog)
-//                        .setDimAmount(0.5f)
-//                        .isCenter(true)
-//                        .setWidth(ArmsUtils.getDimens(this, R.dimen.dialog_width))
-//                        .setHeight(ArmsUtils.getDimens(this, R.dimen.dialog_height))
-//                        .show();
-//                return;
         }
 
         if (targetActivity == null) {
-            ArmsUtils.makeText(ArmsUtils.getContext(), "功能尚未实现");
+            showMessage("功能尚未实现");
         } else {
             ArmsUtils.startActivity(targetActivity);
         }

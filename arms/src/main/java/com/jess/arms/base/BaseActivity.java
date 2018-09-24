@@ -26,13 +26,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.jess.arms.R;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
-import com.jess.arms.utils.StatusBarUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import javax.inject.Inject;
@@ -98,18 +98,29 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
         } catch (Exception e) {
             e.printStackTrace();
         }
-        StatusBarUtil.setStatusBarMode(this, true, android.R.color.white);
-        ImmersionBar.with(this)
-                .fitsSystemWindows(true)
-                .statusBarDarkFont(true)
-                .statusBarColor(android.R.color.white)
-                .init();
+        if (useImmersive()) {
+            ImmersionBar.with(this)
+                    .fitsSystemWindows(true)
+                    .statusBarDarkFont(true)
+                    .statusBarColor(R.color.statusBarColor)
+                    .init();
+        }
         initData(savedInstanceState);
+    }
+
+
+    /**
+     * 是否使用沉浸式状态栏,默认为使用(true)，
+     */
+    public boolean useImmersive() {
+        return true;
     }
 
     @Override
     protected void onDestroy() {
-        ImmersionBar.with(this).destroy();
+        if (useImmersive()) {
+            ImmersionBar.with(this).destroy();
+        }
         super.onDestroy();
         if (mUnbinder != null && mUnbinder != Unbinder.EMPTY)
             mUnbinder.unbind();

@@ -24,19 +24,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerOrderFormCenterComponent;
 import cn.ehanmy.hospital.di.module.OrderFormCenterModule;
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -81,6 +79,63 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     private boolean isLoadingMore;
 
     private CustomProgressDailog progressDailog;
+    private int normalColor = Color.parseColor("#333333");
+    private int currColor = Color.parseColor("#3DBFE8");
+    // 当前选中的textview
+    private TextView currentTab;
+    private String currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
+    private View.OnClickListener onSearchClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.search_btn:
+                    doSearch();
+                    break;
+                case R.id.clear_btn:
+                    searchKey.setText("");
+                    contentList.setAdapter(null);
+                    break;
+            }
+            hideImm();
+        }
+    };
+    private View.OnClickListener onTabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == currentTab.getId()) {
+                return;
+            }
+            currentTab.setTextColor(normalColor);
+            TextView newText = null;
+            switch (v.getId()) {
+                case R.id.unpaid:
+                    newText = unpaid;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
+                    break;
+                case R.id.all:
+                    newText = all;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_ALL;
+                    break;
+                case R.id.secend:
+                    newText = secend;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_SECEND;
+                    break;
+                case R.id.over:
+                    newText = over;
+                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_OK;
+                    break;
+            }
+
+            if (newText == null) {
+                return;
+            }
+            currentTab = newText;
+            currentTab.setTextColor(currColor);
+            mPresenter.requestOrderList(currentSearchType);
+        }
+    };
+    private boolean isEnd;
 
     private void initPaginate() {
         if (mPaginate == null) {
@@ -107,13 +162,6 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
             mPaginate.setHasMoreDataToLoad(false);
         }
     }
-
-    private int normalColor = Color.parseColor("#333333");
-    private int currColor = Color.parseColor("#3DBFE8");
-
-    // 当前选中的textview
-    private TextView currentTab;
-    private String currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -175,7 +223,6 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         initPaginate();
     }
 
-
     @Override
     public void showLoading() {
         if(progressDailog == null){
@@ -213,7 +260,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     private void doSearch(){
         String s = searchKey.getText().toString();
         if(TextUtils.isEmpty(s)){
-            ArmsUtils.makeText(this,"请输入搜索关键字后重试");
+            showMessage("请输入搜索关键字后重试");
             return;
         }
 
@@ -222,59 +269,6 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     public void updateList(List<OrderBean> orderList){
         contentList.setAdapter(mAdapter);
     }
-
-    private View.OnClickListener onSearchClickListener = new View.OnClickListener(){
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.search_btn:
-                    doSearch();
-                    break;
-                case R.id.clear_btn:
-                    searchKey.setText("");
-                    contentList.setAdapter(null);
-                    break;
-            }
-            hideImm();
-        }
-    };
-
-    private View.OnClickListener onTabClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(v.getId() == currentTab.getId()){
-                return;
-            }
-            currentTab.setTextColor(normalColor);
-            TextView newText = null;
-            switch (v.getId()){
-                case R.id.unpaid:
-                    newText = unpaid;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
-                    break;
-                case R.id.all:
-                    newText = all;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_ALL;
-                    break;
-                case R.id.secend:
-                    newText = secend;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_SECEND;
-                    break;
-                case R.id.over:
-                    newText = over;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_OK;
-                    break;
-            }
-
-            if(newText == null){
-                return;
-            }
-            currentTab = newText;
-            currentTab.setTextColor(currColor);
-            mPresenter.requestOrderList(currentSearchType);
-        }
-    };
 
     public Activity getActivity(){
         return this;
@@ -295,8 +289,6 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     public void endLoadMore() {
         isLoadingMore = false;
     }
-
-    private boolean isEnd;
 
     @Override
     public void setEnd(boolean isEnd) {

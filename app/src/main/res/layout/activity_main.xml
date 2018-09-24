@@ -4,37 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#FFFFFFFF"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="医院中心"
-            android:textColor="#FF333333"
-            android:textSize="16sp" />
-
-        <View
-            android:id="@+id/setting"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:background="@mipmap/title_setting" />
-
-    </RelativeLayout>
+    <include layout="@layout/title" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp" />
+        android:background="@color/white"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp" />
 
 </LinearLayout>

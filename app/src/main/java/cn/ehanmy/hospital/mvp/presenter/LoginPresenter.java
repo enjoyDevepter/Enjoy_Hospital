@@ -13,16 +13,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import cn.ehanmy.hospital.mvp.contract.LoginContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
@@ -78,24 +77,15 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
         LoginRequest request = new LoginRequest();
         request.setUsername(username);
         request.setPassword(password);
-////
-//        mRootView.killMyself();
-//        mRootView.goMainPage();
-
         mModel.login(request)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-                })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<LoginResponse>(mErrorHandler) {
                     @Override
                     public void onNext(LoginResponse response) {
                         if (response.isSuccess()) {
-//                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,new UserBean(username,response.getToken(),response.getSignkey()));
                             UserBean value = new UserBean(username, response.getToken(), response.getSignkey());
                             CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER, value);
                             HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
@@ -105,9 +95,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                                     .doOnSubscribe(disposable -> {
                                     }).subscribeOn(AndroidSchedulers.mainThread())
                                     .observeOn(AndroidSchedulers.mainThread())
-                                    .doFinally(() -> {
-                                        mRootView.hideLoading();//隐藏下拉刷新的进度条
-                                    })
                                     .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                                     .subscribe(new ErrorHandleSubscriber<HospitalInfoResponse>(mErrorHandler) {
                                         @Override
@@ -123,7 +110,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                                         }
                                     });
                         } else {
-                            mRootView.hideLoading();
                             mRootView.showMessage(response.getRetDesc());
                         }
                     }

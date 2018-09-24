@@ -4,16 +4,19 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import cn.ehanmy.hospital.mvp.contract.ProjectSettingContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
@@ -24,13 +27,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import cn.ehanmy.hospital.mvp.contract.ProjectSettingContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
@@ -129,7 +127,7 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
                     @Override
                     public void onNext(SettingProjectResponse response) {
                         if (response.isSuccess()) {
-                        } else {
+                            mRootView.showMessage(response.isSuccess() ? "项目设置成功!" : "项目设置失败!");
                         }
                     }
                 });

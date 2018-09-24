@@ -4,14 +4,15 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.integration.cache.Cache;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import javax.inject.Inject;
+
+import cn.ehanmy.hospital.mvp.contract.HospitalInfoContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalInfoResponse;
@@ -21,17 +22,12 @@ import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import cn.ehanmy.hospital.mvp.contract.HospitalInfoContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
 public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Model, HospitalInfoContract.View> {
-
-    public static final String CACHE_KEY_HOSPITAL_INFO = "cache_key_hospital_info";
 
     @Inject
     RxErrorHandler mErrorHandler;
@@ -56,38 +52,34 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         this.mApplication = null;
     }
 
-    public void initHospitalInfo(){
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    private void initHospitalInfo() {
         HospitalInfoRequest request = new HospitalInfoRequest();
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(ub.getToken());
-
         mModel.requestHospitalInfo(request)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<HospitalInfoResponse>(mErrorHandler) {
                     @Override
-                    public void onNext(HospitalInfoResponse s) {
-                        if(s.isSuccess()){
-                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO,s.getHospital());
-                            mRootView.changeHospitalInfoOk(true);
-                        }else{
-                            mRootView.showMessage(s.getRetDesc());
+                    public void onNext(HospitalInfoResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.updateUI(response);
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO, response.getHospital());
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
                         }
-                }});
+                    }
+                });
     }
 
-    public void changeHospitalInfo(String tell,String startTime,String endTime) {
+    public void changeHospitalInfo() {
         ChangeHospitalInfoRequest request = new ChangeHospitalInfoRequest();
-        request.setEndTime(endTime);
-        request.setStartTime(startTime);
-        request.setTellphone(tell);
-
+        request.setEndTime((String) mRootView.getCache().get("endTime"));
+        request.setStartTime((String) mRootView.getCache().get("startTime"));
+        request.setTellphone((String) mRootView.getCache().get("tellphone"));
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(ub.getToken());
 

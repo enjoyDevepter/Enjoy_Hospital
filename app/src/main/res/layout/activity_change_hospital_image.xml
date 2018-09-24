@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title"/>
-    <View style="@style/divider_3"/>
+    <include layout="@layout/title" />
+
 
     <LinearLayout
-        android:id="@+id/go_to_gallry"
-        android:orientation="horizontal"
+        android:id="@+id/album"
         android:layout_width="match_parent"
-        android:layout_height="42dp" >
+        android:layout_height="42dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="从相册选择"
             android:textColor="#ff333333"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
 
         <View
             android:layout_width="6dp"
             android:layout_height="11dp"
-            android:background="@mipmap/arrow_right"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="20dp"></View>
+            android:layout_marginRight="20dp"
+            android:background="@mipmap/arrow_right"></View>
 
     </LinearLayout>
-
-    <View style="@style/divider_3"/>
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_margin="21dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="21dp" />
 </LinearLayout>
