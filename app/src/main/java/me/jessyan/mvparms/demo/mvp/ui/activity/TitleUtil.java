@@ -1,11 +1,9 @@
 package me.jessyan.mvparms.demo.mvp.ui.activity;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
-import com.jess.arms.utils.ArmsUtils;
 
 import me.jessyan.mvparms.demo.R;
 

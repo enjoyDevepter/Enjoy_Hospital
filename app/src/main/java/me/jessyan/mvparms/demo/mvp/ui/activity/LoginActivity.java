@@ -54,7 +54,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void initData(Bundle savedInstanceState) {
         loginV.setOnClickListener(this);
-        mPresenter.requestPermissions();
     }
 
     @Override
@@ -65,6 +64,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void hideLoading() {
 
+    }
+
+    @Override
+    public boolean useImmersive() {
+        return false;
     }
 
     @Override
@@ -112,7 +116,4 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public RxPermissions getRxPermissions() {
         return mRxPermissions;
     }
-
-    // 随便加点注释，测测能不能提交代码
-    // 又加了点日志
 }

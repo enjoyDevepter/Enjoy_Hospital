@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "me.jessyan.mvparms.demo"
+        applicationId "cn.ehanmy.store"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
@@ -49,6 +49,8 @@ dependencies {
     implementation rootProject.ext.dependencies["banner"]
     implementation rootProject.ext.dependencies["extendedRecyclerView"]
     implementation rootProject.ext.dependencies["flowlayout"]
+    implementation rootProject.ext.dependencies["moneyview"]
+    implementation rootProject.ext.dependencies["actionsheet"]
 
     //support
     implementation(rootProject.ext.dependencies["cardview-v7"]) {

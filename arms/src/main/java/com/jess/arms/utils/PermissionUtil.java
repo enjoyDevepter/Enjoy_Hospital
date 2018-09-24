@@ -135,7 +135,7 @@ public class PermissionUtil {
      * 请求app运行初始化
      */
     public static void requestPermissionForInit(RequestPermission requestPermission, RxPermissions rxPermissions, RxErrorHandler errorHandler) {
-        requestPermission(requestPermission, rxPermissions, errorHandler, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        requestPermission(requestPermission, rxPermissions, errorHandler, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public interface RequestPermission {

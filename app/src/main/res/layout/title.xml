@@ -29,5 +29,19 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textColor="#FF333333"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/setting"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center">
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@mipmap/title_setting" />
+    </LinearLayout>
 </RelativeLayout>

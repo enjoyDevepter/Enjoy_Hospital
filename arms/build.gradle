@@ -102,6 +102,8 @@ dependencies {
         exclude module: 'jsr305'
     }
 
+    api rootProject.ext.dependencies['barlibrary']
+
     //tools
     compileOnly rootProject.ext.dependencies["javax.annotation"]
     api rootProject.ext.dependencies["dagger2"]

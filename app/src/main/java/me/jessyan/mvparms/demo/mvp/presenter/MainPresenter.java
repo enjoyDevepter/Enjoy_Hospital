@@ -34,7 +34,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     MainAdapter mAdapter;
     @Inject
     List<MainItem> mainItems;
-    int[] images = new int[]{R.mipmap.place_order, R.mipmap.order, R.mipmap.shop_reservation, R.mipmap.user_reservation, R.mipmap.activity, R.mipmap.hospital, R.mipmap.setting};
+    int[] images = new int[]{R.mipmap.register, R.mipmap.place_order, R.mipmap.order, R.mipmap.user_reservation, R.mipmap.hospital, R.mipmap.store};
 
     @Inject
     public MainPresenter(MainContract.Model model, MainContract.View rootView) {

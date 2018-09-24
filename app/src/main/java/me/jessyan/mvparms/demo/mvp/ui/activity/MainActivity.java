@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -27,7 +28,10 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener {
-
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
     @BindView(R.id.setting)
     View settingV;
     @BindView(R.id.recyclerView)
@@ -56,6 +60,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        backV.setVisibility(View.GONE);
         settingV.setOnClickListener(this);
         recyclerView.addItemDecoration(new SpacesItemDecoration(0, ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.main_item_space)));
         ArmsUtils.configRecyclerView(recyclerView, mLayoutManager);
@@ -110,27 +115,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         Class<? extends Activity> targetActivity = null;
         switch (position) {
             case 0:
+                // 注册会员
                 break;
             case 1:
-                // 订单中心
-                targetActivity = OrderFormCenterActivity.class;
+                // 下单中心
                 break;
             case 2:
+                // 订单中心
                 break;
             case 3:
+                // 用户预约
                 break;
             case 4:
+                // 医美预约
                 break;
             case 5:
+                // 我的店铺
                 break;
-            case 6:
-                break;
-        }
-
-        if(targetActivity == null){
-            ArmsUtils.makeText(ArmsUtils.getContext(),"功能尚未实现");
-        }else{
-            ArmsUtils.startActivity(targetActivity);
         }
     }
 }
