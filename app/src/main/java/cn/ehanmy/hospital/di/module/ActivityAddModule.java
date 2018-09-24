@@ -1,7 +1,15 @@
 package cn.ehanmy.hospital.di.module;
 
-import com.jess.arms.di.scope.ActivityScope;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
+import com.jess.arms.di.scope.ActivityScope;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.ehanmy.hospital.mvp.ui.adapter.DiaryUpdateImageAdapter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -32,5 +40,30 @@ public class ActivityAddModule {
     @Provides
     ActivityAddContract.Model provideActivityAddModel(ActivityAddModel model) {
         return model;
+    }
+
+
+    @ActivityScope
+    @Provides
+    RxPermissions provideRxPermissions() {
+        return new RxPermissions(view.getActivity());
+    }
+
+    @ActivityScope
+    @Provides
+    RecyclerView.LayoutManager provideLayoutManager() {
+        return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.HORIZONTAL, false);
+    }
+
+    @ActivityScope
+    @Provides
+    List<String> provideDiariesList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    RecyclerView.Adapter provideGoodsListAdapter(List<String> images) {
+        return new DiaryUpdateImageAdapter(images);
     }
 }

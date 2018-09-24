@@ -4,4 +4,6 @@
     <dimen name="main_padding_space">50dp</dimen>
     <dimen name="dialog_height">100dp</dimen>
     <dimen name="dialog_width">220dp</dimen>
+    <dimen name="image_upload_width">160dp</dimen>
+    <dimen name="image_upload_height">120dp</dimen>
 </resources>

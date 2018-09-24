@@ -11,6 +11,10 @@ import com.jess.arms.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
+import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 
 
 @ActivityScope
@@ -30,5 +34,11 @@ public class ActivityAddModel extends BaseModel implements ActivityAddContract.M
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .uploadImage(type, imgs);
     }
 }

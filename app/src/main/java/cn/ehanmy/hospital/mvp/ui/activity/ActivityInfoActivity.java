@@ -101,6 +101,12 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"活动信息");
+        add_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArmsUtils.startActivity(ActivityAddActivity.class);
+            }
+        });
         tab.addTab(tab.newTab().setText("待审核"));
         tab.addTab(tab.newTab().setText("已审核"));
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
