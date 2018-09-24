@@ -1,40 +1,36 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
-import java.util.List;
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.di.component.DaggerUserAppointmentComponent;
 import cn.ehanmy.hospital.di.module.UserAppointmentModule;
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
-import cn.ehanmy.hospital.mvp.model.ShopAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
-import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
-import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
 
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
-import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentListAdapter;
-import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentListAdapter;
-import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
+import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
+import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -42,9 +38,11 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresenter> implements UserAppointmentContract.View {
 
-    @BindView(R.id.title_Layout)
-    View title;
 
+    @BindView(R.id.title_Layout)
+    View title_Layout;
+    @BindView(R.id.search_layout)
+    View search_layout;
 
     @BindView(R.id.new_appointment)
     TextView new_appointment;
@@ -56,13 +54,11 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     TextView all;
 
     private TextView currTextView;
-    private int currType;
+    private String currType = UserAppointmentModel.SEARCH_TYPE_NEW;
 
     private int normalColor = Color.parseColor("#333333");
     private int currColor = Color.parseColor("#3DBFE8");
 
-    @BindView(R.id.search_layout)
-    View search_layout;
     @BindView(R.id.code)
     View code;
     @BindView(R.id.search_btn)
@@ -72,8 +68,48 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     @BindView(R.id.search_key)
     EditText searchKey;
 
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    UserAppointmentAdapter mAdapter;
+
     @BindView(R.id.contentList)
     RecyclerView contentList;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+
+    private CustomProgressDailog progressDailog;
+
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.nextPage();
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return isEnd;
+                }
+            };
+
+            mPaginate = Paginate.with(contentList, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -92,7 +128,7 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"用户预约");
+        new TitleUtil(title_Layout,this,"用户预约");
         currTextView = new_appointment;
         new_appointment.setTextColor(currColor);
 
@@ -104,7 +140,8 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         code.setVisibility(View.GONE);
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
-        contentList.setLayoutManager(new LinearLayoutManager(this));
+        ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        contentList.setAdapter(mAdapter);
     }
 
     @Override
@@ -134,6 +171,30 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         finish();
     }
 
+
+    /**
+     * 开始加载更多
+     */
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    private boolean isEnd;
+
+    @Override
+    public void setEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
+
     private View.OnClickListener onTypeClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -141,28 +202,39 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
                 return;
             }
             currTextView.setTextColor(normalColor);
+            TextView newText = null;
             switch (v.getId()){
                 case R.id.new_appointment:
-                    currTextView = new_appointment;
+                    newText = new_appointment;
                     currType = UserAppointmentModel.SEARCH_TYPE_NEW;
                     break;
                 case R.id.over:
                     currType = UserAppointmentModel.SEARCH_TYPE_OVER;
-                    currTextView = over;
+                    newText = over;
                     break;
                 case R.id.confirmed:
-                    currTextView = confirmed;
+                    newText = confirmed;
                     currType = UserAppointmentModel.SEARCH_TYPE_CONFIRMED;
                     break;
                 case R.id.all:
-                    currType = ShopAppointmentModel.SEARCH_TYPE_ALL;
-                    currTextView = all;
+                    currType = UserAppointmentModel.SEARCH_TYPE_ALL;
+                    newText = all;
                     break;
             }
 
+            if(newText == null){
+                return;
+            }
+
+            currTextView = newText;
             currTextView.setTextColor(currColor);
+            mPresenter.requestOrderList(currType);
         }
     };
+
+    public Activity getActivity(){
+        return this;
+    }
 
     private void doSearch(){
         String s = searchKey.getText().toString();
@@ -170,8 +242,6 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
             ArmsUtils.makeText(this,"请输入搜索关键字后重试");
             return;
         }
-
-        mPresenter.doSearch(s,currType);
     }
 
     private View.OnClickListener onSearchClickListener = new View.OnClickListener(){
@@ -191,26 +261,32 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         }
     };
 
-
-    public void updateList(List<UserAppointment> userAppointments){
-        UserAppointmentListAdapter adapter = new UserAppointmentListAdapter(userAppointments);
-        adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
-                if(position == 0){
-                    return;
-                }
-                switch (viewname){
-                    case OK:
-                        break;
-                    case CHANGE_APPOINTMENT:
-                        break;
-                    case CANCEL:
-                        break;
-                }
-            }
-        });
-        contentList.setAdapter(adapter);
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+        this.mPaginate = null;
     }
+
+//    public void updateList(List<UserAppointment> userAppointments){
+//        UserAppointmentListAdapter adapter = new UserAppointmentListAdapter(userAppointments);
+//        adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
+//            @Override
+//            public void onChildItemClick(View v, ViewName viewname, int position) {
+//                if(position == 0){
+//                    return;
+//                }
+//                switch (viewname){
+//                    case OK:
+//                        break;
+//                    case CHANGE_APPOINTMENT:
+//                        break;
+//                    case CANCEL:
+//                        break;
+//                }
+//            }
+//        });
+//        contentList.setAdapter(adapter);
+//    }
 
 }

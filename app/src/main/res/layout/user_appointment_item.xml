@@ -14,26 +14,37 @@
 
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="60dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_id"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="73dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_phone"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         style="@style/recycler_item_style"
         android:id="@+id/order_project"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="60dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_status"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="60dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_time"
         />
@@ -46,48 +57,49 @@
             android:text="操作"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:id="@+id/button_group"
-        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/ok"
-            android:layout_width="36dp"
-            android:layout_height="19dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/order_center_btn_bg"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:text="确定"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:id="@+id/button_group"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/change_appointment"
-            android:layout_width="36dp"
-            android:layout_height="19dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/order_center_btn_bg"
-            android:gravity="center"
-            android:text="改约"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/ok"
+                android:layout_width="36dp"
+                android:layout_height="19dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/order_center_btn_bg"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/cancel"
-            android:layout_width="36dp"
-            android:layout_height="19dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/order_center_btn_bg"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/change"
+                android:layout_width="36dp"
+                android:layout_height="19dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/order_center_btn_bg"
+                android:gravity="center"
+                android:text="改约"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/cancel"
+                android:layout_width="36dp"
+                android:layout_height="19dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/order_center_btn_bg"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

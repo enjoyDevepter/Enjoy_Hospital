@@ -14,8 +14,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -25,10 +31,10 @@ public class UserAppointmentModel extends BaseModel implements UserAppointmentCo
     @Inject
     Application mApplication;
 
-    public static final int SEARCH_TYPE_NEW = 1;
-    public static final int SEARCH_TYPE_CONFIRMED = 2;
-    public static final int SEARCH_TYPE_OVER = 3;
-    public static final int SEARCH_TYPE_ALL = 4;
+    public static final String SEARCH_TYPE_NEW = "0";
+    public static final String SEARCH_TYPE_CONFIRMED = "1";
+    public static final String SEARCH_TYPE_OVER = "2";
+    public static final String SEARCH_TYPE_ALL = null;
 
     @Inject
     public UserAppointmentModel(IRepositoryManager repositoryManager) {
@@ -42,12 +48,9 @@ public class UserAppointmentModel extends BaseModel implements UserAppointmentCo
         this.mApplication = null;
     }
 
-    public List<UserAppointment> doSearch(String searchKey, int SearchType){
-        // 啥也别说，先造点假数据
-        List<UserAppointment> list = new ArrayList<>();
-        for(int i = 0;i<10;i++){
-            list.add(new UserAppointment(i+"","1234567890","有关于"+searchKey+"的一些项目","未关联","20180808"));
-        }
-        return list;
+    @Override
+    public Observable<GetUserAppointmentPageResponse> getUserAppintmentPage(GetUserAppointmentPageRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .getUserAppointmentPage(request);
     }
 }

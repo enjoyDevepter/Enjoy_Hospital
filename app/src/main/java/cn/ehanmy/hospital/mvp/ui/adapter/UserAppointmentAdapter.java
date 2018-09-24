@@ -23,10 +23,10 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
-import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
-import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentListItemHolder;
-import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentListItemHolder;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 
 /**
  * ================================================
@@ -37,7 +37,14 @@ import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class UserAppointmentListAdapter extends DefaultAdapter<UserAppointment> {
+public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBean> {
+
+    public enum ListType{
+        NEW,  // 新预约
+        CONFIRM,  // 已确认
+        OVER,  // 已完成
+        ALL,  // 所有
+    }
 
     public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
@@ -51,14 +58,13 @@ public class UserAppointmentListAdapter extends DefaultAdapter<UserAppointment> 
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public UserAppointmentListAdapter(List<UserAppointment> userAppointments) {
-        super(userAppointments);
-        userAppointments.add(0,new UserAppointment());
+    public UserAppointmentAdapter(List<OrderProjectDetailBean> ordres) {
+        super(ordres);
     }
 
     @Override
-    public BaseHolder<UserAppointment> getHolder(View v, int viewType) {
-        return new UserAppointmentListItemHolder(v, new OnChildItemClickLinstener() {
+    public BaseHolder<OrderProjectDetailBean> getHolder(View v, int viewType) {
+        return new UserAppointmentHolder(v, new UserAppointmentHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
@@ -76,4 +82,6 @@ public class UserAppointmentListAdapter extends DefaultAdapter<UserAppointment> 
     public OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
+
+
 }

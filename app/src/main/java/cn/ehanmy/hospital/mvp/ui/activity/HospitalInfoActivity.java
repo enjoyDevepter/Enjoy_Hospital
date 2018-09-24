@@ -22,6 +22,7 @@ import com.jess.arms.utils.ArmsUtils;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
@@ -148,8 +149,9 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        DecimalFormat decimalFormat = new DecimalFormat("00");
                         et_time_start.setText(
-                                String.format("%2s:%2s",""+hourOfDay,""+minute));
+                                String.format("%s:%s",decimalFormat.format(hourOfDay),decimalFormat.format(minute)));
                     }
                 }, 0,0, true);
                 time.show();
@@ -163,8 +165,9 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        DecimalFormat decimalFormat = new DecimalFormat("00");
                         et_time_end.setText(
-                                String.format("%2s:%2s",""+hourOfDay,""+minute));
+                                String.format("%2s:%2s",decimalFormat.format(hourOfDay),decimalFormat.format(minute)));
                     }
                 }, 0,0, true);
                 time.show();

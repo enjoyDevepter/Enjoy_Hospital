@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,58 +47,76 @@
 
         <activity
             android:name=".mvp.ui.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.OrderFormCenterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.OrderInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ShopAppointmentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ShopAppointmentInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.UserAppointmentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.RelatedListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.HospitalInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.BuyCenterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.GoodsListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.OrderConfirmActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.CommitOrderActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ChangePasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.SafeSettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ProjectSettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ActivityInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ChangeHospitalImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".mvp.ui.activity.ActivityAddActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"></activity>
     </application>
 

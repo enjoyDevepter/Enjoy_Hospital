@@ -18,6 +18,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -111,4 +113,9 @@ public interface InterfaceService {
     @Multipart
     @POST("file/imageUpload")
     Observable<BaseResponse> uploadImage(@Part("type") String description, @Part MultipartBody.Part file);
+
+    // 获取用户预约列表
+    @POST("gateway")
+    Observable<GetUserAppointmentPageResponse> getUserAppointmentPage(@Body GetUserAppointmentPageRequest request);
+
 }
