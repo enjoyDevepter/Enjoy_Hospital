@@ -31,6 +31,8 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerActivityAddComponent;
 import cn.ehanmy.hospital.di.module.ActivityAddModule;
 import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ActivityInfoBean;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.ActivityAddPresenter;
 import cn.ehanmy.hospital.mvp.ui.widget.SpacesItemDecoration;
 import cn.ehanmy.hospital.util.EdittextUtil;
@@ -39,8 +41,13 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
+/**
+ * 添加活动和编辑活动共用
+ * */
 public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> implements ActivityAddContract.View, View.OnClickListener, ActionSheet.OnActionSheetSelected {
+
+    /**如果是编辑活动，通过这个标记将活动信息传递过来，否则认为是添加活动*/
+    public static final String KEY_FOR_APPOINTENT = "key_for_appointent";
 
     private static final int GALLERY_OPEN_REQUEST_CODE = 1;
     private static final int CROP_IMAGE_REQUEST_CODE = 2;
@@ -78,6 +85,9 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
     @BindView(R.id.et_content)
     EditText et_content;
 
+    /**如果是编辑活动，通过这个对象保存原始的活动。如果是新建活动，这个对象没有用*/
+    private ActivityInfoBean activityInfoBean;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerActivityAddComponent //如找不到该类,请编译一下项目
@@ -95,11 +105,18 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title, this, "添加活动");
+        activityInfoBean = (ActivityInfoBean) getIntent().getSerializableExtra(KEY_FOR_APPOINTENT);
+        String titleStr = activityInfoBean == null ? "添加活动":"编辑活动";
+        new TitleUtil(title, this, titleStr);
         addV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
         imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.dip2px(ArmsUtils.getContext(), 10), 0));
         imagesRV.setAdapter(mAdapter);
+
+        if(activityInfoBean != null){
+            et_title.setText(activityInfoBean.getTitle());
+            et_content.setText(activityInfoBean.getContent());
+        }
 
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +131,11 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
                     return;
                 }
 
-                mPresenter.addActivity(et_title.getText()+"",et_content.getText()+"");
+                if(activityInfoBean == null){
+                    mPresenter.addActivity(et_title.getText()+"",et_content.getText()+"");
+                }else{
+                    showMessage("需要调用编辑活动接口，暂时没提供接口");
+                }
             }
         });
     }

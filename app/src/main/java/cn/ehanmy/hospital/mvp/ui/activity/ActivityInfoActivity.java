@@ -18,6 +18,8 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
+import java.io.Serializable;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -27,7 +29,9 @@ import cn.ehanmy.hospital.mvp.contract.ActivityInfoContract;
 import cn.ehanmy.hospital.mvp.presenter.ActivityInfoPresenter;
 
 import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.mvp.ui.adapter.ActivityInfoListAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.GridDividerItemDecoration;
+import cn.ehanmy.hospital.mvp.ui.holder.ActivityInfoListHolder;
 
 
 import static android.view.View.INVISIBLE;
@@ -137,6 +141,22 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
         contentList.addItemDecoration(new GridDividerItemDecoration(
                 ArmsUtils.dip2px(ArmsUtils.getContext(),13), Color.TRANSPARENT
         ));
+        if(mAdapter instanceof ActivityInfoListAdapter){
+            ((ActivityInfoListAdapter) mAdapter).setOnChildItemClickLinstener(new ActivityInfoListHolder.OnChildItemClickLinstener() {
+                @Override
+                public void onChildItemClick(View v, ActivityInfoListHolder.ViewName viewname, int position) {
+                    switch (viewname){
+                        case EDIT:
+                            Intent intent = new Intent(ActivityInfoActivity.this,ActivityAddActivity.class);
+                            intent.putExtra(ActivityAddActivity.KEY_FOR_APPOINTENT,((ActivityInfoListAdapter) mAdapter).getItem(position));
+                            ArmsUtils.startActivity(intent);
+                            break;
+                        case DELETE:
+                            break;
+                    }
+                }
+            });
+        }
         contentList.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

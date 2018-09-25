@@ -25,12 +25,14 @@
             />
         
         <ImageView
+            android:id="@+id/delete"
             android:layout_width="14dp"
             android:layout_marginRight="9dp"
             android:background="@mipmap/activity_info_delete"
             android:layout_height="match_parent" />
 
         <TextView
+            android:id="@+id/edit"
             android:layout_marginRight="11dp"
             android:background="@drawable/activity_info_edit_btn_back"
             android:text="编辑"

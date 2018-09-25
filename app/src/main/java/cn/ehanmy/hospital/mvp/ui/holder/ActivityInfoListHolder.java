@@ -17,6 +17,9 @@ import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.activity.ActivityInfoBean;
 
+import static cn.ehanmy.hospital.mvp.ui.holder.ActivityInfoListHolder.ViewName.DELETE;
+import static cn.ehanmy.hospital.mvp.ui.holder.ActivityInfoListHolder.ViewName.EDIT;
+
 public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
 
     @BindView(R.id.image)
@@ -26,14 +29,24 @@ public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
     @BindView(R.id.content)
     TextView content;
 
+    @BindView(R.id.edit)
+    View edit;
+    @BindView(R.id.delete)
+    View delete;
+
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;
 
 
-    public ActivityInfoListHolder(View itemView) {
+    private OnChildItemClickLinstener onChildItemClickLinstener;
+
+    public ActivityInfoListHolder(View itemView, OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
+        edit.setOnClickListener(this);
+        delete.setOnClickListener(this);
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
     @Override
@@ -55,7 +68,36 @@ public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
         this.name = null;
         this.content = null;
         this.image = null;
+        this.edit = null;
+        this.delete = null;
     }
+
+
+    @Override
+    public void onClick(View view) {
+        if (null != onChildItemClickLinstener) {
+            switch (view.getId()) {
+                case R.id.edit:
+                    onChildItemClickLinstener.onChildItemClick(view, EDIT, getAdapterPosition());
+                    return;
+                case R.id.delete:
+                    onChildItemClickLinstener.onChildItemClick(view, DELETE, getAdapterPosition());
+                    return;
+            }
+        }
+        super.onClick(view);
+    }
+
+
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
+    }
+
+    public enum ViewName {
+        EDIT,
+        DELETE,
+    }
+
 }
 
 
