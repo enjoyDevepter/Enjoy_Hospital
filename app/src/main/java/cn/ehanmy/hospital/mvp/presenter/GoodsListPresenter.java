@@ -12,6 +12,7 @@ import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.GoodsListContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 @ActivityScope
@@ -148,10 +150,13 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                }).subscribe(new Consumer<GoodsPageResponse>() {
-            @Override
-            public void accept(GoodsPageResponse response) throws Exception {
-                if (response.isSuccess()) {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoodsPageResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(GoodsPageResponse response) {
+
+                        if (response.isSuccess()) {
                     if (pullToRefresh) {
                         GoodsList.clear();
                     }
