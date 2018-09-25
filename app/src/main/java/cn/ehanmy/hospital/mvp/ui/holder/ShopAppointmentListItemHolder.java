@@ -23,11 +23,7 @@ import com.jess.arms.base.BaseHolder;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
-import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
-import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
-import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 
 /**
  * ================================================

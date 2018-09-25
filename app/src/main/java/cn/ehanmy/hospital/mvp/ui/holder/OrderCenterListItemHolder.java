@@ -29,8 +29,6 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
-import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
-import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 
 /**
  * ================================================

@@ -26,9 +26,7 @@ import cn.ehanmy.hospital.mvp.contract.ShopAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.ShopAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentPresenter;
-import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
 import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentListAdapter;
-import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 

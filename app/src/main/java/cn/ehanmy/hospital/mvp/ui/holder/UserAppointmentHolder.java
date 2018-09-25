@@ -28,9 +28,9 @@ import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 
-import static cn.ehanmy.hospital.mvp.ui.adapter.ViewName.CANCEL;
-import static cn.ehanmy.hospital.mvp.ui.adapter.ViewName.CHANGE_APPOINTMENT;
-import static cn.ehanmy.hospital.mvp.ui.adapter.ViewName.OK;
+import static cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder.ViewName.CANCEL;
+import static cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder.ViewName.CHANGE_APPOINTMENT;
+import static cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder.ViewName.OK;
 
 
 /**
@@ -118,7 +118,7 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
     }
 
     public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, cn.ehanmy.hospital.mvp.ui.adapter.ViewName viewname, int position);
+        void onChildItemClick(View v, ViewName viewname, int position);
     }
 
     public enum ViewName {

@@ -29,6 +29,7 @@ import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
+import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -184,7 +185,22 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        mAdapter.setOnChildItemClickLinstener(new UserAppointmentHolder.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, UserAppointmentHolder.ViewName viewname, int position) {
+                switch (viewname){
+                    case CHANGE_APPOINTMENT:
+                        break;
+                    case OK:
+                        mPresenter.confirmAppointment(mAdapter.getItem(position).getReservationId());
+                        break;
+                    case CANCEL:
+                        break;
+                }
+            }
+        });
         contentList.setAdapter(mAdapter);
+        initPaginate();
     }
 
     @Override

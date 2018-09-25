@@ -10,6 +10,8 @@ import java.util.List;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.User;
 import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import io.reactivex.Observable;
@@ -27,5 +29,6 @@ public interface UserAppointmentContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GetUserAppointmentPageResponse> getUserAppintmentPage(GetUserAppointmentPageRequest request);
+        Observable<ConfirmAppointmentResponse> confirmAppointment(ConfirmAppointmentRequest request);
     }
 }

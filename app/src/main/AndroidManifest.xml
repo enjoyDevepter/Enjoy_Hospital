@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
     <application
         android:name="com.jess.arms.base.BaseApplication"
         android:allowBackup="true"
@@ -20,8 +21,8 @@
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

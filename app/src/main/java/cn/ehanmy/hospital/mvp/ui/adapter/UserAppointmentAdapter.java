@@ -23,9 +23,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
-import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
 import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 
 /**
@@ -46,7 +44,7 @@ public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
         ALL,  // 所有
     }
 
-    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+    public void setOnChildItemClickLinstener(UserAppointmentHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -56,7 +54,7 @@ public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
         });
     }
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
+    private UserAppointmentHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
     public UserAppointmentAdapter(List<OrderProjectDetailBean> ordres) {
         super(ordres);
@@ -66,7 +64,7 @@ public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
     public BaseHolder<OrderProjectDetailBean> getHolder(View v, int viewType) {
         return new UserAppointmentHolder(v, new UserAppointmentHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
+            public void onChildItemClick(View v, UserAppointmentHolder.ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -79,7 +77,7 @@ public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
         return R.layout.user_appointment_item;
     }
 
-    public OnChildItemClickLinstener getOnChildItemClickLinstener() {
+    public UserAppointmentHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
 

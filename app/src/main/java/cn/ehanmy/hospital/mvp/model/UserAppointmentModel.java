@@ -19,6 +19,8 @@ import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import io.reactivex.Observable;
@@ -52,5 +54,10 @@ public class UserAppointmentModel extends BaseModel implements UserAppointmentCo
     public Observable<GetUserAppointmentPageResponse> getUserAppintmentPage(GetUserAppointmentPageRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .getUserAppointmentPage(request);
+    }
+    @Override
+    public Observable<ConfirmAppointmentResponse> confirmAppointment(ConfirmAppointmentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .confirmAppointment(request);
     }
 }

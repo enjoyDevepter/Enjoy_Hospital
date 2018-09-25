@@ -1,28 +1,19 @@
 package cn.ehanmy.hospital.di.module;
 
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.ehanmy.hospital.mvp.ui.activity.OrderFormCenterActivity;
-import cn.ehanmy.hospital.mvp.ui.activity.OrderInfoActivity;
-import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
-import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 import dagger.Module;
 import dagger.Provides;
 
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
-import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 
 

@@ -31,9 +31,7 @@ import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
-import cn.ehanmy.hospital.mvp.ui.adapter.OnChildItemClickLinstener;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
-import cn.ehanmy.hospital.mvp.ui.adapter.ViewName;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;

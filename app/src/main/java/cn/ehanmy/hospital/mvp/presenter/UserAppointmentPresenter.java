@@ -1,6 +1,8 @@
 package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
 
 import com.jess.arms.integration.AppManager;
@@ -19,6 +21,8 @@ import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
@@ -32,6 +36,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 @ActivityScope
@@ -69,6 +74,11 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
         requestOrderList(1,type,true);
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void init(){
+        requestOrderList(currType);
+    }
+
     public void nextPage(){
         requestOrderList(nextPageIndex,currType,false);
     }
@@ -101,9 +111,9 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<GetUserAppointmentPageResponse>() {
+                .subscribe(new ErrorHandleSubscriber<GetUserAppointmentPageResponse>(mErrorHandler) {
                     @Override
-                    public void accept(GetUserAppointmentPageResponse response) throws Exception {
+                    public void onNext(GetUserAppointmentPageResponse response) {
                         if (response.isSuccess()) {
                             if(clear){
                                 orderBeanList.clear();
@@ -125,6 +135,37 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
                     }
                 });
     }
+
+    public void confirmAppointment(String id) {
+        ConfirmAppointmentRequest request = new ConfirmAppointmentRequest();
+        request.setReservationId(id);
+
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.confirmAppointment(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ConfirmAppointmentResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ConfirmAppointmentResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("确定成功");
+                            init();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
 
 
 //
