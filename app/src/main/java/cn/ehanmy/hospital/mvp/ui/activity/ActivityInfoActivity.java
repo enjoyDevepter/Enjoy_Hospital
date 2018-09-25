@@ -2,6 +2,8 @@ package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +27,7 @@ import cn.ehanmy.hospital.mvp.contract.ActivityInfoContract;
 import cn.ehanmy.hospital.mvp.presenter.ActivityInfoPresenter;
 
 import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.mvp.ui.adapter.GridDividerItemDecoration;
 
 
 import static android.view.View.INVISIBLE;
@@ -131,6 +134,9 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
         });
 
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        contentList.addItemDecoration(new GridDividerItemDecoration(
+                ArmsUtils.dip2px(ArmsUtils.getContext(),13), Color.TRANSPARENT
+        ));
         contentList.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

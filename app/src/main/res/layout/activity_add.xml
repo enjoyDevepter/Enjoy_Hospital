@@ -39,6 +39,7 @@
         </LinearLayout>
 
         <EditText
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:layout_marginLeft="23dp"
@@ -77,6 +78,7 @@
         </LinearLayout>
 
         <EditText
+            android:id="@+id/et_content"
             android:layout_width="match_parent"
             android:layout_height="91dp"
             android:layout_marginBottom="22dp"
@@ -129,6 +131,7 @@
             android:background="#F2F2F2">
 
             <TextView
+                android:id="@+id/commit"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_gravity="center"

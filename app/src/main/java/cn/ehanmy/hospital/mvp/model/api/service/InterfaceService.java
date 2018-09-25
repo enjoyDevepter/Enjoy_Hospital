@@ -1,5 +1,7 @@
 package cn.ehanmy.hospital.mvp.model.api.service;
 
+import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
@@ -130,5 +132,9 @@ public interface InterfaceService {
     // 获取用户预约列表
     @POST("gateway")
     Observable<CancelAppointmentResponse> cancelAppointment(@Body CancelAppointmentRequest request);
+
+    // 添加活动
+    @POST("gateway")
+    Observable<AddActivityResponse> addActivity(@Body AddActivityRequest request);
 
 }

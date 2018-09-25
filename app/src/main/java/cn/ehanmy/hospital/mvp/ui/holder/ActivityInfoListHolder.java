@@ -41,7 +41,7 @@ public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
 
         name.setText(data.getTitle());
         content.setText(Html.fromHtml(data.getContent()));
-
+        image.setImageResource(R.mipmap.default_image);
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()

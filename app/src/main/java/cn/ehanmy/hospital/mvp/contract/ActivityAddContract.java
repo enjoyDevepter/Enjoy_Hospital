@@ -5,6 +5,8 @@ import android.app.Activity;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
+import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -19,5 +21,6 @@ public interface ActivityAddContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs);
+        Observable<AddActivityResponse> addActivity(AddActivityRequest request);
     }
 }

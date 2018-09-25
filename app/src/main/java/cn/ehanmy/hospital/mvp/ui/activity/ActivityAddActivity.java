@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 
 import com.guoqi.actionsheet.ActionSheet;
 import com.jess.arms.base.BaseActivity;
@@ -32,6 +33,7 @@ import cn.ehanmy.hospital.di.module.ActivityAddModule;
 import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
 import cn.ehanmy.hospital.mvp.presenter.ActivityAddPresenter;
 import cn.ehanmy.hospital.mvp.ui.widget.SpacesItemDecoration;
+import cn.ehanmy.hospital.util.EdittextUtil;
 import cn.ehanmy.hospital.util.ImageUploadUtils;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
@@ -65,8 +67,16 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
     RxPermissions mRxPermissions;
     @Inject
     List<String> images;
+
+    @BindView(R.id.commit)
+    View commit;
     private String mCameraFilePath = "";
     private String mCropImgFilePath = "";
+
+    @BindView(R.id.et_title)
+    EditText et_title;
+    @BindView(R.id.et_content)
+    EditText et_content;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -90,6 +100,23 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
         ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
         imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.dip2px(ArmsUtils.getContext(), 10), 0));
         imagesRV.setAdapter(mAdapter);
+
+        commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(EdittextUtil.isEmpty(et_title)){
+                    showMessage("请输入活动标题");
+                    return;
+                }
+
+                if(EdittextUtil.isEmpty(et_content)){
+                    showMessage("请输入活动内容");
+                    return;
+                }
+
+                mPresenter.addActivity(et_title.getText()+"",et_content.getText()+"");
+            }
+        });
     }
 
     @Override

@@ -12,6 +12,10 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
+import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -40,5 +44,12 @@ public class ActivityAddModel extends BaseModel implements ActivityAddContract.M
     public Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .uploadImage(type, imgs);
+    }
+
+
+    @Override
+    public Observable<AddActivityResponse> addActivity(AddActivityRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .addActivity(request);
     }
 }

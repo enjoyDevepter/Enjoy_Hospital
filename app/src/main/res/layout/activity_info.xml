@@ -68,6 +68,7 @@
         app:tabTextColor="#FF666666" />
 
     <FrameLayout
+        android:padding="18dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">

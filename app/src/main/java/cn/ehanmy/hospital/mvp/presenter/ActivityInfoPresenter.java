@@ -59,7 +59,7 @@ public class ActivityInfoPresenter extends BasePresenter<ActivityInfoContract.Mo
     List<ActivityInfoBean> orderBeanList;
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void initData(){
         requestOrderList(currentType);
     }
