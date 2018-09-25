@@ -18,6 +18,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
@@ -124,5 +126,9 @@ public interface InterfaceService {
     // 获取用户预约列表
     @POST("gateway")
     Observable<ConfirmAppointmentResponse> confirmAppointment(@Body ConfirmAppointmentRequest request);
+
+    // 获取用户预约列表
+    @POST("gateway")
+    Observable<CancelAppointmentResponse> cancelAppointment(@Body CancelAppointmentRequest request);
 
 }

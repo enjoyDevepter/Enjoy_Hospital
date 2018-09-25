@@ -21,6 +21,8 @@ import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
@@ -167,6 +169,35 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
     }
 
 
+    public void cancelAppointment(String id) {
+        CancelAppointmentRequest request = new CancelAppointmentRequest();
+        request.setReservationId(id);
+
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.cancelAppointment(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CancelAppointmentResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(CancelAppointmentResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("取消成功");
+                            init();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
 //
 //    public void doSearch(String key,int searchType){

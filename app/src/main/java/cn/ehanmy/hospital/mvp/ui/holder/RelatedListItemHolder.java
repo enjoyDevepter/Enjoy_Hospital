@@ -86,6 +86,15 @@ public class RelatedListItemHolder extends BaseHolder<Order> {
 //                .subscribe(s -> mImage.setBackgroundResource(s));
     }
 
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
+    }
+
+    public enum ViewName{
+        RELATED
+    }
+
+
     @Override
     public void onClick(View view) {
         if (null != onChildItemClickLinstener) {

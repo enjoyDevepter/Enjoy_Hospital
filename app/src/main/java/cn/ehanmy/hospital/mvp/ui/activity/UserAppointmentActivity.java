@@ -195,6 +195,7 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
                         mPresenter.confirmAppointment(mAdapter.getItem(position).getReservationId());
                         break;
                     case CANCEL:
+                        mPresenter.cancelAppointment(mAdapter.getItem(position).getReservationId());
                         break;
                 }
             }

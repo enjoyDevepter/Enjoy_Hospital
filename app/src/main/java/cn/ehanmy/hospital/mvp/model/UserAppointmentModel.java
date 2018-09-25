@@ -19,6 +19,8 @@ import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
@@ -59,5 +61,10 @@ public class UserAppointmentModel extends BaseModel implements UserAppointmentCo
     public Observable<ConfirmAppointmentResponse> confirmAppointment(ConfirmAppointmentRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .confirmAppointment(request);
+    }
+    @Override
+    public Observable<CancelAppointmentResponse> cancelAppointment(CancelAppointmentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .cancelAppointment(request);
     }
 }

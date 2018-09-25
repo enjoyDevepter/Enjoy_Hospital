@@ -44,7 +44,7 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
         ALL,  // 所有
     }
 
-    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+    public void setOnChildItemClickLinstener(OrderCenterListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -54,7 +54,7 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
         });
     }
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
+    private OrderCenterListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
     public OrderCenterListAdapter(List<OrderBean> ordres) {
         super(ordres);
@@ -62,9 +62,9 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
 
     @Override
     public BaseHolder<OrderBean> getHolder(View v, int viewType) {
-        return new OrderCenterListItemHolder(v, new OnChildItemClickLinstener() {
+        return new OrderCenterListItemHolder(v, new OrderCenterListItemHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
+            public void onChildItemClick(View v, OrderCenterListItemHolder.ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -77,7 +77,7 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
         return R.layout.order_center_item;
     }
 
-    public OnChildItemClickLinstener getOnChildItemClickLinstener() {
+    public OrderCenterListItemHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
 

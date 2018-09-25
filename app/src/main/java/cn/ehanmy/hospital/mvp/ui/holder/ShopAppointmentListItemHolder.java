@@ -69,6 +69,16 @@ public class ShopAppointmentListItemHolder extends BaseHolder<ShopAppointment> {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
+
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
+    }
+
+    public enum ViewName{
+        DETAIL,RELATED,CANCEL
+    }
+
+
     @Override
     public void setData(ShopAppointment shopAppointment, int position) {
         if(position == 0){

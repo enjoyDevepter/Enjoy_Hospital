@@ -27,6 +27,7 @@ import cn.ehanmy.hospital.mvp.model.ShopAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentListAdapter;
+import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentListItemHolder;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -177,9 +178,9 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
 
     public void updateList(List<ShopAppointment> orderList) {
         ShopAppointmentListAdapter adapter = new ShopAppointmentListAdapter(orderList);
-        adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
+        adapter.setOnChildItemClickLinstener(new ShopAppointmentListItemHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
+            public void onChildItemClick(View v, ShopAppointmentListItemHolder.ViewName viewname, int position) {
                 if (position == 0) {
                     return;
                 }

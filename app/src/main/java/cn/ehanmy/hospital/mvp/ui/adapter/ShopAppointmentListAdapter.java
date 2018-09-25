@@ -39,7 +39,7 @@ import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentListItemHolder;
  */
 public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> {
 
-    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+    public void setOnChildItemClickLinstener(ShopAppointmentListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -49,7 +49,7 @@ public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> 
         });
     }
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
+    private ShopAppointmentListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
     public ShopAppointmentListAdapter(List<ShopAppointment> shopAppointments) {
         super(shopAppointments);
@@ -58,9 +58,9 @@ public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> 
 
     @Override
     public BaseHolder<ShopAppointment> getHolder(View v, int viewType) {
-        return new ShopAppointmentListItemHolder(v, new OnChildItemClickLinstener() {
+        return new ShopAppointmentListItemHolder(v, new ShopAppointmentListItemHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
+            public void onChildItemClick(View v, ShopAppointmentListItemHolder.ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -73,7 +73,7 @@ public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> 
         return R.layout.shop_appointment_item;
     }
 
-    public OnChildItemClickLinstener getOnChildItemClickLinstener() {
+    public ShopAppointmentListItemHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
 }

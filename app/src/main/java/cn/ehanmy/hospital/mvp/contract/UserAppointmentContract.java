@@ -10,6 +10,8 @@ import java.util.List;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.User;
 import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
@@ -30,5 +32,6 @@ public interface UserAppointmentContract {
     interface Model extends IModel {
         Observable<GetUserAppointmentPageResponse> getUserAppintmentPage(GetUserAppointmentPageRequest request);
         Observable<ConfirmAppointmentResponse> confirmAppointment(ConfirmAppointmentRequest request);
+        Observable<CancelAppointmentResponse> cancelAppointment(CancelAppointmentRequest request);
     }
 }

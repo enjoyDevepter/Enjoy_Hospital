@@ -38,7 +38,7 @@ import cn.ehanmy.hospital.mvp.ui.holder.RelatedListItemHolder;
  */
 public class RelatedListAdapter extends DefaultAdapter<Order> {
 
-    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+    public void setOnChildItemClickLinstener(RelatedListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -48,7 +48,7 @@ public class RelatedListAdapter extends DefaultAdapter<Order> {
         });
     }
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
+    private RelatedListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
     public RelatedListAdapter(List<Order> ordres) {
         super(ordres);
@@ -57,9 +57,9 @@ public class RelatedListAdapter extends DefaultAdapter<Order> {
 
     @Override
     public BaseHolder<Order> getHolder(View v, int viewType) {
-        return new RelatedListItemHolder(v, new OnChildItemClickLinstener() {
+        return new RelatedListItemHolder(v, new RelatedListItemHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
+            public void onChildItemClick(View v, RelatedListItemHolder.ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -72,7 +72,7 @@ public class RelatedListAdapter extends DefaultAdapter<Order> {
         return R.layout.related_list_item;
     }
 
-    public OnChildItemClickLinstener getOnChildItemClickLinstener() {
+    public RelatedListItemHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
 

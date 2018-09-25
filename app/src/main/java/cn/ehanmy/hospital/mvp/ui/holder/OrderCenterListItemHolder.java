@@ -136,6 +136,14 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
         super.onClick(view);
     }
 
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
+    }
+
+    public enum ViewName{
+        DETAIL,PAY
+    }
+
     @Override
     protected void onRelease() {
         this.orderIdTV = null;

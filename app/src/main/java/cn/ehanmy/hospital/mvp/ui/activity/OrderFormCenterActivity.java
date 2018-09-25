@@ -32,6 +32,7 @@ import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
+import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -191,9 +192,9 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         clear.setOnClickListener(onSearchClickListener);
 
         OrderCenterListAdapter orderCenterListAdapter = (OrderCenterListAdapter) mAdapter;
-        orderCenterListAdapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
+        orderCenterListAdapter.setOnChildItemClickLinstener(new OrderCenterListItemHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ViewName viewname, int position) {
+            public void onChildItemClick(View v, OrderCenterListItemHolder.ViewName viewname, int position) {
                 if(position == 0){
                     return;
                 }
