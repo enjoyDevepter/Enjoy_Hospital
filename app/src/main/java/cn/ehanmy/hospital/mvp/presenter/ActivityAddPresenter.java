@@ -74,6 +74,7 @@ public class ActivityAddPresenter extends BasePresenter<ActivityAddContract.Mode
                     @Override
                     public void onNext(BaseResponse response) {
                         if (response.isSuccess()) {
+                            images.clear();  // 只保留一张图片
                             images.add(response.getResult().getUrl());
                         } else {
                             mRootView.showMessage(response.getRetDesc());

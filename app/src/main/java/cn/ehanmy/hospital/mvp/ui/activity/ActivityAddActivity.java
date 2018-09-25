@@ -108,15 +108,17 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
         activityInfoBean = (ActivityInfoBean) getIntent().getSerializableExtra(KEY_FOR_APPOINTENT);
         String titleStr = activityInfoBean == null ? "添加活动":"编辑活动";
         new TitleUtil(title, this, titleStr);
-        addV.setOnClickListener(this);
-        ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
-        imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.dip2px(ArmsUtils.getContext(), 10), 0));
-        imagesRV.setAdapter(mAdapter);
 
         if(activityInfoBean != null){
             et_title.setText(activityInfoBean.getTitle());
             et_content.setText(activityInfoBean.getContent());
+            images.add(activityInfoBean.getImage());
         }
+
+        addV.setOnClickListener(this);
+        ArmsUtils.configRecyclerView(imagesRV, mLayoutManager);
+        imagesRV.addItemDecoration(new SpacesItemDecoration(ArmsUtils.dip2px(ArmsUtils.getContext(), 10), 0));
+        imagesRV.setAdapter(mAdapter);
 
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,6 +259,7 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
                 case CROP_IMAGE_REQUEST_CODE:
 //                    provideCache().put("imagePath", mCropImgFilePath);
                     mPresenter.uploadImage(new File(mCropImgFilePath));
+                    images.clear();  // 只保留一张图片
                     images.add(mCropImgFilePath);
                     mAdapter.notifyDataSetChanged();
                     break;
