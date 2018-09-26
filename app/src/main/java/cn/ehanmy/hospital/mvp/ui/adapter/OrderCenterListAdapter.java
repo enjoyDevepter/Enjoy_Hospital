@@ -37,24 +37,7 @@ import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
  */
 public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
 
-    public enum ListType{
-        NO_PAY,  // 未支付
-        DOUBLE_PAY,  // 二次付款
-        OVER,  // 已完成
-        ALL,  // 所有
-    }
-
-    public void setOnChildItemClickLinstener(OrderCenterListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
-        this.onChildItemClickLinstener = onChildItemClickLinstener;
-        setOnItemClickListener(new OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int viewType, Object data, int position) {
-
-            }
-        });
-    }
-
-    private OrderCenterListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener;
+    private OnChildItemClickLinstener onChildItemClickLinstener;
 
     public OrderCenterListAdapter(List<OrderBean> ordres) {
         super(ordres);
@@ -62,9 +45,9 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
 
     @Override
     public BaseHolder<OrderBean> getHolder(View v, int viewType) {
-        return new OrderCenterListItemHolder(v, new OrderCenterListItemHolder.OnChildItemClickLinstener() {
+        return new OrderCenterListItemHolder(v, new OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, OrderCenterListItemHolder.ViewName viewname, int position) {
+            public void onChildItemClick(View v, ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -77,9 +60,18 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
         return R.layout.order_center_item;
     }
 
-    public OrderCenterListItemHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
-        return onChildItemClickLinstener;
+    public void setOnChildItemClickLinstener(OnChildItemClickLinstener onChildItemClickLinstener) {
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
+
+    public enum ViewName {
+        DETAIL, PAY
+    }
+
+
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
+    }
 
 }

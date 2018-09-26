@@ -1,7 +1,6 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -9,16 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
@@ -36,19 +31,14 @@ import javax.inject.Inject;
 import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerGoodsListComponent;
 import cn.ehanmy.hospital.di.module.GoodsListModule;
 import cn.ehanmy.hospital.mvp.contract.GoodsListContract;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.presenter.GoodsListPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterThirdAdapter;
-import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
-import cn.ehanmy.hospital.mvp.ui.widget.SpacesItemDecoration;
-
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -101,19 +91,19 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
-
-    private List<Category> thirdCategoryList;
-
     @BindDrawable(R.mipmap.arrow_up)
     Drawable asceD;
     @BindDrawable(R.mipmap.arrow_down)
     Drawable descD;
     @BindColor(R.color.choice)
     int choiceColor;
-
+    private List<Category> thirdCategoryList;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
+    private int currentSecentIndex = 0;
+    private int currentThirdIndex = 0;
+    private int cacheSecendIndex = 0;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -240,7 +230,6 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         this.hasLoadedAllItems = has;
     }
 
-
     /**
      * 初始化Paginate,用于加载更多
      */
@@ -330,10 +319,6 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     public Cache getCache() {
         return provideCache();
     }
-
-    private int currentSecentIndex = 0;
-    private int currentThirdIndex = 0;
-    private int cacheSecendIndex = 0;
 
     @Override
     public void onItemClick(View view, int viewType, Object data, int position) {

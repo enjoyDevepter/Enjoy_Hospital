@@ -1,64 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/title" />
 
     <include layout="@layout/search_layout" />
 
-    <LinearLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="3dp"
-        android:divider="@null"
-        android:dividerPadding="2dp"
-        android:showDividers="middle">
-
-        <TextView
-            android:id="@+id/unpaid"
-            style="@style/tab_item"
-            android:text="未支付" />
-
-        <View style="@style/tab_divider" />
-
-        <TextView
-            android:id="@+id/secend"
-            style="@style/tab_item"
-            android:text="二次付款" />
-
-        <View style="@style/tab_divider" />
-
-        <TextView
-            android:id="@+id/over"
-            style="@style/tab_item"
-            android:text="已完成" />
-
-        <View style="@style/tab_divider" />
-
-        <TextView
-            android:id="@+id/all"
-            style="@style/tab_item"
-            android:text="全部" />
-    </LinearLayout>
-
-    <View style="@style/divider_1" />
+        android:background="@drawable/list_item_bg"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="#FF3DBFE8"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="#FF333333" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/contentList"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="9dp"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/recycle_list" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="9dp"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/recycle_list" />
+
+            <LinearLayout
+                android:id="@+id/no_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="94dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/nodata" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="暂无数据"
+                    android:textColor="#FF666666"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

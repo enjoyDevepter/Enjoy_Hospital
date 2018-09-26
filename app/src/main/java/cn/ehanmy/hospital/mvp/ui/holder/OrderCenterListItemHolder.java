@@ -26,9 +26,9 @@ import java.util.Date;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
+import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 
 /**
  * ================================================
@@ -66,9 +66,9 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
     @BindView(R.id.order_secend_price)
     TextView order_secend_price;
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
+    private OrderCenterListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public OrderCenterListItemHolder(View itemView, OnChildItemClickLinstener onChildItemClickLinstener) {
+    public OrderCenterListItemHolder(View itemView, OrderCenterListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         detailV.setOnClickListener(this);
         payV.setOnClickListener(this);
@@ -76,22 +76,24 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
     }
 
     @Override
+    public void onClick(View view) {
+        if (null != onChildItemClickLinstener) {
+            switch (view.getId()) {
+                case R.id.detail:
+                    onChildItemClickLinstener.onChildItemClick(view, OrderCenterListAdapter.ViewName.DETAIL, getAdapterPosition());
+                    return;
+                case R.id.pay:
+                    onChildItemClickLinstener.onChildItemClick(view, OrderCenterListAdapter.ViewName.PAY, getAdapterPosition());
+                    return;
+            }
+        }
+        super.onClick(view);
+    }
+
+    @Override
     public void setData(OrderBean order, int position) {
-        String searchType = order.getSearchType();
-        if(searchType == OrderFormCenterModel.SEARCH_TYPE_ALL || OrderFormCenterModel.SEARCH_TYPE_SECEND.equals(searchType)){
-            order_secend_price.setVisibility(View.VISIBLE);
-        }else{
-            order_secend_price.setVisibility(View.GONE);
-        }
 
-        String orderType = order.getOrderType();
-        if(OrderFormCenterModel.SEARCH_TYPE_OK.equals(orderType)){
-            payV.setVisibility(View.GONE);
-        }else{
-            payV.setVisibility(View.VISIBLE);
-        }
-
-        if(position == 0){
+        if (position == 0) {
             orderIdTV.setText("编号");
             phoneTV.setText("手机");
             priceTV.setText("金额");
@@ -100,48 +102,32 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             timeTV.setText("时间");
             order_secend_price.setText("尾款");
             buttonGroup.setVisibility(View.INVISIBLE);
-            parent.setBackgroundColor(Color.parseColor("#E4E4E4"));
-        }else{
-            parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            parent.setBackgroundColor(Color.parseColor("#FFE4E4E4"));
+        } else {
+            parent.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             buttonGroup.setVisibility(View.VISIBLE);
             orderIdTV.setText(order.getOrderId());
             GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
             order_secend_price.setText(String.format("¥%.0f", goodsOrderBean.getTailMoney()));
             phoneTV.setText("13112345678");
-            if(goodsOrderBean != null){
+            if (goodsOrderBean != null) {
                 priceTV.setText(String.format("¥%.0f", goodsOrderBean.getSalePrice()));
                 projectTV.setText(goodsOrderBean.getName());
             }
             statusTV.setText(order.getOrderStatusDesc());
             timeTV.setText(SIMPLE_DATE_FORMAT.format(new Date(order.getOrderTime())));
         }
-//        Observable.just(data.getName())
-//                .subscribe(s -> mName.setText(s));
-//        Observable.just(data.getImageId())
-//                .subscribe(s -> mImage.setBackgroundResource(s));
-    }
 
-    @Override
-    public void onClick(View view) {
-        if (null != onChildItemClickLinstener) {
-            switch (view.getId()) {
-                case R.id.detail:
-                    onChildItemClickLinstener.onChildItemClick(view, ViewName.DETAIL, getAdapterPosition());
-                    return;
-                case R.id.pay:
-                    onChildItemClickLinstener.onChildItemClick(view, ViewName.PAY, getAdapterPosition());
-                    return;
-            }
+        if ("1".equals(order.getOrderStatus())) {
+            payV.setVisibility(View.VISIBLE);
+            order_secend_price.setVisibility(View.GONE);
+        } else if ("2".equals(order.getOrderStatus())) {
+            payV.setVisibility(View.VISIBLE);
+            order_secend_price.setVisibility(View.VISIBLE);
+        } else if ("5".equals(order.getOrderStatus())) {
+            order_secend_price.setVisibility(View.VISIBLE);
+            payV.setVisibility(View.GONE);
         }
-        super.onClick(view);
-    }
-
-    public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, ViewName viewname, int position);
-    }
-
-    public enum ViewName{
-        DETAIL,PAY
     }
 
     @Override
@@ -154,6 +140,7 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
         this.timeTV = null;
         this.detailV = null;
         this.payV = null;
-        order_secend_price = null;
+        this.order_secend_price = null;
     }
 }
+

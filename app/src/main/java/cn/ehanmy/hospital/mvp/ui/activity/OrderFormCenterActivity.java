@@ -2,24 +2,23 @@ package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,28 +27,20 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerOrderFormCenterComponent;
 import cn.ehanmy.hospital.di.module.OrderFormCenterModule;
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
-import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
-import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
-import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
-import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**订单中心页面*/
-public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresenter> implements OrderFormCenterContract.View {
-
-    @Inject
-    RecyclerView.LayoutManager mLayoutManager;
-    @Inject
-    RecyclerView.Adapter mAdapter;
+/**
+ * 订单中心页面
+ */
+public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresenter> implements OrderFormCenterContract.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TabLayout.OnTabSelectedListener, OrderCenterListAdapter.OnChildItemClickLinstener {
 
     @BindView(R.id.title_Layout)
     View title_Layout;
     @BindView(R.id.search_layout)
     View search_layout;
-
     @BindView(R.id.code)
     View code;
     @BindView(R.id.search_btn)
@@ -58,109 +49,22 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     View clear;
     @BindView(R.id.search_key)
     EditText searchKey;
-
-    @BindView(R.id.unpaid)
-    TextView unpaid;
-    @BindView(R.id.secend)
-    TextView secend;
-    @BindView(R.id.over)
-    TextView over;
-    @BindView(R.id.all)
-    TextView all;
-
+    @BindView(R.id.tab)
+    TabLayout tabLayout;
     @BindView(R.id.contentList)
     RecyclerView contentList;
-
+    @BindView(R.id.no_date)
+    View noDataV;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    OrderCenterListAdapter mAdapter;
 
     private Paginate mPaginate;
     private boolean isLoadingMore;
-
-    private CustomProgressDailog progressDailog;
-    private int normalColor = Color.parseColor("#333333");
-    private int currColor = Color.parseColor("#3DBFE8");
-    // 当前选中的textview
-    private TextView currentTab;
-    private String currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
-    private View.OnClickListener onSearchClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.search_btn:
-                    doSearch();
-                    break;
-                case R.id.clear_btn:
-                    searchKey.setText("");
-                    contentList.setAdapter(null);
-                    break;
-            }
-            hideImm();
-        }
-    };
-    private View.OnClickListener onTabClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == currentTab.getId()) {
-                return;
-            }
-            currentTab.setTextColor(normalColor);
-            TextView newText = null;
-            switch (v.getId()) {
-                case R.id.unpaid:
-                    newText = unpaid;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
-                    break;
-                case R.id.all:
-                    newText = all;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_ALL;
-                    break;
-                case R.id.secend:
-                    newText = secend;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_SECEND;
-                    break;
-                case R.id.over:
-                    newText = over;
-                    currentSearchType = OrderFormCenterModel.SEARCH_TYPE_OK;
-                    break;
-            }
-
-            if (newText == null) {
-                return;
-            }
-            currentTab = newText;
-            currentTab.setTextColor(currColor);
-            mPresenter.requestOrderList(currentSearchType);
-        }
-    };
-    private boolean isEnd;
-
-    private void initPaginate() {
-        if (mPaginate == null) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.nextPage();
-                }
-
-                @Override
-                public boolean isLoading() {
-                    return isLoadingMore;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return isEnd;
-                }
-            };
-
-            mPaginate = Paginate.with(contentList, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
-        }
-    }
+    private boolean hasLoadedAllItems;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -179,64 +83,26 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title_Layout,this,"订单中心");
-        unpaid.setOnClickListener(onTabClickListener);
-        all.setOnClickListener(onTabClickListener);
-        secend.setOnClickListener(onTabClickListener);
-        over.setOnClickListener(onTabClickListener);
-        currentTab = unpaid;
-        currentTab.setTextColor(currColor);
-
         code.setVisibility(View.GONE);
-        search.setOnClickListener(onSearchClickListener);
-        clear.setOnClickListener(onSearchClickListener);
-
-        OrderCenterListAdapter orderCenterListAdapter = (OrderCenterListAdapter) mAdapter;
-        orderCenterListAdapter.setOnChildItemClickLinstener(new OrderCenterListItemHolder.OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, OrderCenterListItemHolder.ViewName viewname, int position) {
-                if(position == 0){
-                    return;
-                }
-                switch (viewname){
-                    case DETAIL:
-                        Intent intent = new Intent(OrderFormCenterActivity.this,OrderInfoActivity.class);
-                        intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID,orderCenterListAdapter.getItem(position).getOrderId());
-                        startActivity(intent);
-                        break;
-                    case PAY:
-                        break;
-                }
-            }
-        });
-
+        search.setOnClickListener(this);
+        clear.setOnClickListener(this);
+        new TitleUtil(title_Layout, this, "订单中心");
+        tabLayout.addTab(tabLayout.newTab().setTag("1").setText("未支付"));
+        tabLayout.addTab(tabLayout.newTab().setTag("2").setText("二次付款"));
+        tabLayout.addTab(tabLayout.newTab().setTag("5").setText("已完成"));
+        tabLayout.addTab(tabLayout.newTab().setText("全部"));
+        tabLayout.addOnTabSelectedListener(this);
+        LinearLayout linearLayout = (LinearLayout) tabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
+                R.drawable.tablayout_divider_vertical));
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         contentList.setAdapter(mAdapter);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.requestOrderList(currentSearchType);
-            }
-        });
+        mAdapter.setOnChildItemClickLinstener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         initPaginate();
-    }
-
-    @Override
-    public void showLoading() {
-        if(progressDailog == null){
-            progressDailog = new CustomProgressDailog(this);
-            progressDailog.show();
-        }
-    }
-
-    @Override
-    public void hideLoading() {
-        if(progressDailog != null && progressDailog.isShowing()){
-            progressDailog.dismiss();
-            progressDailog = null;
-        }
-        swipeRefreshLayout.setRefreshing(false);
+        provideCache().put("type", "1");
+        mPresenter.getOrderList(true);
     }
 
     @Override
@@ -256,21 +122,47 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         finish();
     }
 
-    private void doSearch(){
-        String s = searchKey.getText().toString();
-        if(TextUtils.isEmpty(s)){
-            showMessage("请输入搜索关键字后重试");
-            return;
-        }
-
-    }
-
-    public void updateList(List<OrderBean> orderList){
-        contentList.setAdapter(mAdapter);
-    }
-
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+        this.mPaginate = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_btn:
+                String s = searchKey.getText().toString();
+                if (ArmsUtils.isEmpty(s)) {
+                    showMessage("请输入搜索关键字后重试");
+                    return;
+                }
+                break;
+            case R.id.clear_btn:
+                searchKey.setText("");
+                contentList.setAdapter(null);
+                break;
+        }
+    }
+
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -290,14 +182,91 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     }
 
     @Override
-    public void setEnd(boolean isEnd) {
-        this.isEnd = isEnd;
+    public void showError(boolean hasDate) {
+        contentList.setVisibility(hasDate ? View.VISIBLE : View.INVISIBLE);
+        noDataV.setVisibility(hasDate ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
-    protected void onDestroy() {
-        DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
-        super.onDestroy();
-        this.mPaginate = null;
+    public void setLoadedAllItems(boolean has) {
+        this.hasLoadedAllItems = has;
+    }
+
+
+    /**
+     * 初始化Paginate,用于加载更多
+     */
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.getOrderList(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return hasLoadedAllItems;
+                }
+            };
+
+            mPaginate = Paginate.with(contentList, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.getOrderList(true);
+    }
+
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        switch (tab.getPosition()) {
+            case 0:
+                provideCache().put("type", "1");
+                break;
+            case 1:
+                provideCache().put("type", "2");
+                break;
+            case 2:
+                provideCache().put("type", "5");
+                break;
+            case 3:
+                provideCache().put("type", "");
+                break;
+        }
+        mPresenter.getOrderList(true);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onChildItemClick(View v, OrderCenterListAdapter.ViewName viewname, int position) {
+        switch (viewname) {
+            case DETAIL:
+                Intent intent = new Intent(OrderFormCenterActivity.this, OrderInfoActivity.class);
+                intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, mAdapter.getItem(position).getOrderId());
+                startActivity(intent);
+                break;
+            case PAY:
+                break;
+        }
     }
 }

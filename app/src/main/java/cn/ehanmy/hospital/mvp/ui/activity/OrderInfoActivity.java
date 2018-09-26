@@ -21,29 +21,25 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerOrderInfoComponent;
 import cn.ehanmy.hospital.di.module.OrderInfoModule;
 import cn.ehanmy.hospital.mvp.contract.OrderInfoContract;
-import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
-import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderRecipientInfoBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderInfoPresenter;
 
-import cn.ehanmy.hospital.R;
-
-
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**订单详情页面*/
+/**
+ * 订单详情页面
+ */
 public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implements OrderInfoContract.View {
 
     public static final String KEY_FOR_ORDER_ID = "key_for_order_id";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     ImageLoader mImageLoader;
-
     @BindView(R.id.title_Layout)
     View title;
     @BindView(R.id.form_id)
@@ -68,8 +64,9 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
     TextView project_name;
     @BindView(R.id.order_time)
     TextView order_time;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public void updateOrderInfo(OrderInfoBean orderInfoBean){
+    public void updateOrderInfo(OrderInfoBean orderInfoBean) {
         GoodsOrderBean goodsOrderBean = orderInfoBean.getGoodsList().get(0);
         mImageLoader.loadImage(this,
                 ImageConfigImpl
@@ -83,13 +80,15 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
         form_remark.setText(orderInfoBean.getRemark());
         time.setText(simpleDateFormat.format(new Date(orderInfoBean.getOrderTime())));
         OrderRecipientInfoBean orderRecipientInfo = orderInfoBean.getOrderRecipientInfo();
-        if(orderRecipientInfo != null){
+        if (orderRecipientInfo != null) {
             form_tel.setText(orderRecipientInfo.getMobile());
             form_add.setText(orderRecipientInfo.getAddress());
         }
         skill.setText(goodsOrderBean.getGoodsSpecValue().getSpecValueName());
         project_name.setText(goodsOrderBean.getName());
-        order_time.setText(orderInfoBean.getAppointmentsDate()+"  "+orderInfoBean.getAppointmentsTime());
+        if (!ArmsUtils.isEmpty(orderInfoBean.getAppointmentsDate())) {
+            order_time.setText("预约时间：" + orderInfoBean.getAppointmentsDate() + "  " + orderInfoBean.getAppointmentsTime());
+        }
     }
 
     @Override
@@ -109,7 +108,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"订单详情");
+        new TitleUtil(title, this, "订单详情");
     }
 
 
@@ -140,7 +139,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
         finish();
     }
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 }

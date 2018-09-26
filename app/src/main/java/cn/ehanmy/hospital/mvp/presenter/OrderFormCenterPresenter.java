@@ -1,39 +1,29 @@
 package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.integration.cache.IntelligentCache;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
-import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
-import cn.ehanmy.hospital.mvp.model.entity.User;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import javax.inject.Inject;
+
+import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
+import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 import cn.ehanmy.hospital.util.CacheUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-
-import static cn.ehanmy.hospital.mvp.model.OrderFormCenterModel.SEARCH_TYPE_ALL;
 
 
 @ActivityScope
@@ -46,16 +36,70 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
-
-
     @Inject
-    RecyclerView.Adapter mAdapter;
+    OrderCenterListAdapter mAdapter;
     @Inject
     List<OrderBean> orderBeanList;
+
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public OrderFormCenterPresenter(OrderFormCenterContract.Model model, OrderFormCenterContract.View rootView) {
         super(model, rootView);
+    }
+
+    public void getOrderList(boolean pullToRefresh) {
+        OrderListRequest request = new OrderListRequest();
+        request.setOrderStatus((String) mRootView.getCache().get("type"));
+
+        UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(cacheUserBean.getToken());
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
+
+        mModel.requestOrderListPage(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> {
+                    if (pullToRefresh)
+                        mRootView.showLoading();//显示下拉刷新的进度条
+                    else
+                        mRootView.startLoadMore();//显示上拉加载更多的进度条
+                })
+                .doFinally(() -> {
+                    if (pullToRefresh)
+                        mRootView.hideLoading();//隐藏下拉刷新的进度条
+                    else
+                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
+                })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<OrderListResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(OrderListResponse response) {
+                        if (response.isSuccess()) {
+                            if (pullToRefresh) {
+                                orderBeanList.clear();
+                                OrderBean orderBean = new OrderBean();
+                                orderBean.setOrderStatus((String) mRootView.getCache().get("type"));
+                                orderBeanList.add(orderBean);
+                            }
+                            mRootView.showError(response.getOrderList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            orderBeanList.addAll(response.getOrderList());
+                            preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = orderBeanList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, orderBeanList.size());
+                            }
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -65,67 +109,6 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
-    }
-
-    public void requestOrderList(String type){
-        requestOrderList(1,type,true);
-    }
-
-    public void nextPage(){
-        requestOrderList(nextPageIndex,currType,false);
-    }
-
-    private String currType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
-    private int nextPageIndex = 1;
-
-    private void requestOrderList(int pageIndex,String type,final boolean clear) {
-        OrderListRequest request = new OrderListRequest();
-        request.setPageIndex(pageIndex);
-        request.setOrderStatus(type);
-        request.setPageSize(10);
-
-        UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
-        request.setToken(cacheUserBean.getToken());
-
-        mModel.requestOrderListPage(request)
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                    if (clear) {
-//                        mRootView.showLoading();//显示下拉刷新的进度条
-                    }else
-                        mRootView.startLoadMore();//显示上拉加载更多的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    if (clear)
-                        mRootView.hideLoading();//隐藏下拉刷新的进度条
-                    else
-                        mRootView.endLoadMore();//隐藏上拉加载更多的进度条
-                })
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(new Consumer<OrderListResponse>() {
-                    @Override
-                    public void accept(OrderListResponse response) throws Exception {
-                        if (response.isSuccess()) {
-                            if(clear){
-                                orderBeanList.clear();
-                                orderBeanList.add(new OrderBean());
-                            }
-                            currType = type;
-                            nextPageIndex = response.getNextPageIndex();
-                            mRootView.setEnd(nextPageIndex == -1);
-                            List<OrderBean> orderList = response.getOrderList();
-                            orderBeanList.addAll(orderList);
-                            for(OrderBean ob : orderBeanList){
-                                ob.setSearchType(currType);
-                            }
-                            mAdapter.notifyDataSetChanged();
-                            mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
-                        }
-                    }
-                });
     }
 
 }

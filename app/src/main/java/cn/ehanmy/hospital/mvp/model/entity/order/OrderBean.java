@@ -3,56 +3,18 @@ package cn.ehanmy.hospital.mvp.model.entity.order;
 import java.io.Serializable;
 import java.util.List;
 
-import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
-
-public class OrderBean implements Serializable{
+public class OrderBean implements Serializable {
     private long orderTime;
     private int nums;
     private String orderId;
     private String orderType;
     private String orderTypeDesc;
     private String orderStatus;
-
-    public String getSearchType() {
-        return searchType;
-    }
-
-    public void setSearchType(String searchType) {
-        this.searchType = searchType;
-    }
-
-    private String searchType = OrderFormCenterModel.SEARCH_TYPE_UNPAID;
-
-    public String getOrderStatusDesc() {
-        return orderStatusDesc;
-    }
-
-    public void setOrderStatusDesc(String orderStatusDesc) {
-        this.orderStatusDesc = orderStatusDesc;
-    }
-
     private String orderStatusDesc;
     private long payMoney;
     private long price;
     private long totalPrice;
     private List<GoodsOrderBean> goodsList;
-
-    @Override
-    public String toString() {
-        return "OrderBean{" +
-                "orderTime=" + orderTime +
-                ", nums=" + nums +
-                ", orderId='" + orderId + '\'' +
-                ", orderType='" + orderType + '\'' +
-                ", orderTypeDesc='" + orderTypeDesc + '\'' +
-                ", orderStatus='" + orderStatus + '\'' +
-                ", payMoney=" + payMoney +
-                ", price=" + price +
-                ", totalPrice=" + totalPrice +
-                ", goodsList=" + goodsList +
-                '}';
-    }
 
     public long getOrderTime() {
         return orderTime;
@@ -102,6 +64,14 @@ public class OrderBean implements Serializable{
         this.orderStatus = orderStatus;
     }
 
+    public String getOrderStatusDesc() {
+        return orderStatusDesc;
+    }
+
+    public void setOrderStatusDesc(String orderStatusDesc) {
+        this.orderStatusDesc = orderStatusDesc;
+    }
+
     public long getPayMoney() {
         return payMoney;
     }
@@ -132,5 +102,22 @@ public class OrderBean implements Serializable{
 
     public void setGoodsList(List<GoodsOrderBean> goodsList) {
         this.goodsList = goodsList;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderBean{" +
+                "orderTime=" + orderTime +
+                ", nums=" + nums +
+                ", orderId='" + orderId + '\'' +
+                ", orderType='" + orderType + '\'' +
+                ", orderTypeDesc='" + orderTypeDesc + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", orderStatusDesc='" + orderStatusDesc + '\'' +
+                ", payMoney=" + payMoney +
+                ", price=" + price +
+                ", totalPrice=" + totalPrice +
+                ", goodsList=" + goodsList +
+                '}';
     }
 }

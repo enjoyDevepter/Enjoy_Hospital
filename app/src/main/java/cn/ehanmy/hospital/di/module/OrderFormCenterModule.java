@@ -8,13 +8,12 @@ import com.jess.arms.di.scope.ActivityScope;
 import java.util.ArrayList;
 import java.util.List;
 
-import dagger.Module;
-import dagger.Provides;
-
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.model.OrderFormCenterModel;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
+import dagger.Module;
+import dagger.Provides;
 
 
 @Module
@@ -44,18 +43,14 @@ public class OrderFormCenterModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<OrderBean> list) {
-        OrderCenterListAdapter orderCenterListAdapter = new OrderCenterListAdapter(list);
-        return orderCenterListAdapter;
+    OrderCenterListAdapter provideStoreAdapter(List<OrderBean> list) {
+        return new OrderCenterListAdapter(list);
     }
-
 
     @ActivityScope
     @Provides
     List<OrderBean> provideOrderBeanList() {
-        ArrayList<OrderBean> orderBeans = new ArrayList<>();
-        orderBeans.add(new OrderBean());
-        return orderBeans;
+        return new ArrayList<>();
     }
 
     @ActivityScope
