@@ -3,115 +3,120 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center|top"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/y300"
         android:background="@mipmap/login_logo_bg">
 
         <View
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/x142"
+            android:layout_height="@dimen/y142"
             android:layout_gravity="center"
             android:background="@mipmap/logo" />
 
     </FrameLayout>
 
-
     <LinearLayout
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/x500"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="16dp"
-                android:layout_height="18dp"
-                android:layout_alignParentLeft="true"
-                android:background="@mipmap/user" />
-
-            <EditText
-                android:id="@+id/username"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@android:color/transparent"
-                android:hint="请输入账号"
-                android:imeOptions="actionNext"
-                android:text="h0000001"
-                android:textSize="13sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/x33"
+                    android:layout_height="@dimen/y36"
+                    android:layout_alignParentLeft="true"
+                    android:background="@mipmap/user" />
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x21"
+                    android:background="@android:color/transparent"
+                    android:hint="请输入账号"
+                    android:imeOptions="actionNext"
+                    android:text="h0000001"
+                    android:textSize="@dimen/x28" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y1"
+                android:layout_marginLeft="@dimen/x48"
+                android:layout_marginTop="@dimen/y20"
+                android:background="#FFCCCCCC" />
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="23dp"
-            android:layout_marginTop="9dp"
-            android:background="#FFCCCCCC" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
 
         <LinearLayout
-            android:id="@+id/byUserName"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/x500"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/y44"
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="17dp"
-                android:layout_height="19dp"
-                android:layout_alignParentLeft="true"
-                android:background="@mipmap/password" />
 
-            <EditText
-                android:id="@+id/password"
+            <LinearLayout
+                android:id="@+id/byUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="9dp"
-                android:background="@android:color/transparent"
-                android:hint="请输入密码"
-                android:imeOptions="actionDone"
-                android:text="123456"
-                android:textSize="13sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/x38"
+                    android:layout_height="@dimen/y42"
+                    android:layout_alignParentLeft="true"
+                    android:background="@mipmap/password" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x21"
+                    android:background="@android:color/transparent"
+                    android:hint="请输入密码"
+                    android:imeOptions="actionDone"
+                    android:text="123456"
+                    android:textSize="@dimen/x28" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y1"
+                android:layout_marginLeft="@dimen/x48"
+                android:layout_marginTop="@dimen/y20"
+                android:background="#FFCCCCCC" />
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="23dp"
-            android:layout_marginTop="9dp"
-            android:background="#FFCCCCCC" />
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="@dimen/x548"
+            android:layout_height="@dimen/y82"
+            android:layout_marginTop="@dimen/y75"
+            android:background="@drawable/login_btn_bg"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="#FFFFFFFF"
+            android:textSize="@dimen/x36" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/login"
-        android:layout_width="276dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/login_btn_bg"
-        android:gravity="center"
-        android:text="登录"
-        android:textColor="#FFFFFFFF"
-        android:textSize="17sp" />
-
 </LinearLayout>

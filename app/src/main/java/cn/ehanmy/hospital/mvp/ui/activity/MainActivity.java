@@ -2,11 +2,14 @@ package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
@@ -43,6 +46,33 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Inject
     MainAdapter mAdapter;
 
+    private void showResolution(){
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Resolution: "+dm.widthPixels+","+dm.heightPixels);
+        sb.append("\n");
+        sb.append("valuesType = "+getResources().getString(R.string.values_type));
+        sb.append("\n");
+        sb.append("density = "+dm.density);
+        sb.append("\n");
+
+        Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation; //获取屏幕方向
+        String orientationStr = "";
+        if(ori == Configuration.ORIENTATION_LANDSCAPE){
+            orientationStr = "land";
+        }else if(ori == Configuration.ORIENTATION_PORTRAIT){
+            orientationStr = "port";
+        }else{
+            orientationStr = ori + "";
+        }
+        sb.append("orientation = "+orientationStr);
+
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
         DaggerMainComponent //如找不到该类,请编译一下项目
@@ -60,6 +90,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        showResolution();
         titleTV.setText("医院中心");
         settingV.setVisibility(View.VISIBLE);
         settingV.setOnClickListener(this);
