@@ -133,10 +133,19 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
-                        .url("")
+                        .url(hospitaInfoBean.getImage())
                         .placeholder(R.drawable.place_holder_img)
                         .imageView(imageIV)
                         .build());
+    }
+
+    @Override
+    public void changeOk() {
+        if(dialog != null){
+            dialog.dismiss();
+            dialog = null;
+        }
+
     }
 
 

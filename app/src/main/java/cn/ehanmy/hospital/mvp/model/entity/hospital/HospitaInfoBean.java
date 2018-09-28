@@ -17,81 +17,27 @@ public class HospitaInfoBean implements Serializable {
     private String tellphone;
     private String endTime;
     private String starTime;
+    private String image;
 
     @Override
     public String toString() {
         return "HospitaInfoBean{" +
-                "address='" + address + '\'' +
+                "hospitalId='" + hospitalId + '\'' +
+                ", name='" + name + '\'' +
+                ", province='" + province + '\'' +
+                ", provinceName='" + provinceName + '\'' +
                 ", city='" + city + '\'' +
                 ", cityName='" + cityName + '\'' +
                 ", county='" + county + '\'' +
                 ", countyName='" + countyName + '\'' +
+                ", address='" + address + '\'' +
                 ", distance='" + distance + '\'' +
                 ", distanceDesc='" + distanceDesc + '\'' +
-                ", hospitalId='" + hospitalId + '\'' +
-                ", name='" + name + '\'' +
-                ", province='" + province + '\'' +
-                ", provinceName='" + provinceName + '\'' +
                 ", tellphone='" + tellphone + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", starTime='" + starTime + '\'' +
+                ", image='" + image + '\'' +
                 '}';
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getCountyName() {
-        return countyName;
-    }
-
-    public void setCountyName(String countyName) {
-        this.countyName = countyName;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
-    public String getDistanceDesc() {
-        return distanceDesc;
-    }
-
-    public void setDistanceDesc(String distanceDesc) {
-        this.distanceDesc = distanceDesc;
     }
 
     public String getHospitalId() {
@@ -126,6 +72,62 @@ public class HospitaInfoBean implements Serializable {
         this.provinceName = provinceName;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+        this.countyName = countyName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getDistanceDesc() {
+        return distanceDesc;
+    }
+
+    public void setDistanceDesc(String distanceDesc) {
+        this.distanceDesc = distanceDesc;
+    }
+
     public String getTellphone() {
         return tellphone;
     }
@@ -148,5 +150,13 @@ public class HospitaInfoBean implements Serializable {
 
     public void setStarTime(String starTime) {
         this.starTime = starTime;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

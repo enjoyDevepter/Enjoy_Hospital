@@ -52,7 +52,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
         this.mApplication = null;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     private void initHospitalInfo() {
         HospitalInfoRequest request = new HospitalInfoRequest();
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
@@ -97,6 +97,7 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                     public void onNext(ChangeHospitalInfoResponse response) {
                         if (response.isSuccess()) {
                             initHospitalInfo();
+                            mRootView.changeOk();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
