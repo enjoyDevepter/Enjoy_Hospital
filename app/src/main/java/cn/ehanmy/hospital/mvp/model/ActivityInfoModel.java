@@ -12,6 +12,8 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ActivityInfoContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.activity.DeleteActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.DeleteActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import io.reactivex.Observable;
@@ -42,4 +44,10 @@ public class ActivityInfoModel extends BaseModel implements ActivityInfoContract
 	                .getActivityInfo(request);
     }
 
+
+    @Override
+    public Observable<DeleteActivityInfoResponse> deleteActivityInfo(DeleteActivityInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .deleteActivityInfo(request);
+    }
 }

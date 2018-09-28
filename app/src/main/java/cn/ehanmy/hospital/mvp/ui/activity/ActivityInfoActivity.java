@@ -152,6 +152,7 @@ public class ActivityInfoActivity extends BaseActivity<ActivityInfoPresenter> im
                             ArmsUtils.startActivity(intent);
                             break;
                         case DELETE:
+                            mPresenter.deleteActivityInfo(((ActivityInfoListAdapter) mAdapter).getItem(position).getActivityId());
                             break;
                     }
                 }

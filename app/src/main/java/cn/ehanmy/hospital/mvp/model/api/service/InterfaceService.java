@@ -2,6 +2,10 @@ package cn.ehanmy.hospital.mvp.model.api.service;
 
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.activity.DeleteActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.DeleteActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
@@ -136,5 +140,13 @@ public interface InterfaceService {
     // 添加活动
     @POST("gateway")
     Observable<AddActivityResponse> addActivity(@Body AddActivityRequest request);
+
+    // 修改活动信息
+    @POST("gateway")
+    Observable<ChangeActivityInfoResponse> changeActivityInfo(@Body ChangeActivityInfoRequest request);
+
+    // 删除活动
+    @POST("gateway")
+    Observable<DeleteActivityInfoResponse> deleteActivityInfo(@Body DeleteActivityInfoRequest request);
 
 }

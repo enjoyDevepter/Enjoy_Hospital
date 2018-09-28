@@ -17,11 +17,18 @@ package cn.ehanmy.hospital.mvp.ui.holder;
 
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.utils.ArmsUtils;
+
+import java.io.File;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
@@ -39,13 +46,34 @@ public class DiaryUpdateImageHolder extends BaseHolder<String> {
     @BindView(R.id.image)
     ImageView imageIV;
 
+    private AppComponent mAppComponent;
+    private ImageLoader mImageLoader;
+
     public DiaryUpdateImageHolder(View itemView) {
         super(itemView);
+        mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
+        mImageLoader = mAppComponent.imageLoader();
     }
 
     @Override
     public void setData(String path, int position) {
-        imageIV.setImageBitmap(BitmapFactory.decodeFile(path));
+        if(TextUtils.isEmpty(path)){
+            return;
+        }
+        File file = new File(path);
+        // 如果给定的字符串表示路径，且文件存在，则将文件解析为图片
+        if(file.exists()){
+            imageIV.setImageBitmap(BitmapFactory.decodeFile(path));
+        }else{
+            // 否则，path可能是一个图片的url
+            mImageLoader.loadImage(itemView.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .url(path)
+                            .imageView(imageIV)
+                            .build());
+
+        }
     }
 
     /**

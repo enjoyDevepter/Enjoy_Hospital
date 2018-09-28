@@ -6,6 +6,7 @@ public class ActivityInfoBean implements Serializable {
     private String title;
     private String content;
     private String image;
+    private String activityId;
 
     @Override
     public String toString() {
@@ -13,6 +14,7 @@ public class ActivityInfoBean implements Serializable {
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", image='" + image + '\'' +
+                ", activityId='" + activityId + '\'' +
                 '}';
     }
 
@@ -38,5 +40,13 @@ public class ActivityInfoBean implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
     }
 }

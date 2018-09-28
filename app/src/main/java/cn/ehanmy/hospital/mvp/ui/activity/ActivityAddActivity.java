@@ -136,7 +136,7 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
                 if(activityInfoBean == null){
                     mPresenter.addActivity(et_title.getText()+"",et_content.getText()+"");
                 }else{
-                    showMessage("需要调用编辑活动接口，暂时没提供接口");
+                    mPresenter.changeActivityInfo(activityInfoBean.getActivityId(),et_title.getText()+"",et_content.getText()+"");
                 }
             }
         });

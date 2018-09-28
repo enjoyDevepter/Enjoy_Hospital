@@ -1,6 +1,8 @@
 package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -14,9 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ActivityInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -30,6 +36,8 @@ import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
+import static cn.ehanmy.hospital.mvp.ui.activity.ActivityAddActivity.KEY_FOR_APPOINTENT;
 
 
 @ActivityScope
@@ -83,6 +91,15 @@ public class ActivityAddPresenter extends BasePresenter<ActivityAddContract.Mode
                 });
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void init(){
+        ActivityInfoBean activityInfoBean = (ActivityInfoBean) mRootView.getActivity().getIntent().getSerializableExtra(KEY_FOR_APPOINTENT);
+
+        if(activityInfoBean != null){
+            images.add(activityInfoBean.getImage());
+        }
+    }
+
     public void addActivity(String title,String content) {
         AddActivityRequest request = new AddActivityRequest();
         request.setTitle(title);
@@ -114,5 +131,36 @@ public class ActivityAddPresenter extends BasePresenter<ActivityAddContract.Mode
                 });
     }
 
+    public void changeActivityInfo(String id,String title,String content) {
+        ChangeActivityInfoRequest request = new ChangeActivityInfoRequest();
+        request.setTitle(title);
+        request.setContent(content);
+        request.setImageList(new ArrayList<>(images));
+        request.setActivityId(id);
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.changeActivityInfo(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ChangeActivityInfoResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ChangeActivityInfoResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("编辑活动成功");
+                            mRootView.killMyself();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
 
 }

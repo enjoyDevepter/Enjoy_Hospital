@@ -5,6 +5,8 @@ import android.app.Activity;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
+import cn.ehanmy.hospital.mvp.model.entity.activity.DeleteActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.DeleteActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import io.reactivex.Observable;
@@ -23,5 +25,6 @@ public interface ActivityInfoContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GetActivityInfoResponse> getActivityInfo(GetActivityInfoRequest request);
+        Observable<DeleteActivityInfoResponse> deleteActivityInfo(DeleteActivityInfoRequest request);
     }
 }

@@ -7,6 +7,8 @@ import com.jess.arms.mvp.IModel;
 
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -22,5 +24,6 @@ public interface ActivityAddContract {
     interface Model extends IModel {
         Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs);
         Observable<AddActivityResponse> addActivity(AddActivityRequest request);
+        Observable<ChangeActivityInfoResponse> changeActivityInfo(ChangeActivityInfoRequest request);
     }
 }

@@ -14,6 +14,8 @@ import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.GetActivityInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
@@ -51,5 +53,10 @@ public class ActivityAddModel extends BaseModel implements ActivityAddContract.M
     public Observable<AddActivityResponse> addActivity(AddActivityRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .addActivity(request);
+    }
+    @Override
+    public Observable<ChangeActivityInfoResponse> changeActivityInfo(ChangeActivityInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .changeActivityInfo(request);
     }
 }
