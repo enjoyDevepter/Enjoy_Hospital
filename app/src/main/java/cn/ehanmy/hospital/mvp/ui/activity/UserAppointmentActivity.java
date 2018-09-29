@@ -32,6 +32,8 @@ import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -201,16 +203,18 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
             }
         });
         contentList.setAdapter(mAdapter);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.init();
+            }
+        });
+
         initPaginate();
     }
 
     @Override
     public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
 
     }
 
@@ -271,25 +275,18 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         this.mPaginate = null;
     }
 
-//    public void updateList(List<UserAppointment> userAppointments){
-//        UserAppointmentListAdapter adapter = new UserAppointmentListAdapter(userAppointments);
-//        adapter.setOnChildItemClickLinstener(new OnChildItemClickLinstener() {
-//            @Override
-//            public void onChildItemClick(View v, ViewName viewname, int position) {
-//                if(position == 0){
-//                    return;
-//                }
-//                switch (viewname){
-//                    case OK:
-//                        break;
-//                    case CHANGE_APPOINTMENT:
-//                        break;
-//                    case CANCEL:
-//                        break;
-//                }
-//            }
-//        });
-//        contentList.setAdapter(adapter);
-//    }
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @BindView(R.id.no_date)
+    View onDateV;
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
 
 }

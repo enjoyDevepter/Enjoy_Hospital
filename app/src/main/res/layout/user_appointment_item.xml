@@ -99,6 +99,17 @@
                 android:text="取消"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="36dp"
+                android:layout_height="19dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/order_center_btn_bg"
+                android:gravity="center"
+                android:text="详细"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
         </LinearLayout>
     </FrameLayout>
 

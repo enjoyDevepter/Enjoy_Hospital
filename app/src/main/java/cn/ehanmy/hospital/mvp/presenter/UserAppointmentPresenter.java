@@ -76,7 +76,7 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
         requestOrderList(1,type,true);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+//    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void init(){
         requestOrderList(currType);
     }
@@ -124,6 +124,7 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
                             currType = type;
                             nextPageIndex = response.getNextPageIndex();
                             mRootView.setEnd(nextPageIndex == -1);
+                            mRootView.showError(response.getOrderProjectDetailList().size() > 0);
                             List<OrderProjectDetailBean> orderList = response.getOrderProjectDetailList();
                             orderBeanList.addAll(orderList);
                             for(OrderProjectDetailBean ob : orderBeanList){

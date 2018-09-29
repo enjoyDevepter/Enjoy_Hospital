@@ -1,5 +1,6 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,7 +40,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class UserAppointmentInfoActivity extends BaseActivity<UserAppointmentInfoPresenter> implements UserAppointmentInfoContract.View {
 
 
-    public static final String KEY_FOR_APPOINTMENT = "key_for_appointment";
+    public static final String KEY_FOR_APPOINTMENT_ID = "key_for_appointment_id";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     ImageLoader mImageLoader;
@@ -104,8 +105,6 @@ public class UserAppointmentInfoActivity extends BaseActivity<UserAppointmentInf
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"预约详细");
-        OrderProjectDetailBean bean = (OrderProjectDetailBean) getIntent().getSerializableExtra(KEY_FOR_APPOINTMENT);
-        updateOrderInfo(bean);
     }
 
     @Override
@@ -133,5 +132,9 @@ public class UserAppointmentInfoActivity extends BaseActivity<UserAppointmentInf
     @Override
     public void killMyself() {
         finish();
+    }
+
+    public Activity getActivity(){
+        return this;
     }
 }

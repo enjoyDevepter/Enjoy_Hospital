@@ -15,11 +15,13 @@
  */
 package cn.ehanmy.hospital.mvp.ui.holder;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +29,7 @@ import java.util.Date;
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.ui.activity.UserAppointmentInfoActivity;
 
 import static cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder.ViewName.CANCEL;
 import static cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder.ViewName.CHANGE_APPOINTMENT;
@@ -63,6 +66,8 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
     View cancel;
     @BindView(R.id.button_group)
     View button_group;
+    @BindView(R.id.info)
+    View info;
 
     @BindView(R.id.parent)
     View parent;
@@ -74,6 +79,7 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
         ok.setOnClickListener(this);
         change.setOnClickListener(this);
         cancel.setOnClickListener(this);
+        info.setOnClickListener(this);
         this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
@@ -97,6 +103,29 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
             order_status.setText(order.getStatusDesc());
             order_project.setText(order.getGoods().getName());
         }
+
+        ok.setVisibility(View.GONE);
+        change.setVisibility(View.GONE);
+        cancel.setVisibility(View.GONE);
+        info.setVisibility(View.GONE);
+
+        switch (order.getStatus()){
+            case "0":
+                ok.setVisibility(View.VISIBLE);
+                change.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.VISIBLE);
+                break;
+            case "1":
+                change.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.VISIBLE);
+                break;
+            case "2":
+                info.setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+
+        }
     }
 
     @Override
@@ -111,6 +140,11 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
                     return;
                 case R.id.cancel:
                     onChildItemClickLinstener.onChildItemClick(view, CANCEL, getAdapterPosition());
+                    return;
+                case R.id.info:
+                    Intent intent = new Intent(ArmsUtils.getContext(), UserAppointmentInfoActivity.class);
+                    intent.putExtra(UserAppointmentInfoActivity.KEY_FOR_APPOINTMENT_ID,order_id.getText());
+                    ArmsUtils.startActivity(intent);
                     return;
             }
         }

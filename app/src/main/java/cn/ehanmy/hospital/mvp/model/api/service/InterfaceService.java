@@ -28,6 +28,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentReq
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import io.reactivex.Observable;
@@ -148,5 +150,9 @@ public interface InterfaceService {
     // 删除活动
     @POST("gateway")
     Observable<DeleteActivityInfoResponse> deleteActivityInfo(@Body DeleteActivityInfoRequest request);
+
+    // 获取用户预约详情
+    @POST("gateway")
+    Observable<GetUserAppointmentInfoResponse> getUserAppointmentInfo(@Body GetUserAppointmentInfoRequest request);
 
 }
