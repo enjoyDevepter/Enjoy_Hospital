@@ -16,6 +16,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRe
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouResponse;
 import io.reactivex.Observable;
 
 
@@ -34,5 +36,6 @@ public interface UserAppointmentContract {
         Observable<GetUserAppointmentPageResponse> getUserAppintmentPage(GetUserAppointmentPageRequest request);
         Observable<ConfirmAppointmentResponse> confirmAppointment(ConfirmAppointmentRequest request);
         Observable<CancelAppointmentResponse> cancelAppointment(CancelAppointmentRequest request);
+        Observable<HuakouResponse> huakou(HuakouRequest request);
     }
 }

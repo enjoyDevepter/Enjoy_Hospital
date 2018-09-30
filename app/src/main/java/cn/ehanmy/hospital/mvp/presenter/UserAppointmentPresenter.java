@@ -27,6 +27,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRe
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.util.CacheUtil;
@@ -138,6 +140,37 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
                     }
                 });
     }
+
+    public void huakou(String orderId,String reservationId) {
+        HuakouRequest request = new HuakouRequest();
+        request.setOrderId(orderId);
+        request.setReservationId(reservationId);
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.huakou(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HuakouResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(HuakouResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("划扣成功");
+                            init();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
 
     public void confirmAppointment(String id) {
         ConfirmAppointmentRequest request = new ConfirmAppointmentRequest();

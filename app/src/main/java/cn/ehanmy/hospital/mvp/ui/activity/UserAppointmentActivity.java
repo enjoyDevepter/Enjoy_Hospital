@@ -27,6 +27,7 @@ import cn.ehanmy.hospital.di.component.DaggerUserAppointmentComponent;
 import cn.ehanmy.hospital.di.module.UserAppointmentModule;
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
@@ -199,6 +200,14 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
                     case CANCEL:
                         mPresenter.cancelAppointment(mAdapter.getItem(position).getReservationId());
                         break;
+                    case INFO:
+                        Intent intent = new Intent(ArmsUtils.getContext(), UserAppointmentInfoActivity.class);
+                        intent.putExtra(UserAppointmentInfoActivity.KEY_FOR_APPOINTMENT_ID,mAdapter.getItem(position).getReservationId());
+                        ArmsUtils.startActivity(intent);
+                        break;
+                    case HUAKOU:
+                        OrderProjectDetailBean item = mAdapter.getItem(position);
+                        mPresenter.huakou(item.getProjectId(),item.getReservationId());
                 }
             }
         });

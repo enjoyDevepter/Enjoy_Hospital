@@ -17,6 +17,16 @@ public class OrderProjectDetailBean implements Serializable {
     private String reservationTime;
     private String reservationId;
     private String reservationStatus;
+
+    public String getReservationStatusDesc() {
+        return reservationStatusDesc;
+    }
+
+    public void setReservationStatusDesc(String reservationStatusDesc) {
+        this.reservationStatusDesc = reservationStatusDesc;
+    }
+
+    private String reservationStatusDesc;
     private String code;
     private String isExperience;  // 是否为体验卡
     private String confirmTime;
@@ -25,6 +35,16 @@ public class OrderProjectDetailBean implements Serializable {
     private String address;
     private UserAppointmentGoodsBean goods;
     private UserAppointmentMember member;
+
+    private int maxNum;
+
+    public int getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(int maxNum) {
+        this.maxNum = maxNum;
+    }
 
     public String getSearcyType() {
         return searcyType;
@@ -48,6 +68,7 @@ public class OrderProjectDetailBean implements Serializable {
                 ", reservationTime='" + reservationTime + '\'' +
                 ", reservationId='" + reservationId + '\'' +
                 ", reservationStatus='" + reservationStatus + '\'' +
+                ", reservationStatusDesc='" + reservationStatusDesc + '\'' +
                 ", code='" + code + '\'' +
                 ", isExperience='" + isExperience + '\'' +
                 ", confirmTime='" + confirmTime + '\'' +
@@ -56,6 +77,8 @@ public class OrderProjectDetailBean implements Serializable {
                 ", address='" + address + '\'' +
                 ", goods=" + goods +
                 ", member=" + member +
+                ", maxNum=" + maxNum +
+                ", searcyType='" + searcyType + '\'' +
                 '}';
     }
 

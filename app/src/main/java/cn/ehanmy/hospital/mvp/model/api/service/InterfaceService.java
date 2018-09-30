@@ -34,6 +34,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPa
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentTimeRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentTimeResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouResponse;
 import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListResponse;
@@ -160,5 +162,9 @@ public interface InterfaceService {
     // 获取用户预约时间
     @POST("gateway")
     Observable<GetUserAppointmentTimeResponse> getUserAppointmentTime(@Body GetUserAppointmentTimeRequest request);
+
+    // 划扣账单
+    @POST("gateway")
+    Observable<HuakouResponse> huakou(@Body HuakouRequest request);
 
 }

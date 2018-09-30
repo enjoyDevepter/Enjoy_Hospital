@@ -25,6 +25,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRe
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouResponse;
 import io.reactivex.Observable;
 
 
@@ -66,5 +68,10 @@ public class UserAppointmentModel extends BaseModel implements UserAppointmentCo
     public Observable<CancelAppointmentResponse> cancelAppointment(CancelAppointmentRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .cancelAppointment(request);
+    }
+    @Override
+    public Observable<HuakouResponse> huakou(HuakouRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .huakou(request);
     }
 }

@@ -2,17 +2,19 @@ package cn.ehanmy.hospital.mvp.model.entity.user_appointment;
 
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
-public class GetUserAppointmentInfoRequest extends BaseRequest {
-    private final int cmd = 5352;
+public class HuakouRequest extends BaseRequest {
+    private final int cmd = 5357;
     private String token;
     private String reservationId;
+    private String orderId;
 
     @Override
     public String toString() {
-        return "GetUserAppointmentInfoRequest{" +
+        return "HuakouRequest{" +
                 "cmd=" + cmd +
                 ", token='" + token + '\'' +
                 ", reservationId='" + reservationId + '\'' +
+                ", orderId='" + orderId + '\'' +
                 '}';
     }
 
@@ -34,5 +36,13 @@ public class GetUserAppointmentInfoRequest extends BaseRequest {
 
     public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

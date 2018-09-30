@@ -52,12 +52,55 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
         <TextView
+            android:id="@+id/btn_group_title"
             style="@style/recycler_item_style"
             android:text="操作"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:visibility="invisible"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:visibility="invisible"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:visibility="invisible"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    android:visibility="gone"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv5"
+                    android:visibility="gone"
+                    style="@style/btn_in_list"
+                    />
+            </LinearLayout>
+        </FrameLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:background="@color/white"
@@ -69,47 +112,34 @@
 
             <TextView
                 android:id="@+id/ok"
-                android:layout_width="36dp"
-                android:layout_height="19dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/order_center_btn_bg"
-                android:gravity="center"
                 android:text="确定"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                style="@style/btn_in_list"
+                />
 
             <TextView
                 android:id="@+id/change"
-                android:layout_width="36dp"
-                android:layout_height="19dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/order_center_btn_bg"
-                android:gravity="center"
                 android:text="改约"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                style="@style/btn_in_list"
+                />
 
             <TextView
                 android:id="@+id/cancel"
-                android:layout_width="36dp"
-                android:layout_height="19dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/order_center_btn_bg"
-                android:gravity="center"
                 android:text="取消"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                style="@style/btn_in_list"
+                />
 
             <TextView
                 android:id="@+id/info"
-                android:layout_width="36dp"
-                android:layout_height="19dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/order_center_btn_bg"
-                android:gravity="center"
                 android:text="详细"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                style="@style/btn_in_list"
+                />
+
+
+            <TextView
+                android:id="@+id/huakou"
+                android:text="划扣"
+                style="@style/btn_in_list"
+                />
         </LinearLayout>
     </FrameLayout>
 
