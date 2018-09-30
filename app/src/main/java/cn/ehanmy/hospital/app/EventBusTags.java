@@ -37,4 +37,7 @@ public interface EventBusTags {
      * 登录状态改变
      */
     String LOGIN_STATUS_CHANGE_EVENT = "login_status_change_Event";
+    String CHANGE_APPOINTMENT_TIME = "change_appointment_time";
+    String APPOINTMENTS_CHANGE_EVENT = "APPOINTMENTS_CHANGE_EVENT";
+
 }

@@ -51,4 +51,8 @@ public class TimeAdapter extends DefaultAdapter<ReservationTimeBean> {
         return R.layout.goods_filter_third_item;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return R.layout.goods_filter_third_item;
+    }
 }

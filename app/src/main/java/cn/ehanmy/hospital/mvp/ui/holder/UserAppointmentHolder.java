@@ -107,8 +107,8 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
             parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
             button_group.setVisibility(View.VISIBLE);
             order_id.setText(order.getReservationId());
-            order_phone.setText(order.getMember().getMobile());
-            order_time.setText(order.getCreateDate());
+            order_phone.setText(order.getPhone());
+            order_time.setText(order.getReservationDate());
             order_status.setText(order.getReservationStatusDesc());
             order_project.setText(order.getGoods().getName());
 

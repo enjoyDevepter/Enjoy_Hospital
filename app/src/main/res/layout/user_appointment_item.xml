@@ -44,7 +44,7 @@
 
     <TextView
         android:layout_height="match_parent"
-        android:layout_width="60dp"
+        android:layout_width="80dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_time"
         />
@@ -85,6 +85,8 @@
                 <TextView
                     android:id="@+id/tv3"
                     android:visibility="invisible"
+
+                    android:layout_marginRight="0dp"
                     style="@style/btn_in_list"
                     />
 
@@ -138,6 +140,7 @@
             <TextView
                 android:id="@+id/huakou"
                 android:text="划扣"
+                android:layout_marginRight="0dp"
                 style="@style/btn_in_list"
                 />
         </LinearLayout>

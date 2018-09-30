@@ -26,6 +26,8 @@ import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.SettingProjectResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.CancelAppointmentResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ChangeUserAppointmentTimeRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ChangeUserAppointmentTimeResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ConfirmAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentInfoRequest;
@@ -166,5 +168,9 @@ public interface InterfaceService {
     // 划扣账单
     @POST("gateway")
     Observable<HuakouResponse> huakou(@Body HuakouRequest request);
+
+    // 修改用户预约时间
+    @POST("gateway")
+    Observable<ChangeUserAppointmentTimeResponse> changeUserAppointmentTime(@Body ChangeUserAppointmentTimeRequest request);
 
 }

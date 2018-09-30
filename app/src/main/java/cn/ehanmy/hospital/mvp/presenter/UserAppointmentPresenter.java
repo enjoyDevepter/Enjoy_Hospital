@@ -78,7 +78,7 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
         requestOrderList(1,type,true);
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void init(){
         requestOrderList(currType);
     }

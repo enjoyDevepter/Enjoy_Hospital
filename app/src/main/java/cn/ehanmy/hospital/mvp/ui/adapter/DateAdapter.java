@@ -51,4 +51,8 @@ public class DateAdapter extends DefaultAdapter<ReservationDateBean> {
         return R.layout.goods_filter_second_item;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return R.layout.goods_filter_second_item;
+    }
 }

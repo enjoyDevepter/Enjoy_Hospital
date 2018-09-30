@@ -27,6 +27,7 @@ import cn.ehanmy.hospital.di.component.DaggerUserAppointmentComponent;
 import cn.ehanmy.hospital.di.module.UserAppointmentModule;
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
+import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
@@ -193,6 +194,10 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
             public void onChildItemClick(View v, UserAppointmentHolder.ViewName viewname, int position) {
                 switch (viewname){
                     case CHANGE_APPOINTMENT:
+                        Intent intent2 = new Intent(UserAppointmentActivity.this,ChoiceTimeActivity.class);
+                        intent2.putExtra("reservationId", mAdapter.getItem(position).getReservationId());
+                        intent2.putExtra("projectId", mAdapter.getItem(position).getProjectId());
+                        UserAppointmentActivity.this.startActivityForResult(intent2,1);
                         break;
                     case OK:
                         mPresenter.confirmAppointment(mAdapter.getItem(position).getReservationId());
@@ -225,6 +230,12 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     @Override
     public void showLoading() {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mPresenter.init();
     }
 
     @Override
