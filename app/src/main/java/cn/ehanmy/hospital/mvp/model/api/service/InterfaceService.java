@@ -18,6 +18,10 @@ import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ShopAppointmentInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ShopAppointmentInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user.ChangePasswordResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user.ProjectSettingRequest;
@@ -172,5 +176,12 @@ public interface InterfaceService {
     // 修改用户预约时间
     @POST("gateway")
     Observable<ChangeUserAppointmentTimeResponse> changeUserAppointmentTime(@Body ChangeUserAppointmentTimeRequest request);
+
+    // 修改用户预约时间
+    @POST("gateway")
+    Observable<GetShopAppointmentPageResponse> getShopAppointmentPage(@Body GetShopAppointmentPageRequest request);
+    // 修改用户预约时间
+    @POST("gateway")
+    Observable<ShopAppointmentInfoResponse> shopAppointmentInfo(@Body ShopAppointmentInfoRequest request);
 
 }
