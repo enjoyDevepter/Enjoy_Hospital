@@ -207,6 +207,7 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                         ArmsUtils.startActivity(infoIntent);
                         break;
                     case CANCEL:
+                        mPresenter.cancel(mAdapter.getItem(position).getReservationId());
                         break;
                     case RELATED:
                         Intent intent = new Intent(ShopAppointmentActivity.this,RelatedListActivity.class);

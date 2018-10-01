@@ -15,11 +15,15 @@ import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouResponse;
 import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.util.CacheUtil;
@@ -121,6 +125,36 @@ public class ShopAppointmentPresenter extends BasePresenter<ShopAppointmentContr
                             orderBeanList.addAll(orderList);
                             mAdapter.notifyDataSetChanged();
                             mRootView.hideLoading();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    public void cancel(String reservationId) {
+        CancelShopAppointmentRequest request = new CancelShopAppointmentRequest();
+        request.setReservationId(reservationId);
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.cancelShopAppointment(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CancelShopAppointmentResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(CancelShopAppointmentResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("取消成功");
+                            init();
                         } else {
                             mRootView.showMessage(response.getRetDesc());
                         }
