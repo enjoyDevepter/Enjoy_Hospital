@@ -14,30 +14,44 @@
 
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="60dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_id"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="73dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_phone"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         style="@style/recycler_item_style"
         android:id="@+id/order_project"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="60dp"
+        style="@style/recycler_item_style"
         android:id="@+id/order_related"
-        style="@style/recycler_item_style"/>
+        />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="60dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_status"
         />
 
     <TextView
+        android:layout_height="match_parent"
+        android:layout_width="80dp"
         style="@style/recycler_item_style"
         android:id="@+id/order_time"
         />
@@ -45,53 +59,85 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
         <TextView
+            android:id="@+id/btn_group_title"
             style="@style/recycler_item_style"
             android:text="操作"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:id="@+id/button_group"
-        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/detail"
-            android:layout_width="36dp"
-            android:layout_height="19dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/order_center_btn_bg"
-            android:gravity="center"
-            android:text="详情"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/related"
-            android:layout_width="36dp"
-            android:layout_height="19dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/order_center_btn_bg"
-            android:gravity="center"
-            android:text="关联"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/tv1"
+                    android:visibility="invisible"
+                    style="@style/btn_in_list"
+                    />
 
-        <TextView
-            android:id="@+id/cancel"
-            android:layout_width="36dp"
-            android:layout_height="19dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/order_center_btn_bg"
+                <TextView
+                    android:id="@+id/tv2"
+                    android:visibility="invisible"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:visibility="invisible"
+
+                    android:layout_marginRight="0dp"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    android:visibility="gone"
+                    style="@style/btn_in_list"
+                    />
+
+                <TextView
+                    android:id="@+id/tv5"
+                    android:visibility="gone"
+                    style="@style/btn_in_list"
+                    />
+            </LinearLayout>
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:text="取消"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </LinearLayout>
+            android:id="@+id/button_group"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/info"
+                android:text="详细"
+                style="@style/btn_in_list"
+                />
+
+            <TextView
+                android:id="@+id/related"
+                android:text="关联"
+                style="@style/btn_in_list"
+                />
+
+            <TextView
+                android:id="@+id/cancel"
+                android:text="取消"
+                style="@style/btn_in_list"
+                />
+
+        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

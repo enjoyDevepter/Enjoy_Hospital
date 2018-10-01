@@ -23,10 +23,9 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.model.entity.Order;
-import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
-import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
-import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentListItemHolder;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 
 /**
  * ================================================
@@ -37,9 +36,16 @@ import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> {
+public class ShopAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBean> {
 
-    public void setOnChildItemClickLinstener(ShopAppointmentListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
+    public enum ListType{
+        APPOINTMENT,  // 预约中
+        CANCEL,  // 取消
+        OVER,  // 已完成
+        ALL,  // 所有
+    }
+
+    public void setOnChildItemClickLinstener(ShopAppointmentHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -49,18 +55,17 @@ public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> 
         });
     }
 
-    private ShopAppointmentListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener;
+    private ShopAppointmentHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public ShopAppointmentListAdapter(List<ShopAppointment> shopAppointments) {
-        super(shopAppointments);
-        shopAppointments.add(0,new ShopAppointment());
+    public ShopAppointmentAdapter(List<OrderProjectDetailBean> ordres) {
+        super(ordres);
     }
 
     @Override
-    public BaseHolder<ShopAppointment> getHolder(View v, int viewType) {
-        return new ShopAppointmentListItemHolder(v, new ShopAppointmentListItemHolder.OnChildItemClickLinstener() {
+    public BaseHolder<OrderProjectDetailBean> getHolder(View v, int viewType) {
+        return new ShopAppointmentHolder(v, new ShopAppointmentHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, ShopAppointmentListItemHolder.ViewName viewname, int position) {
+            public void onChildItemClick(View v, ShopAppointmentHolder.ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -73,7 +78,9 @@ public class ShopAppointmentListAdapter extends DefaultAdapter<ShopAppointment> 
         return R.layout.shop_appointment_item;
     }
 
-    public ShopAppointmentListItemHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
+    public ShopAppointmentHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
+
+
 }

@@ -14,8 +14,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ShopAppointmentContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -25,10 +31,10 @@ public class ShopAppointmentModel extends BaseModel implements ShopAppointmentCo
     @Inject
     Application mApplication;
 
-    public static final int SEARCH_TYPE_APPOINTMENT = 1;
-    public static final int SEARCH_TYPE_OVER = 2;
-    public static final int SEARCH_TYPE_CANCEL = 3;
-    public static final int SEARCH_TYPE_ALL = 4;
+    public static final String SEARCH_TYPE_APPOINTMENT = "0";
+    public static final String SEARCH_TYPE_OVER = "2";
+    public static final String SEARCH_TYPE_CANCEL = "3";
+    public static final String SEARCH_TYPE_ALL = null;
 
     @Inject
     public ShopAppointmentModel(IRepositoryManager repositoryManager) {
@@ -42,12 +48,10 @@ public class ShopAppointmentModel extends BaseModel implements ShopAppointmentCo
         this.mApplication = null;
     }
 
-    public List<ShopAppointment> doSearch(String searchKey, int SearchType){
-        // 啥也别说，先造点假数据
-        List<ShopAppointment> list = new ArrayList<>();
-        for(int i = 0;i<10;i++){
-            list.add(new ShopAppointment(i+"","1234567890","未关联","有关于"+searchKey+"的一些项目","未支付","20180808"));
-        }
-        return list;
+
+    @Override
+    public Observable<GetShopAppointmentPageResponse> getShopAppointmentPage(GetShopAppointmentPageRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .getShopAppointmentPage(request);
     }
 }

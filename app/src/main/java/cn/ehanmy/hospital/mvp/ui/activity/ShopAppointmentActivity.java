@@ -1,10 +1,12 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,10 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
@@ -25,10 +31,16 @@ import cn.ehanmy.hospital.di.module.ShopAppointmentModule;
 import cn.ehanmy.hospital.mvp.contract.ShopAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.ShopAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentPresenter;
-import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentListAdapter;
-import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentListItemHolder;
+import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentAdapter;
+import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
+import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
+import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -58,9 +70,24 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
     @BindView(R.id.contentList)
     RecyclerView contentList;
     private TextView currTextView;
-    private int currType;
+    private String currType;
     private int normalColor = Color.parseColor("#333333");
     private int currColor = Color.parseColor("#3DBFE8");
+
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
+    @Inject
+    ShopAppointmentAdapter mAdapter;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+
+    private CustomProgressDailog progressDailog;
+    private boolean isEnd;
+
     private View.OnClickListener onTypeClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -68,26 +95,32 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                 return;
             }
             currTextView.setTextColor(normalColor);
+            TextView newText = null;
             switch (v.getId()) {
                 case R.id.appointmentint:
-                    currTextView = appointment;
+                    newText = appointment;
                     currType = ShopAppointmentModel.SEARCH_TYPE_APPOINTMENT;
                     break;
                 case R.id.over:
                     currType = ShopAppointmentModel.SEARCH_TYPE_OVER;
-                    currTextView = over;
+                    newText = over;
                     break;
                 case R.id.cancel:
-                    currTextView = cancel;
+                    newText = cancel;
                     currType = ShopAppointmentModel.SEARCH_TYPE_CANCEL;
                     break;
                 case R.id.all:
                     currType = ShopAppointmentModel.SEARCH_TYPE_ALL;
-                    currTextView = all;
+                    newText = all;
                     break;
             }
 
+            if(newText == null){
+                return;
+            }
+            currTextView = newText;
             currTextView.setTextColor(currColor);
+            mPresenter.requestOrderList(currType);
         }
     };
     private View.OnClickListener onSearchClickListener = new View.OnClickListener() {
@@ -106,6 +139,32 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
             hideImm();
         }
     };
+
+    private void initPaginate() {
+        if (mPaginate == null) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.nextPage();
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return isEnd;
+                }
+            };
+
+            mPaginate = Paginate.with(contentList, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
+    }
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -136,16 +195,34 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
         code.setVisibility(View.GONE);
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
-        contentList.setLayoutManager(new LinearLayoutManager(this));
+        ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+
+        mAdapter.setOnChildItemClickLinstener(new ShopAppointmentHolder.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, ShopAppointmentHolder.ViewName viewname, int position) {
+                switch (viewname){
+                    case INFO:
+                        break;
+                    case CANCEL:
+                        break;
+                    case RELATED:
+                        break;
+                }
+            }
+        });
+        contentList.setAdapter(mAdapter);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.init();
+            }
+        });
+
+        initPaginate();
     }
 
     @Override
     public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
 
     }
 
@@ -166,6 +243,33 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
         finish();
     }
 
+    @Override
+    public void startLoadMore() {
+        isLoadingMore = true;
+    }
+
+    /**
+     * 结束加载更多
+     */
+    @Override
+    public void endLoadMore() {
+        isLoadingMore = false;
+    }
+
+    @Override
+    public void setEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
+
+    public Activity getActivity(){
+        return this;
+    }
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
+        this.mPaginate = null;
+    }
     private void doSearch() {
         String s = searchKey.getText().toString();
         if (TextUtils.isEmpty(s)) {
@@ -173,33 +277,21 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
             return;
         }
 
-        mPresenter.doSearch(s, currType);
     }
 
-    public void updateList(List<ShopAppointment> orderList) {
-        ShopAppointmentListAdapter adapter = new ShopAppointmentListAdapter(orderList);
-        adapter.setOnChildItemClickLinstener(new ShopAppointmentListItemHolder.OnChildItemClickLinstener() {
-            @Override
-            public void onChildItemClick(View v, ShopAppointmentListItemHolder.ViewName viewname, int position) {
-                if (position == 0) {
-                    return;
-                }
-                Intent intent;
-                switch (viewname) {
-                    case DETAIL:
-                        intent = new Intent(ShopAppointmentActivity.this, ShopAppointmentInfoActivity.class);
-                        intent.putExtra(ShopAppointmentInfoActivity.KEY_FOR_DATA, adapter.getItem(position));
-                        launchActivity(intent);
-                        break;
-                    case RELATED:
-                        intent = new Intent(ShopAppointmentActivity.this, RelatedListActivity.class);
-                        launchActivity(intent);
-                        break;
-                    case CANCEL:
-                        break;
-                }
-            }
-        });
-        contentList.setAdapter(adapter);
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    @BindView(R.id.no_date)
+    View onDateV;
+
+    @Override
+    public void showError(boolean hasDate) {
+        onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
+        contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 }

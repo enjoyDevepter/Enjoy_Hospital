@@ -1,7 +1,16 @@
 package cn.ehanmy.hospital.di.module;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import com.jess.arms.di.scope.ActivityScope;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentAdapter;
+import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -32,5 +41,28 @@ public class ShopAppointmentModule {
     @Provides
     ShopAppointmentContract.Model provideShopAppointmentModel(ShopAppointmentModel model) {
         return model;
+    }
+
+
+
+    @ActivityScope
+    @Provides
+    ShopAppointmentAdapter provideStoreAdapter(List<OrderProjectDetailBean> list) {
+        return new ShopAppointmentAdapter(list);
+    }
+
+
+    @ActivityScope
+    @Provides
+    List<OrderProjectDetailBean> provideOrderBeanList() {
+        ArrayList<OrderProjectDetailBean> orderBeans = new ArrayList<>();
+        orderBeans.add(new OrderProjectDetailBean());
+        return orderBeans;
+    }
+
+    @ActivityScope
+    @Provides
+    RecyclerView.LayoutManager provideLayoutManager() {
+        return new LinearLayoutManager(view.getActivity(), LinearLayoutManager.VERTICAL, false);
     }
 }
