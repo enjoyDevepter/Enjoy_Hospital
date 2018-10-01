@@ -202,10 +202,15 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
             public void onChildItemClick(View v, ShopAppointmentHolder.ViewName viewname, int position) {
                 switch (viewname){
                     case INFO:
+                        Intent infoIntent = new Intent(ShopAppointmentActivity.this,ShopAppointmentInfoActivity.class);
+                        infoIntent.putExtra(ShopAppointmentInfoActivity.KEY_FOR_APPOINTMENT_ID,mAdapter.getItem(position).getReservationId());
+                        ArmsUtils.startActivity(infoIntent);
                         break;
                     case CANCEL:
                         break;
                     case RELATED:
+                        Intent intent = new Intent(ShopAppointmentActivity.this,RelatedListActivity.class);
+                        launchActivity(intent);
                         break;
                 }
             }

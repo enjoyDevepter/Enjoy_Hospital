@@ -1,16 +1,24 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
@@ -18,6 +26,8 @@ import cn.ehanmy.hospital.di.component.DaggerShopAppointmentInfoComponent;
 import cn.ehanmy.hospital.di.module.ShopAppointmentInfoModule;
 import cn.ehanmy.hospital.mvp.contract.ShopAppointmentInfoContract;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.UserAppointmentGoodsBean;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentInfoPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -25,14 +35,36 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInfoPresenter> implements ShopAppointmentInfoContract.View {
 
-    public static final String KEY_FOR_DATA = "data";
+    public static final String KEY_FOR_APPOINTMENT_ID = "key_for_appointment_id";
 
     @BindView(R.id.title_Layout)
     View title;
 
     @BindView(R.id.related)
     View related;
-    private ShopAppointment shopAppointment;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    @Inject
+    ImageLoader mImageLoader;
+
+    @BindView(R.id.form_id)
+    TextView form_id;
+    @BindView(R.id.form_state)
+    TextView form_state;
+
+    @BindView(R.id.name)
+    TextView name;
+    @BindView(R.id.time)
+    TextView time;
+    @BindView(R.id.form_tel)
+    TextView form_tel;
+    @BindView(R.id.form_add)
+    TextView form_add;
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.project_name)
+    TextView project_name;
+    @BindView(R.id.order_time)
+    TextView order_time;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -59,19 +91,6 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
                 launchActivity(intent);
             }
         });
-        Intent intent = getIntent();
-        Serializable serializableExtra = intent.getSerializableExtra(KEY_FOR_DATA);
-        if(serializableExtra == null || !(serializableExtra instanceof ShopAppointment)){
-            showMessage("店铺预约数据不存在");
-            return;
-        }
-
-        shopAppointment = (ShopAppointment) serializableExtra;
-        updateView();
-    }
-
-    private void updateView() {
-
     }
 
     @Override
@@ -99,5 +118,29 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     @Override
     public void killMyself() {
         finish();
+    }
+
+    public void updateOrderInfo(OrderProjectDetailBean orderInfoBean){
+        UserAppointmentGoodsBean goodsOrderBean = orderInfoBean.getGoods();
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .url(goodsOrderBean.getImage())
+                        .imageView(image)
+                        .build());
+
+        form_id.setText(orderInfoBean.getReservationId());
+        form_state.setText(orderInfoBean.getStatusDesc());
+        time.setText(orderInfoBean.getCreateDate());
+        name.setText(orderInfoBean.getMember().getMemberId());
+        form_tel.setText(orderInfoBean.getMember().getMobile());
+        form_add.setText("");
+        project_name.setText(goodsOrderBean.getName());
+        order_time.setText(orderInfoBean.getReservationTime());
+    }
+
+
+    public Activity getActivity(){
+        return this;
     }
 }
