@@ -150,6 +150,15 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     }
 
     public void showPaySuccess(GoodsBuyResponse response) {
+        mImageLoader.loadImage(this,
+                ImageConfigImpl
+                        .builder()
+                        .placeholder(R.drawable.place_holder_img)
+                        .url(response.getGoods().getImage())
+                        .imageView(image)
+                        .build());
+        order_name.setText(response.getGoods().getName());
+        priceMV.setMoneyText(ArmsUtils.formatLong(response.getPayMoney()));
         if ("1".equals(response.getPayStatus())) {
             payTypeV.setVisibility(View.GONE);
             payOkDialog = CustomDialog.create(getSupportFragmentManager())
@@ -182,19 +191,11 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                     .setLayoutRes(R.layout.pay_ok_dialog_layout)
                     .setDimAmount(0.5f)
                     .isCenter(true)
+                    .setCancelOutside(false)
                     .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
                     .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this, 240))
                     .show();
         } else {
-            mImageLoader.loadImage(this,
-                    ImageConfigImpl
-                            .builder()
-                            .placeholder(R.drawable.place_holder_img)
-                            .url(response.getGoods().getImage())
-                            .imageView(image)
-                            .build());
-            order_name.setText(response.getGoods().getName());
-            priceMV.setMoneyText(ArmsUtils.formatLong(response.getPayMoney()));
             payTypeV.setVisibility(View.VISIBLE);
             payEntries.clear();
             payEntries.addAll(response.getPayEntryList());

@@ -156,7 +156,7 @@
                         android:layout_alignBottom="@id/image"
                         android:layout_alignLeft="@id/name"
                         android:layout_toRightOf="@id/image"
-                        android:text="金额 "
+                        android:text="金额"
                         android:textColor="#FF666666"
                         android:textSize="14sp" />
 
@@ -166,7 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@id/price_title"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="3dp"
                         android:layout_toRightOf="@id/price_title"
                         money:cent_size="13sp"
                         money:money_color="#FF666666"
@@ -254,7 +254,7 @@
 
                         <EditText
                             android:id="@+id/money"
-                            android:layout_width="50dp"
+                            android:layout_width="80dp"
                             android:layout_height="20dp"
                             android:background="@drawable/order_input_bg"
                             android:gravity="center"

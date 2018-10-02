@@ -24,8 +24,6 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.text.SimpleDateFormat;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -51,7 +49,6 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * 确认订单页面，支付页面前通过这个页面确定订单
  */
 public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> implements OrderConfirmContract.View, View.OnClickListener, LabelsView.OnLabelSelectChangeListener, View.OnFocusChangeListener, TextView.OnEditorActionListener {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @BindView(R.id.back)
     View backV;
     @BindView(R.id.title)
