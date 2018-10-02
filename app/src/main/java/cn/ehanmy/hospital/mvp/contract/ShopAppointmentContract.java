@@ -11,6 +11,8 @@ import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentResponse;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageResponse;
 import io.reactivex.Observable;
@@ -30,5 +32,6 @@ public interface ShopAppointmentContract {
     interface Model extends IModel {
         Observable<GetShopAppointmentPageResponse> getShopAppointmentPage(GetShopAppointmentPageRequest request);
         Observable<CancelShopAppointmentResponse> cancelShopAppointment(CancelShopAppointmentRequest request);
+        Observable<ConfirmShopAppointmentResponse> confirmShopAppointmentResponseObservable(ConfirmShopAppointmentRequest request);
     }
 }

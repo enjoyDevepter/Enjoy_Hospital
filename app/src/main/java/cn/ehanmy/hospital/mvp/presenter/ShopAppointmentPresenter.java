@@ -17,6 +17,8 @@ import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentResponse;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentPageRequest;
@@ -154,6 +156,37 @@ public class ShopAppointmentPresenter extends BasePresenter<ShopAppointmentContr
                     public void onNext(CancelShopAppointmentResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showMessage("取消成功");
+                            init();
+                        } else {
+                            mRootView.showMessage(response.getRetDesc());
+                        }
+                    }
+                });
+    }
+
+
+    public void confirmShopAppointment(String orderId,String reservationId) {
+        ConfirmShopAppointmentRequest request = new ConfirmShopAppointmentRequest();
+        request.setOrderId(orderId);
+        request.setReservationId(reservationId);
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(ub.getToken());
+
+        mModel.confirmShopAppointmentResponseObservable(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();//隐藏下拉刷新的进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<ConfirmShopAppointmentResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(ConfirmShopAppointmentResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showMessage("确认成功");
                             init();
                         } else {
                             mRootView.showMessage(response.getRetDesc());

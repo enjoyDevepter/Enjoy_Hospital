@@ -20,6 +20,8 @@ import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentResponse;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetShopAppointmentPageRequest;
@@ -195,4 +197,8 @@ public interface InterfaceService {
     // 修改用户预约时间
     @POST("gateway")
     Observable<GetRelatedListResponse> getRelatedList(@Body GetRelatedListRequest request);
+
+    // 确定上铺预约
+    @POST("gateway")
+    Observable<ConfirmShopAppointmentResponse> confirmShopAppointment(@Body ConfirmShopAppointmentRequest request);
 }

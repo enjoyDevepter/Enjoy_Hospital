@@ -8,6 +8,8 @@ import com.jess.arms.mvp.IModel;
 import java.util.List;
 
 import cn.ehanmy.hospital.mvp.model.entity.Order;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListResponse;
 import io.reactivex.Observable;
@@ -26,5 +28,6 @@ public interface RelatedListContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<GetRelatedListResponse> getRelatedList(GetRelatedListRequest request);
+        Observable<ConfirmShopAppointmentResponse> confirmShopAppointmentResponseObservable(ConfirmShopAppointmentRequest request);
     }
 }

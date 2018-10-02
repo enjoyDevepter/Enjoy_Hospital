@@ -16,6 +16,8 @@ import javax.inject.Inject;
 import cn.ehanmy.hospital.mvp.contract.RelatedListContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.Order;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.ConfirmShopAppointmentResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListRequest;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListResponse;
 import io.reactivex.Observable;
@@ -46,5 +48,10 @@ public class RelatedListModel extends BaseModel implements RelatedListContract.M
 	                .getRelatedList(request);
     }
 
+    @Override
+    public Observable<ConfirmShopAppointmentResponse> confirmShopAppointmentResponseObservable(ConfirmShopAppointmentRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .confirmShopAppointment(request);
+    }
 
 }

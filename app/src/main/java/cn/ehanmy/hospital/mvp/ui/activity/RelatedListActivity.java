@@ -25,9 +25,12 @@ import cn.ehanmy.hospital.di.component.DaggerRelatedListComponent;
 import cn.ehanmy.hospital.di.module.RelatedListModule;
 import cn.ehanmy.hospital.mvp.contract.RelatedListContract;
 import cn.ehanmy.hospital.mvp.model.entity.Order;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.RelatedOrderBean;
 import cn.ehanmy.hospital.mvp.presenter.RelatedListPresenter;
 
 import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.mvp.ui.adapter.RelatedListAdapter;
+import cn.ehanmy.hospital.mvp.ui.holder.RelatedListHolder;
 
 
 import static android.view.View.INVISIBLE;
@@ -77,6 +80,17 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"关联列表");
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        ((RelatedListAdapter)mAdapter).setOnChildItemClickLinstener(new RelatedListHolder.OnChildItemClickLinstener() {
+            @Override
+            public void onChildItemClick(View v, RelatedListHolder.ViewName viewname, int position) {
+                switch (viewname){
+                    case RELATED:
+                        RelatedOrderBean item = ((RelatedListAdapter) mAdapter).getItem(position);
+//                        mPresenter.confirmShopAppointment(item.getOrderId(),item.id);
+                    break;
+                }
+            }
+        });
         contentList.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
