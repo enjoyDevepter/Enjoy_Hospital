@@ -24,9 +24,9 @@ import com.jess.arms.base.BaseHolder;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.MainItem;
+import io.reactivex.Observable;
 
 /**
  * ================================================
@@ -47,7 +47,7 @@ public class MainItemHolder extends BaseHolder<MainItem> {
     public MainItemHolder(View itemView) {
         super(itemView);
         int screenWidth = ArmsUtils.getScreenWidth(ArmsUtils.getContext());
-        itemView.setLayoutParams(new RecyclerView.LayoutParams((screenWidth - ArmsUtils.getDimens(ArmsUtils.getContext(), R.dimen.main_item_space) * 2) / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
+        itemView.setLayoutParams(new RecyclerView.LayoutParams(screenWidth / 4, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     @Override
