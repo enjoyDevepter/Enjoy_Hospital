@@ -14,7 +14,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.RelatedListContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.Order;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListRequest;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.GetRelatedListResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -36,12 +40,11 @@ public class RelatedListModel extends BaseModel implements RelatedListContract.M
         this.mApplication = null;
     }
 
-    public List<Order> requestRelatedList(){
-        // 啥也别说，先造点假数据
-        List<Order> list = new ArrayList<>();
-        for(int i = 0;i<10;i++){
-            list.add(new Order(i+"","1234567890","12345","有关于"+" balabala "+"的一些项目","未支付","20180808"));
-        }
-        return list;
+     @Override
+	    public Observable<GetRelatedListResponse> getRelatedList(GetRelatedListRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+	                .getRelatedList(request);
     }
+
+
 }

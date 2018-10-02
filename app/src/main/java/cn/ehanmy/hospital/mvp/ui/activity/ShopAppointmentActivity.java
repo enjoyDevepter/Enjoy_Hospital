@@ -211,6 +211,7 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                         break;
                     case RELATED:
                         Intent intent = new Intent(ShopAppointmentActivity.this,RelatedListActivity.class);
+                        intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID,mAdapter.getItem(position).getMember().getMemberId());
                         launchActivity(intent);
                         break;
                 }

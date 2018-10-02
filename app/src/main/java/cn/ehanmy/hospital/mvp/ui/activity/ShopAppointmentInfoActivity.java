@@ -84,13 +84,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"预约详细");
-        related.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ShopAppointmentInfoActivity.this,RelatedListActivity.class);
-                launchActivity(intent);
-            }
-        });
+
     }
 
     @Override
@@ -128,6 +122,15 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
                         .url(goodsOrderBean.getImage())
                         .imageView(image)
                         .build());
+
+        related.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShopAppointmentInfoActivity.this,RelatedListActivity.class);
+                intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID,orderInfoBean.getMember().getMemberId());
+                launchActivity(intent);
+            }
+        });
 
         form_id.setText(orderInfoBean.getReservationId());
         form_state.setText(orderInfoBean.getStatusDesc());

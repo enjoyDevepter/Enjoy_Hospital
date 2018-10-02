@@ -23,9 +23,10 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 import cn.ehanmy.hospital.R;
-import cn.ehanmy.hospital.mvp.model.entity.Order;
-import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
-import cn.ehanmy.hospital.mvp.ui.holder.RelatedListItemHolder;
+import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.RelatedOrderBean;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.ui.holder.RelatedListHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 
 /**
  * ================================================
@@ -36,9 +37,9 @@ import cn.ehanmy.hospital.mvp.ui.holder.RelatedListItemHolder;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class RelatedListAdapter extends DefaultAdapter<Order> {
+public class RelatedListAdapter extends DefaultAdapter<RelatedOrderBean> {
 
-    public void setOnChildItemClickLinstener(RelatedListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
+    public void setOnChildItemClickLinstener(RelatedListHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -48,18 +49,17 @@ public class RelatedListAdapter extends DefaultAdapter<Order> {
         });
     }
 
-    private RelatedListItemHolder.OnChildItemClickLinstener onChildItemClickLinstener;
+    private RelatedListHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
-    public RelatedListAdapter(List<Order> ordres) {
+    public RelatedListAdapter(List<RelatedOrderBean> ordres) {
         super(ordres);
-        ordres.add(0,new Order());
     }
 
     @Override
-    public BaseHolder<Order> getHolder(View v, int viewType) {
-        return new RelatedListItemHolder(v, new RelatedListItemHolder.OnChildItemClickLinstener() {
+    public BaseHolder<RelatedOrderBean> getHolder(View v, int viewType) {
+        return new RelatedListHolder(v, new RelatedListHolder.OnChildItemClickLinstener() {
             @Override
-            public void onChildItemClick(View v, RelatedListItemHolder.ViewName viewname, int position) {
+            public void onChildItemClick(View v, RelatedListHolder.ViewName viewname, int position) {
                 if (onChildItemClickLinstener != null) {
                     onChildItemClickLinstener.onChildItemClick(v, viewname, position);
                 }
@@ -72,7 +72,7 @@ public class RelatedListAdapter extends DefaultAdapter<Order> {
         return R.layout.related_list_item;
     }
 
-    public RelatedListItemHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
+    public RelatedListHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
     }
 
