@@ -16,6 +16,7 @@
 package cn.ehanmy.hospital.mvp.ui.holder;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -66,6 +67,9 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
     @BindView(R.id.order_secend_price)
     TextView order_secend_price;
 
+    @BindView(R.id.btn_group_title)
+    View btn_group_title;
+
     private OrderCenterListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
     public OrderCenterListItemHolder(View itemView, OrderCenterListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
@@ -101,15 +105,17 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             statusTV.setText("状态");
             timeTV.setText("时间");
             order_secend_price.setText("尾款");
-            buttonGroup.setVisibility(View.INVISIBLE);
+            buttonGroup.setVisibility(View.GONE);
+            btn_group_title.setVisibility(View.VISIBLE);
             parent.setBackgroundColor(Color.parseColor("#FFE4E4E4"));
         } else {
+            btn_group_title.setVisibility(View.GONE);
             parent.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             buttonGroup.setVisibility(View.VISIBLE);
             orderIdTV.setText(order.getOrderId());
             GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
             order_secend_price.setText(String.format("¥%.0f", goodsOrderBean.getTailMoney()));
-            phoneTV.setText("13112345678");
+            phoneTV.setText("");
             if (goodsOrderBean != null) {
                 priceTV.setText(String.format("¥%.0f", goodsOrderBean.getSalePrice()));
                 projectTV.setText(goodsOrderBean.getName());
@@ -118,16 +124,34 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             timeTV.setText(SIMPLE_DATE_FORMAT.format(new Date(order.getOrderTime())));
         }
 
-        if ("1".equals(order.getOrderStatus())) {
-            payV.setVisibility(View.VISIBLE);
-            order_secend_price.setVisibility(View.GONE);
-        } else if ("2".equals(order.getOrderStatus())) {
-            payV.setVisibility(View.VISIBLE);
+        String orderListStatus = order.getOrderListStatus();
+        if(TextUtils.isEmpty(orderListStatus)){
             order_secend_price.setVisibility(View.VISIBLE);
-        } else if ("5".equals(order.getOrderStatus())) {
-            order_secend_price.setVisibility(View.VISIBLE);
-            payV.setVisibility(View.GONE);
+            switch (order.getOrderStatus()){
+                case "1": case "2":
+                    payV.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    payV.setVisibility(View.GONE);
+                    break;
+            }
+        }else{
+            switch (orderListStatus){
+                case "1":
+                    payV.setVisibility(View.VISIBLE);
+                    order_secend_price.setVisibility(View.GONE);
+                    break;
+                case "2":
+                    payV.setVisibility(View.VISIBLE);
+                    order_secend_price.setVisibility(View.VISIBLE);
+                    break;
+                case "5":
+                    order_secend_price.setVisibility(View.GONE);
+                    payV.setVisibility(View.GONE);
+                    break;
+            }
         }
+
     }
 
     @Override

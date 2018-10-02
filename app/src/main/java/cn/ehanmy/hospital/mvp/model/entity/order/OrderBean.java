@@ -16,6 +16,16 @@ public class OrderBean implements Serializable {
     private long totalPrice;
     private List<GoodsOrderBean> goodsList;
 
+    public String getOrderListStatus() {
+        return orderListStatus;
+    }
+
+    public void setOrderListStatus(String orderListStatus) {
+        this.orderListStatus = orderListStatus;
+    }
+
+    private String orderListStatus;
+
     public long getOrderTime() {
         return orderTime;
     }

@@ -79,15 +79,21 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
                     @Override
                     public void onNext(OrderListResponse response) {
                         if (response.isSuccess()) {
+                            String type = (String) mRootView.getCache().get("type");
                             if (pullToRefresh) {
                                 orderBeanList.clear();
                                 OrderBean orderBean = new OrderBean();
-                                orderBean.setOrderStatus((String) mRootView.getCache().get("type"));
+                                orderBean.setOrderStatus(type);
                                 orderBeanList.add(orderBean);
                             }
                             mRootView.showError(response.getOrderList().size() > 0);
                             mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                            orderBeanList.addAll(response.getOrderList());
+                            List<OrderBean> orderList = response.getOrderList();
+
+                            orderBeanList.addAll(orderList);
+                            for(OrderBean ob : orderBeanList){
+                                ob.setOrderListStatus(type);
+                            }
                             preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
                             lastPageIndex = orderBeanList.size() / 10;
                             if (pullToRefresh) {
