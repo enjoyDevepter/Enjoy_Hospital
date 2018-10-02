@@ -1,22 +1,21 @@
 package cn.ehanmy.hospital.mvp.ui.holder;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
-import io.reactivex.Observable;
-
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
-import cn.ehanmy.hospital.mvp.ui.activity.OrderConfirmActivity;
+import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
+import io.reactivex.Observable;
 
 public class GoodsListHolder extends BaseHolder<GoodsListBean> {
 
@@ -29,37 +28,32 @@ public class GoodsListHolder extends BaseHolder<GoodsListBean> {
     @BindView(R.id.count)
     TextView count;
     @BindView(R.id.price)
-    TextView price;
+    MoneyView priceMV;
     @BindView(R.id.buy)
     TextView buy;
+
+    GoodsListAdapter.OnChildItemClickLinstener onChildItemClickLinstener;
 
     private AppComponent mAppComponent;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用 Glide,使用策略模式,可替换框架
 
 
-    @Override
-    protected void onRelease() {
-        image = null;
-        title = null;
-        title2 = null;
-        count = null;
-        price = null;
-        buy = null;
-    }
-
-    public GoodsListHolder(View itemView) {
+    public GoodsListHolder(View itemView, GoodsListAdapter.OnChildItemClickLinstener onChildItemClickLinstener) {
         super(itemView);
         mAppComponent = ArmsUtils.obtainAppComponentFromContext(itemView.getContext());
         mImageLoader = mAppComponent.imageLoader();
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
 
     }
 
+
     @Override
-    public void setData(GoodsListBean data, int position){
+    public void setData(GoodsListBean data, int position) {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
                         .url(data.getImage())
+                        .isCenterCrop(true)
                         .imageView(image)
                         .build());
         Observable.just(data.getName())
@@ -67,17 +61,34 @@ public class GoodsListHolder extends BaseHolder<GoodsListBean> {
         Observable.just(data.getGoodsSpecValue().getSpecValueName())
                 .subscribe(s -> title2.setText(s));
         Observable.just(data.getSales())
-                .subscribe(s -> count.setText(""+s));
+                .subscribe(s -> count.setText(String.valueOf(s)));
         Observable.just(data.getSalePrice())
-                .subscribe(s -> price.setText(""+s));
+                .subscribe(s -> priceMV.setMoneyText(String.valueOf(s)));
+        buy.setOnClickListener(this);
+    }
 
-        buy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ArmsUtils.getContext(), OrderConfirmActivity.class);
-                intent.putExtra(OrderConfirmActivity.KEY_FOR_GOODS_INFO,data);
-                ArmsUtils.startActivity(intent);
-            }
-        });
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.buy:
+                onChildItemClickLinstener.onChildItemClick(view, GoodsListAdapter.ViewName.BUY, getAdapterPosition());
+                return;
+        }
+        onChildItemClickLinstener.onChildItemClick(view, GoodsListAdapter.ViewName.ITEM, getAdapterPosition());
+    }
+
+    @Override
+    protected void onRelease() {
+        //只要传入的 Context 为 Activity, Glide 就会自己做好生命周期的管理, 其实在上面的代码中传入的 Context 就是 Activity
+        //所以在 onRelease 方法中不做 clear 也是可以的, 但是在这里想展示一下 clear 的用法
+        mImageLoader.clear(mAppComponent.application(), ImageConfigImpl.builder()
+                .imageViews(image)
+                .build());
+        this.image = null;
+        this.title = null;
+        this.title2 = null;
+        this.count = null;
+        this.priceMV = null;
+        this.buy = null;
     }
 }

@@ -1,10 +1,10 @@
-package cn.ehanmy.hospital.mvp.model.entity.response;
+package cn.ehanmy.hospital.mvp.model.entity.placeOrder;
 
 import java.util.List;
 
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.PayEntry;
+import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 
 public class GoodsBuyResponse extends BaseResponse {
     private String orderId;

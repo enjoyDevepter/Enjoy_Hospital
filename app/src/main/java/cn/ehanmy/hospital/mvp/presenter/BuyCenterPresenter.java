@@ -2,23 +2,22 @@ package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import cn.ehanmy.hospital.mvp.model.entity.UserBean;
-import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
-import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
-import cn.ehanmy.hospital.util.CacheUtil;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.BuyCenterContract;
+import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.util.CacheUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
 @ActivityScope
@@ -46,7 +45,7 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
         this.mApplication = null;
     }
 
-    public void requestHospitalInfo(String username){
+    public void requestHospitalInfo(String username) {
         MemberInfoRequest memberInfoRequest = new MemberInfoRequest();
         UserBean user = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         memberInfoRequest.setUsername(username);
@@ -65,11 +64,9 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
                     if (response.isSuccess()) {
                         MemberBean member = response.getMember();
                         CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
-                        System.out.println("member = "+member);
                         mRootView.updateCodeisRight(true);
-                    }else{
+                    } else {
                         mRootView.updateCodeisRight(false);
-                        mRootView.showMessage(response.getRetDesc());
                     }
                 });
     }

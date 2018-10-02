@@ -1,13 +1,13 @@
 package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
 import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
+
 // 2.3.1	获取医美项目列表
 public class GoodsPageRequest extends BaseRequest {
     private String secondCategoryId;
     private String categoryId;
-    private int pageIndex;  // 从1开始
-    private int pageSize;
+    private int pageIndex = 1;  // 从1开始
+    private int pageSize = 10;
     private OrderBy orderBy;
     private String token;
     private int cmd = 5101;

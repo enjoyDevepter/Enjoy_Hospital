@@ -8,15 +8,14 @@ import com.jess.arms.di.scope.ActivityScope;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
-import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
-import dagger.Module;
-import dagger.Provides;
-
 import cn.ehanmy.hospital.mvp.contract.GoodsListContract;
 import cn.ehanmy.hospital.mvp.model.GoodsListModel;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
+import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
+import dagger.Module;
+import dagger.Provides;
 
 
 @Module
@@ -58,7 +57,7 @@ public class GoodsListModule {
 
     @ActivityScope
     @Provides
-    RecyclerView.Adapter provideStoreAdapter(List<GoodsListBean> list) {
+    GoodsListAdapter provideStoreAdapter(List<GoodsListBean> list) {
         return new GoodsListAdapter(list);
     }
 

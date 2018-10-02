@@ -39,6 +39,7 @@ import com.jess.arms.base.App;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.integration.AppManager;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 
 import static com.jess.arms.integration.AppManager.APP_EXIT;
@@ -391,6 +392,12 @@ public class ArmsUtils {
         return hex.toString();
     }
 
+    public static String formatLong(long money) {
+        money = money / 100;
+        BigDecimal bd = new BigDecimal(money);
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.toString();
+    }
 
     /**
      * 全屏,并且沉侵式状态栏

@@ -5,15 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,8 +30,9 @@ import cn.ehanmy.hospital.mvp.contract.CommitOrderContract;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.PayEntry;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
-import cn.ehanmy.hospital.mvp.model.entity.response.GoodsBuyResponse;
+import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.presenter.CommitOrderPresenter;
+import cn.ehanmy.hospital.mvp.ui.adapter.PayItemAdapter;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
 import cn.ehanmy.hospital.util.CacheUtil;
 
@@ -34,12 +40,9 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 /**
  * 显示订单信息并提供支付入口（支付二维码）
- * */
-public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View {
-
-    public static final String KEY_FOR_ORDER_INDO = "key_for_order_indo";
-    public static final String KEY_FOR_REMARK = "KEY_FOR_REMARK";  // 留言
-    public static final String KEY_FOR_MONEY = "key_for_money";  // 用户输入的消费币
+ */
+public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View, View.OnClickListener {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @BindView(R.id.title_Layout)
     View title;
@@ -50,7 +53,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     @BindView(R.id.order_name)
     TextView order_name;  // 项目名称
     @BindView(R.id.price)
-    TextView price;  // 订单金额
+    MoneyView priceMV;  // 订单金额
     @BindView(R.id.name)
     TextView name;  // 用户姓名
     @BindView(R.id.phone)
@@ -61,16 +64,20 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     TextView member_code;  // 会员名
     @BindView(R.id.addr)
     TextView addr;
-    @BindView(R.id.pay_title)
-    TextView pay_title;
-    @BindView(R.id.pay_image)
-    ImageView pay_image;
-    @BindView(R.id.make_sure_btn)
-    TextView make_sure_btn;
-
+    @BindView(R.id.pay)
+    View payV;
+    @BindView(R.id.pay_type)
+    View payTypeV;
+    @BindView(R.id.arList)
+    RecyclerView mRecyclerView;
+    @Inject
+    PayItemAdapter mAdapter;
+    @Inject
+    List<PayEntry> payEntries;
+    @Inject
+    RecyclerView.LayoutManager mLayoutManager;
     @Inject
     ImageLoader mImageLoader;
-    private String orderId;
     private CustomDialog payOkDialog;
 
     @Override
@@ -88,29 +95,10 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         return R.layout.activity_commit_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    public void update(GoodsBuyResponse response){
-        orderId = response.getOrderId();
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .url(response.getGoods().getImage())
-                        .imageView(image)
-                        .build());
-        PayEntry payEntry = response.getPayEntryList().get(0);
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .url(payEntry.getImage())
-                        .imageView(pay_image)
-                        .build());
-        order_name.setText(response.getGoods().getName());
-        price.setText(String.format("%.2f",response.getPayMoney() * 1.0 / 100));
-        pay_title.setText(payEntry.getName());
-    }
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"提交订单");
+        new TitleUtil(title, this, "提交订单");
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
         HospitaInfoBean hospitaInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
         mImageLoader.loadImage(this,
@@ -119,18 +107,14 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                         .url(memberBean.getHeadImage())
                         .imageView(head_image)
                         .build());
-
         name.setText(memberBean.getRealName());
         phone.setText(memberBean.getMobile());
         hospital.setText(hospitaInfoBean.getName());
         addr.setText(hospitaInfoBean.getAddress());
         member_code.setText(memberBean.getUserName());
-        make_sure_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.makeSureOrder();
-            }
-        });
+        payV.setOnClickListener(this);
+        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -161,44 +145,69 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
-    private void showCancelDailog() {
-        payOkDialog = CustomDialog.create(getSupportFragmentManager())
-                .setViewListener(new CustomDialog.ViewListener() {
-                    @Override
-                    public void bindView(View view) {
-                        view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(CommitOrderActivity.this,OrderInfoActivity.class);
-                                intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID,orderId);
-                                ArmsUtils.startActivity(intent);
-                            }
-                        });
-                        view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ArmsUtils.startActivity(GoodsListActivity.class);
-                            }
-                        });
-                    }
-                })
-                .setLayoutRes(R.layout.pay_ok_dialog_layout)
-                .setDimAmount(0.5f)
-                .isCenter(true)
-                .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this,228))
-                .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this,240))
-                .show();
+    public void showPaySuccess(GoodsBuyResponse response) {
+        if ("1".equals(response.getPayStatus())) {
+            payTypeV.setVisibility(View.GONE);
+            payOkDialog = CustomDialog.create(getSupportFragmentManager())
+                    .setViewListener(new CustomDialog.ViewListener() {
+                        @Override
+                        public void bindView(View view) {
+                            MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
+                            ((TextView) view.findViewById(R.id.project_name)).setText(response.getGoods().getName());
+                            ((TextView) view.findViewById(R.id.project_id)).setText(response.getGoods().getCode());
+                            ((TextView) view.findViewById(R.id.project_leader)).setText(memberBean.getUserName());
+                            ((TextView) view.findViewById(R.id.project_time)).setText(sdf.format(response.getOrderTime()));
+                            view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    payOkDialog.dismiss();
+                                    Intent intent = new Intent(CommitOrderActivity.this, OrderInfoActivity.class);
+                                    intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, response.getOrderId());
+                                    ArmsUtils.startActivity(intent);
+                                }
+                            });
+                            view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    payOkDialog.dismiss();
+                                    ArmsUtils.startActivity(GoodsListActivity.class);
+                                }
+                            });
+                        }
+                    })
+                    .setLayoutRes(R.layout.pay_ok_dialog_layout)
+                    .setDimAmount(0.5f)
+                    .isCenter(true)
+                    .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
+                    .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this, 240))
+                    .show();
+        } else {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url(response.getGoods().getImage())
+                            .imageView(image)
+                            .build());
+            order_name.setText(response.getGoods().getName());
+            priceMV.setMoneyText(ArmsUtils.formatLong(response.getPayMoney()));
+            payTypeV.setVisibility(View.VISIBLE);
+            payEntries.clear();
+            payEntries.addAll(response.getPayEntryList());
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
-    public void makeSure(boolean ok){
-        if(ok){
-            showCancelDailog();
-        }else{
-            showMessage("支付未完成");
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.pay:
+                mPresenter.placeGoodsOrder();
+                break;
         }
     }
 }

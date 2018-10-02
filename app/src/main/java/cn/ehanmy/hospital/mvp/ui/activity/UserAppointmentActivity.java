@@ -27,7 +27,6 @@ import cn.ehanmy.hospital.di.component.DaggerUserAppointmentComponent;
 import cn.ehanmy.hospital.di.module.UserAppointmentModule;
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
-import cn.ehanmy.hospital.mvp.model.entity.UserAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
@@ -71,13 +70,14 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     RecyclerView contentList;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_date)
+    View onDateV;
     private TextView currTextView;
     private String currType = UserAppointmentModel.SEARCH_TYPE_NEW;
     private int normalColor = Color.parseColor("#333333");
     private int currColor = Color.parseColor("#3DBFE8");
     private Paginate mPaginate;
     private boolean isLoadingMore;
-
     private CustomProgressDailog progressDailog;
     private boolean isEnd;
     private View.OnClickListener onTypeClickListener = new View.OnClickListener() {
@@ -176,7 +176,7 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title_Layout,this,"用户预约");
+        new TitleUtil(title_Layout, this, "用户预约");
         currTextView = new_appointment;
         new_appointment.setTextColor(currColor);
 
@@ -192,12 +192,12 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         mAdapter.setOnChildItemClickLinstener(new UserAppointmentHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, UserAppointmentHolder.ViewName viewname, int position) {
-                switch (viewname){
+                switch (viewname) {
                     case CHANGE_APPOINTMENT:
-                        Intent intent2 = new Intent(UserAppointmentActivity.this,ChoiceTimeActivity.class);
+                        Intent intent2 = new Intent(UserAppointmentActivity.this, ChoiceTimeActivity.class);
                         intent2.putExtra("reservationId", mAdapter.getItem(position).getReservationId());
                         intent2.putExtra("projectId", mAdapter.getItem(position).getProjectId());
-                        UserAppointmentActivity.this.startActivityForResult(intent2,1);
+                        UserAppointmentActivity.this.startActivityForResult(intent2, 1);
                         break;
                     case OK:
                         mPresenter.confirmAppointment(mAdapter.getItem(position).getReservationId());
@@ -207,12 +207,12 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
                         break;
                     case INFO:
                         Intent intent = new Intent(ArmsUtils.getContext(), UserAppointmentInfoActivity.class);
-                        intent.putExtra(UserAppointmentInfoActivity.KEY_FOR_APPOINTMENT_ID,mAdapter.getItem(position).getReservationId());
+                        intent.putExtra(UserAppointmentInfoActivity.KEY_FOR_APPOINTMENT_ID, mAdapter.getItem(position).getReservationId());
                         ArmsUtils.startActivity(intent);
                         break;
                     case HUAKOU:
                         OrderProjectDetailBean item = mAdapter.getItem(position);
-                        mPresenter.huakou(item.getProjectId(),item.getReservationId());
+                        mPresenter.huakou(item.getProjectId(), item.getReservationId());
                 }
             }
         });
@@ -276,13 +276,13 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         this.isEnd = isEnd;
     }
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
-    private void doSearch(){
+    private void doSearch() {
         String s = searchKey.getText().toString();
-        if(TextUtils.isEmpty(s)){
+        if (TextUtils.isEmpty(s)) {
             showMessage("请输入搜索关键字后重试");
             return;
         }
@@ -299,9 +299,6 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
     public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
-
-    @BindView(R.id.no_date)
-    View onDateV;
 
     @Override
     public void showError(boolean hasDate) {

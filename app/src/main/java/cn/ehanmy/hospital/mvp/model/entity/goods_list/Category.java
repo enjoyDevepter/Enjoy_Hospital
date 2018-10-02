@@ -9,7 +9,6 @@ import java.util.List;
 public class Category {
     private String categoryId;
     private List<Category> goodsCategoryList;
-
     private String name;
     private String busType;  // 3 医美
     private boolean choice;

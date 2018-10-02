@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,30 +24,22 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 /**
  * 订单中心，查询会员编号页面
  */
-public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implements BuyCenterContract.View {
+public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implements BuyCenterContract.View, View.OnClickListener {
 
     @BindView(R.id.title_Layout)
     View title;
-
     @BindView(R.id.clear_btn)
     View clear_btn;
-
     @BindView(R.id.search_btn)
     View search_btn;
-
     @BindView(R.id.search_key)
     EditText search_key;
-
     @BindView(R.id.image)
     View image;
-
     @BindView(R.id.hide)
     TextView hide;
-
     @BindView(R.id.buy)
     View buy;
-
-    private String memberCode;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -69,27 +60,8 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title, this, "下单中心");
         clear_btn.setVisibility(View.GONE);
-        buy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                killMyself();
-                ArmsUtils.startActivity(GoodsListActivity.class);
-
-            }
-        });
-        search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideImm();
-                String s = search_key.getText().toString();
-                if (TextUtils.isEmpty(s)) {
-                    showMessage("请输入会员编号后查询");
-                } else {
-                    memberCode = s;
-                    mPresenter.requestHospitalInfo(s);
-                }
-            }
-        });
+        buy.setOnClickListener(this);
+        search_btn.setOnClickListener(this);
     }
 
     @Override
@@ -123,8 +95,26 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
     public void updateCodeisRight(boolean codeIsRight) {
         image.setVisibility(View.VISIBLE);
         image.setBackground(getResources().getDrawable(codeIsRight ? R.mipmap.member_code_right : R.mipmap.member_code_wrong));
-
         hide.setText(codeIsRight ? "会员编号正确，请继续下单" : "会员编号错误，请重新查询！");
         buy.setVisibility(codeIsRight ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_btn:
+                hideImm();
+                String s = search_key.getText().toString();
+                if (ArmsUtils.isEmpty(s)) {
+                    showMessage("请输入会员编号后查询");
+                } else {
+                    mPresenter.requestHospitalInfo(s);
+                }
+                break;
+            case R.id.buy:
+                ArmsUtils.startActivity(GoodsListActivity.class);
+                break;
+
+        }
     }
 }

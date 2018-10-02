@@ -1,111 +1,112 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
-import com.zhy.view.flowlayout.FlowLayout;
-import com.zhy.view.flowlayout.TagAdapter;
-import com.zhy.view.flowlayout.TagFlowLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerOrderConfirmComponent;
 import cn.ehanmy.hospital.di.module.OrderConfirmModule;
 import cn.ehanmy.hospital.mvp.contract.OrderConfirmContract;
-import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsSpecValueBean;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
 import cn.ehanmy.hospital.mvp.presenter.OrderConfirmPresenter;
-
-import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.mvp.ui.adapter.SpecLabelTextProvider;
+import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
+import cn.ehanmy.hospital.mvp.ui.widget.LabelsView;
 import cn.ehanmy.hospital.util.CacheUtil;
 
-
+import static com.jess.arms.utils.ArmsUtils.getContext;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**确认订单页面，支付页面前通过这个页面确定订单*/
-public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> implements OrderConfirmContract.View {
-
-    public static final String KEY_FOR_GOODS_INFO = "key_for_goods_info";
-
-    @BindView(R.id.title_Layout)
-    View title;
+/**
+ * 确认订单页面，支付页面前通过这个页面确定订单
+ */
+public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> implements OrderConfirmContract.View, View.OnClickListener, LabelsView.OnLabelSelectChangeListener, View.OnFocusChangeListener, TextView.OnEditorActionListener {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
     @BindView(R.id.member_code)
-    TextView member_code;
-    @BindView(R.id.hosptial)
-    TextView hosptial;
-    @BindView(R.id.remark_edit)
-    EditText remark_edit;
-    @BindView(R.id.image)
-    ImageView image;
-    @BindView(R.id.price)
-    TextView price;  // 项目中的金额
-    @BindView(R.id.order_name)
-    TextView order_name;
-    @BindView(R.id.goods_price)
-    TextView goods_price;  // 商品金额
-    @BindView(R.id.all_price)
-    TextView all_price;  // 订单总金额
-    @BindView(R.id.skill)
-    TextView skill;
-    @BindView(R.id.xiaofeibi_shengyu)
-    TextView xiaofeibi_shengyu;
-    @BindView(R.id.xiaofeibi_count)
-    TextView xiaofeibi_count;
+    TextView memberCodeTV;
     @BindView(R.id.member_phone)
-    TextView member_phone;
-    @BindView(R.id.confirm_order)
-    TextView confirm_order;
-    @BindView(R.id.xiaofeibi_edit)
-    EditText xiaofeibi_edit;
-    @BindView(R.id.three_point)
-    View three_point;
-
-    @BindView(R.id.expend)
-    View expend;
-    @BindView(R.id.expend_image)
-    ImageView expend_image;
-    @BindView(R.id.expend_project_name)
-    TextView expend_project_name;
-    @BindView(R.id.expend_price)
-    TextView expend_price;
-    @BindView(R.id.expend_project_id)
-    TextView expend_project_id;
-    @BindView(R.id.skill_list)
-    TagFlowLayout skill_list;
-    @BindView(R.id.expend_close)
-    View expend_close;
-
+    TextView phoneTV;
+    @BindView(R.id.hosptial)
+    TextView hosptialTV;
+    @BindView(R.id.remark)
+    EditText remarkET;
+    @BindView(R.id.image)
+    ImageView imageIV;
+    @BindView(R.id.name)
+    TextView nameTV;
+    @BindView(R.id.price)
+    MoneyView priceMV;
+    @BindView(R.id.goods_spec)
+    TextView goodSpecTV;
+    @BindView(R.id.balance)
+    TextView balanceTV;
+    @BindView(R.id.money)
+    EditText moneyET;
+    @BindView(R.id.payPrice)
+    TextView payPriceTV;
+    @BindView(R.id.payMoney)
+    TextView payMoneyTV;
+    @BindView(R.id.confirm)
+    View confirmV;
+    @BindView(R.id.spec)
+    View specV;
+    @BindView(R.id.mask_spec)
+    View maskSpecV;
+    @BindView(R.id.spec_close)
+    View closeV;
+    @BindView(R.id.spec_layout)
+    View specLayoutV;
+    @BindView(R.id.spec_image)
+    ImageView spceImageIV;
+    @BindView(R.id.spec_name)
+    TextView spceNameTV;
+    @BindView(R.id.spec_price)
+    MoneyView spcePriceTV;
+    @BindView(R.id.spec_goods_id)
+    TextView spceIDTV;
+    @BindView(R.id.specs)
+    LabelsView speceLabelsView;
+    @BindView(R.id.pay)
+    MoneyView payMV;
     @Inject
     ImageLoader mImageLoader;
+    GoodsConfirmResponse response;
+    CustomDialog payOkDialog;
+    private volatile boolean shouldSubmit;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -117,185 +118,26 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
                 .inject(this);
     }
 
-    private GoodsSpecValueBean goodsSpecValueBean;
-
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
         return R.layout.activity_order_confirm; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-    private GoodsConfirmResponse goodsConfirmResponse;
-    private long balance;  // 用户当前剩余的消费币（单位分）
-
-    public void update(GoodsConfirmResponse goodsConfirmResponse){
-
-        this.goodsConfirmResponse = goodsConfirmResponse;
-
-        GoodsListBean goods = goodsConfirmResponse.getGoods();
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .url(goods.getImage())
-                        .imageView(image)
-                        .build());
-        mImageLoader.loadImage(this,
-                ImageConfigImpl
-                        .builder()
-                        .url(goods.getImage())
-                        .imageView(expend_image)
-                        .build());
-
-        order_name.setText(goods.getName());
-        expend_project_name.setText(goods.getName());
-        price.setText(String.format("%.2f",goods.getSalePrice()));
-        expend_price.setText(String.format("%.2f",goods.getSalePrice()));
-        List<GoodsSpecValueBean> goodsSpecValueList = goodsConfirmResponse.getGoodsSpecValueList();
-        if(goodsSpecValueList != null && goodsSpecValueList.size() != 0){
-            goodsSpecValueBean = goodsSpecValueList.get(0);
-            skill.setText(goodsSpecValueBean.getSpecValueName());
-        }
-        balance = goodsConfirmResponse.getBalance();
-        xiaofeibi_shengyu.setText(""+ balance);
-        goods_price.setText(String.format("%.2f",goodsConfirmResponse.getPrice() * 1.0 / 100));
-        xiaofeibi_count.setText(String.format("%.2f",goodsConfirmResponse.getMoney() * 1.0 / 100));
-        all_price.setText(String.format("%.2f",goodsConfirmResponse.getPayMoney() * 1.0 / 100));
-        expend_project_id.setText(goodsConfirmResponse.getGoods().getMerchId());
-
-        TagAdapter<GoodsSpecValueBean> adapter = new TagAdapter<GoodsSpecValueBean>(new ArrayList<>(goodsSpecValueList)) {
-            @Override
-            public View getView(FlowLayout parent, int position, GoodsSpecValueBean s) {
-                TextView tv = (TextView) LayoutInflater.from(ArmsUtils.getContext()).inflate(R.layout.order_confirm_skill_item, null, false);
-                tv.setText(s.getSpecValueName());
-                tv.setTextColor(Color.BLACK);
-                return tv;
-            }
-        };
-        skill_list.setAdapter(adapter);
-        skill_list.setMaxSelectCount(1);
-        ViewGroup childAt = (ViewGroup) skill_list.getChildAt(0);
-        childAt.setSelected(true);
-        ((TextView)childAt.getChildAt(0)).setTextColor(Color.WHITE);
-        TagFlowLayout.OnTagClickListener onTagClickListener = new TagFlowLayout.OnTagClickListener() {
-            @Override
-            public boolean onTagClick(View view, int position, FlowLayout parent) {
-                if (view.isSelected()) {
-                    return true;
-                }
-                updateSpecSelect(view, parent);
-                currGoodsSpec = goodsSpecValueList.get(position);
-                currGoodsSpecIndex = position;
-                requestConfirmInfo();
-                expend.setVisibility(View.GONE);
-                return true;
-            }
-        };
-        updateSpecSelect(skill_list.getChildAt(currGoodsSpecIndex),skill_list);
-        skill_list.setOnTagClickListener(onTagClickListener);
-    }
-
-    private void updateSpecSelect(View view, FlowLayout parent) {
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = parent.getChildAt(i);
-            childAt.setSelected(false);
-            if (childAt instanceof ViewGroup && ((ViewGroup) childAt).getChildAt(0) instanceof TextView) {
-                ((TextView) ((ViewGroup) childAt).getChildAt(0)).setTextColor(Color.BLACK);
-            }
-        }
-
-        view.setSelected(true);
-        if (view instanceof ViewGroup && ((ViewGroup) view).getChildAt(0) instanceof TextView) {
-            TextView childAt1 = (TextView) ((ViewGroup) view).getChildAt(0);
-            childAt1.setTextColor(Color.WHITE);
-            skill.setText(childAt1.getText());
-        }
-    }
-
-    private void requestConfirmInfo(){
-        if(currGoodsSpec == null){
-            mPresenter.requestConfirmInfo(money);
-        }else{
-            mPresenter.requestConfirmInfoWithSpec(money,currGoodsSpec.getSpecValueId());
-        }
-    }
-
-    private GoodsSpecValueBean currGoodsSpec = null;
-    private int currGoodsSpecIndex = 0;
-    private long money = 0;
-
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        xiaofeibi_edit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateMoney(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        xiaofeibi_edit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    xiaofeibi_edit.setText(""+money);
-                    requestConfirmInfo();
-                }
-            }
-        });
-        new TitleUtil(title,this,"确认订单");
-        expend_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expend.setVisibility(View.GONE);
-            }
-        });
-        three_point.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expend.setVisibility(View.VISIBLE);
-            }
-        });
+        titleTV.setText("确认订单");
+        backV.setOnClickListener(this);
+        specV.setOnClickListener(this);
+        confirmV.setOnClickListener(this);
+        maskSpecV.setOnClickListener(this);
+        closeV.setOnClickListener(this);
+        moneyET.setOnFocusChangeListener(this);
+        moneyET.setOnEditorActionListener(this);
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
-        System.out.println("member = "+memberBean);
-        member_code.setText(memberBean.getUserName());
-        member_phone.setText(memberBean.getMobile());
-
+        memberCodeTV.setText(memberBean.getUserName());
+        phoneTV.setText(memberBean.getMobile());
         HospitaInfoBean hospitalInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
-        hosptial.setText(hospitalInfoBean.getName());
-        confirm_order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ArmsUtils.getContext(),CommitOrderActivity.class);
-                intent.putExtra(CommitOrderActivity.KEY_FOR_ORDER_INDO,goodsConfirmResponse);
-                intent.putExtra(CommitOrderActivity.KEY_FOR_REMARK,remark_edit.getText().toString());
-                updateMoney(xiaofeibi_edit.getText());
-                intent.putExtra(CommitOrderActivity.KEY_FOR_MONEY,money);
-                ArmsUtils.startActivity(intent);
-            }
-        });
-    }
-
-    private void updateMoney(CharSequence text){
-        if(text == null || TextUtils.isEmpty(text.toString())){
-            money = 0;
-        }else{
-            try{
-                money = Integer.parseInt(text.toString());
-                if(money * 100 > balance){
-                    money = balance / 100;
-                }
-            }catch (Exception e){
-                money = 0;
-            }
-        }
+        hosptialTV.setText(hospitalInfoBean.getName());
     }
 
     @Override
@@ -328,5 +170,184 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     @Override
     public Activity getActivity() {
         return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+    @Override
+    public void updateUI(GoodsConfirmResponse response) {
+        if (null == this.response ||
+                !this.response.getGoodsSpecValueList().equals(response.getGoodsSpecValueList())) {
+            speceLabelsView.setOnLabelSelectChangeListener(null);
+            speceLabelsView.setLabels(response.getGoodsSpecValueList(), new SpecLabelTextProvider());
+            provideCache().put("specValueId", response.getGoods().getGoodsSpecValue().getSpecValueId());
+            String specValueId = (String) provideCache().get("specValueId");
+            if (!ArmsUtils.isEmpty(specValueId)) {
+                for (int i = 0; i < response.getGoodsSpecValueList().size(); i++) {
+                    if (response.getGoodsSpecValueList().get(i).getSpecValueId().equals(specValueId)) {
+                        speceLabelsView.setSelects(i);
+                        break;
+                    }
+                }
+            }
+            speceLabelsView.setOnLabelSelectChangeListener(this);
+        }
+        this.response = response;
+        GoodsListBean goods = response.getGoods();
+
+        if (null != goods) {
+            mImageLoader.loadImage(this,
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url(goods.getImage())
+                            .imageView(imageIV)
+                            .build());
+
+            nameTV.setText(goods.getName());
+            priceMV.setMoneyText(String.valueOf(goods.getSalePrice()));
+            goodSpecTV.setText(goods.getGoodsSpecValue().getSpecValueName());
+        }
+        moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
+        balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
+        payPriceTV.setText(String.valueOf(goods.getSalePrice()));
+        payMoneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
+        payMV.setMoneyText(ArmsUtils.formatLong(response.getPayMoney()));
+        spceIDTV.setText(goods.getCode());
+        spceNameTV.setText(goods.getName());
+        spcePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.spec:
+            case R.id.mask_spec:
+            case R.id.spec_close:
+                showSpec();
+                break;
+            case R.id.confirm:
+                mPresenter.placeGoodsOrder();
+                break;
+        }
+    }
+
+    private void showSpec() {
+        if (null == speceLabelsView.getLabels()
+                || (null != speceLabelsView.getLabels() && speceLabelsView.getLabels().size() <= 0)) {
+            return;
+        }
+        if (!maskSpecV.isShown()) {
+            maskSpecV.setVisibility(View.VISIBLE);
+            maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
+            specLayoutV.setVisibility(View.VISIBLE);
+            specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_butom_in));
+            spcePriceTV.setMoneyText(String.valueOf(response.getGoods().getSalePrice()));
+            spceIDTV.setText(response.getGoods().getCode());
+            spceNameTV.setText(response.getGoods().getName());
+            mImageLoader.loadImage(spceImageIV.getContext(),
+                    ImageConfigImpl
+                            .builder()
+                            .placeholder(R.drawable.place_holder_img)
+                            .url(response.getGoods().getImage())
+                            .imageView(spceImageIV)
+                            .build());
+
+        } else {
+            maskSpecV.setVisibility(View.GONE);
+            maskSpecV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
+            specLayoutV.setVisibility(View.GONE);
+            specLayoutV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.for_buttom_out));
+        }
+    }
+
+    @Override
+    public void onLabelSelectChange(TextView label, Object data, boolean isSelect, int position) {
+        if (isSelect) {
+            GoodsSpecValueBean goodsSpecValue = (GoodsSpecValueBean) data;
+            provideCache().put("specValueId", goodsSpecValue.getSpecValueId());
+            provideCache().put("merchId", response.getGoods().getMerchId());
+            mPresenter.getGoodsDetails();
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            shouldSubmit = hasFocus;
+        } else {
+            if (shouldSubmit) {
+                String m = moneyET.getText().toString();
+                moneyET.setText("");
+                if (ArmsUtils.isEmpty(m)) {
+                    return;
+                }
+                provideCache().put("money", Long.valueOf(m) * 100);
+                shouldSubmit = hasFocus;
+                mPresenter.getGoodsDetails();
+            }
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        // 必不可少，否则所有的组件都不会有TouchEvent了
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                //使EditText触发一次失去焦点事件
+                v.setFocusable(false);
+//                v.setFocusable(true); //这里不需要是因为下面一句代码会同时实现这个功能
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            //隐藏软键盘
+            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            remarkET.requestFocus();
+            return true;
+        }
+        return false;
     }
 }

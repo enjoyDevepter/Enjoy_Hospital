@@ -1,15 +1,14 @@
 package cn.ehanmy.hospital.mvp.model.entity.request;
 
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmWithSpecBean;
 
 // 2.3.2	获取医美项目确认信息
 public class GoodsConfirmWithSpecRequest extends BaseRequest {
+    private final int cmd = 5104;
     private String token;
     private GoodsConfirmWithSpecBean goods;
     private String memberId;
     private long money;
-    private final int cmd = 5104;
 
     @Override
     public String toString() {

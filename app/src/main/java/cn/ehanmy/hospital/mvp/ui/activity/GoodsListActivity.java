@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -39,6 +38,7 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
 import cn.ehanmy.hospital.mvp.presenter.GoodsListPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterThirdAdapter;
+import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -48,12 +48,14 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 /**
  * 商品列表页面
  */
-public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implements GoodsListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implements GoodsListContract.View, View.OnClickListener, DefaultAdapter.OnRecyclerViewItemClickListener, TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener, GoodsListAdapter.OnChildItemClickLinstener {
 
     @BindView(R.id.title_Layout)
     View title;
     @BindView(R.id.goodsList)
     RecyclerView mRecyclerView;
+    @BindView(R.id.no_date)
+    View noDateV;
     @BindView(R.id.type_layout)
     View typeV;
     @BindView(R.id.type)
@@ -87,7 +89,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     @Inject
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
-    RecyclerView.Adapter mAdapter;
+    GoodsListAdapter mAdapter;
     @Inject
     GoodsFilterSecondAdapter secondAdapter;
     GoodsFilterThirdAdapter thirdAdapter;
@@ -97,13 +99,12 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     Drawable descD;
     @BindColor(R.color.choice)
     int choiceColor;
+    @BindColor(R.color.unchoice)
+    int unChoiceColor;
     private List<Category> thirdCategoryList;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
-    private int currentSecentIndex = 0;
-    private int currentThirdIndex = 0;
-    private int cacheSecendIndex = 0;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -125,10 +126,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         new TitleUtil(title, this, "下单中心");
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        thirdFilterRV.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-//        ((GoodsListAdapter) mAdapter).setOnItemClickListener(this);
-
+        mAdapter.setOnChildItemClickLinstener(this);
         typeV.setOnClickListener(this);
         saleV.setOnClickListener(this);
         priceV.setOnClickListener(this);
@@ -138,7 +136,6 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         ArmsUtils.configRecyclerView(secondFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         secondFilterRV.setAdapter(secondAdapter);
         secondAdapter.setOnItemClickListener(this);
-        mPresenter.getCategory();
     }
 
     @Override
@@ -173,39 +170,37 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
         return this;
     }
 
-    @Override
-    public void refreshNaviTitle(List<Category> categories) {
-    }
-
     private void showFilter(boolean show) {
         typeV.setSelected(show);
         if (show && secondAdapter.getInfos().size() > 0) {
-            thirdCategoryList = new ArrayList<>();
-            if (currentSecentIndex != 0) {
-                thirdCategoryList.addAll(secondAdapter.getInfos().get(currentSecentIndex).getGoodsCategoryList());
+            secondAdapter.notifyDataSetChanged();
+            for (Category category : secondAdapter.getInfos()) {
+                if (category.isChoice()) {
+                    thirdCategoryList = new ArrayList<>();
+                    thirdCategoryList.addAll(category.getGoodsCategoryList());
+                }
             }
             thirdAdapter = new GoodsFilterThirdAdapter(thirdCategoryList);
             ArmsUtils.configRecyclerView(thirdFilterRV, new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            List<Category> grands = thirdAdapter.getInfos();
-            for (int i = 0; i < grands.size(); i++) {
-                grands.get(i).setChoice(i == currentThirdIndex ? true : false);
-            }
-            secondAdapter.notifyDataSetChanged();
-            thirdAdapter.setOnItemClickListener(this);
-            List<Category> childs = secondAdapter.getInfos();
-            for (int i = 0; i < childs.size(); i++) {
-                childs.get(i).setChoice(i == currentSecentIndex ? true : false);
-            }
             thirdFilterRV.setAdapter(thirdAdapter);
-            filterV.setVisibility(VISIBLE);
-            filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_in));
-            maskV.setVisibility(VISIBLE);
-            maskV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
+            thirdAdapter.setOnItemClickListener(this);
+            if (filterV.getVisibility() == GONE) {
+                filterV.setVisibility(VISIBLE);
+                filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_in));
+            }
+            if (maskV.getVisibility() == GONE) {
+                maskV.setVisibility(VISIBLE);
+                maskV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_in));
+            }
         } else {
-            filterV.setVisibility(GONE);
-            filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_out));
-            maskV.setVisibility(GONE);
-            maskV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
+            if (filterV.getVisibility() == VISIBLE) {
+                filterV.setVisibility(GONE);
+                filterV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.menu_out));
+            }
+            if (maskV.getVisibility() == VISIBLE) {
+                maskV.setVisibility(GONE);
+                maskV.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.mask_out));
+            }
         }
     }
 
@@ -228,6 +223,12 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     @Override
     public void setLoadedAllItems(boolean has) {
         this.hasLoadedAllItems = has;
+    }
+
+    @Override
+    public void showContent(boolean hasData) {
+        mRecyclerView.setVisibility(hasData ? View.VISIBLE : View.INVISIBLE);
+        noDateV.setVisibility(hasData ? View.INVISIBLE : View.VISIBLE);
     }
 
     /**
@@ -268,11 +269,9 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
             case R.id.type_layout:
                 typeV.setSelected(!typeV.isSelected());
                 showFilter(typeV.isSelected());
-//                typeTV.setTextColor(choiceColor);
-//                typeStatusV.setBackground(typeV.isSelected() ? asceD : descD);
                 break;
             case R.id.sale_layout:
-                if(typeV.isSelected()){
+                if (typeV.isSelected()) {
                     showFilter(false);
                     return;
                 }
@@ -288,7 +287,7 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 showFilter(false);
                 break;
             case R.id.price_layout:
-                if(typeV.isSelected()){
+                if (typeV.isSelected()) {
                     showFilter(false);
                     return;
                 }
@@ -308,11 +307,11 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         this.mPaginate = null;
         DefaultAdapter.releaseAllHolder(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         DefaultAdapter.releaseAllHolder(secondFilterRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
         DefaultAdapter.releaseAllHolder(thirdFilterRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 
     @Override
@@ -328,51 +327,29 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
                 List<Category> childs = secondAdapter.getInfos();
                 for (int i = 0; i < childs.size(); i++) {
                     childs.get(i).setChoice(i == position ? true : false);
-                }
-                cacheSecendIndex = position;
-                secondAdapter.notifyDataSetChanged();
-                if (position == 0) {
-                    currentThirdIndex = -1;
-                    currentSecentIndex = 0;
-                    provideCache().put("secondCategoryId", null);
-                    provideCache().put("categoryId", null);
-                    showFilter(false);
-                    typeTV.setText("全部商品");
-                    mPresenter.getGoodsList(true);
-                    for(Category c1 : secondAdapter.getInfos()){
-                        if(c1 == null || c1.getGoodsCategoryList() == null){
-                            continue;
-                        }
-                        for(Category c2 : c1.getGoodsCategoryList()){
-                            c2.setChoice(false);
+                    if (null != childs.get(i).getGoodsCategoryList()) {
+                        for (Category childCategory : childs.get(i).getGoodsCategoryList()) {
+                            childCategory.setChoice(false);
                         }
                     }
-                    return;
                 }
+                secondAdapter.notifyDataSetChanged();
                 thirdCategoryList.clear();
                 thirdCategoryList.addAll(childs.get(position).getGoodsCategoryList());
+                provideCache().put("secondCategoryId", childs.get(position).getCategoryId());
                 thirdAdapter.notifyDataSetChanged();
                 break;
             case R.layout.goods_filter_third_item:
-                currentThirdIndex = position;
-                currentSecentIndex = cacheSecendIndex;
-                for(Category c1 : secondAdapter.getInfos()){
-                    if(c1 == null || c1.getGoodsCategoryList() == null){
-                        continue;
-                    }
-                    for(Category c2 : c1.getGoodsCategoryList()){
-                        c2.setChoice(false);
-                    }
-                }
+
                 List<Category> grands = thirdAdapter.getInfos();
                 for (int i = 0; i < grands.size(); i++) {
                     grands.get(i).setChoice(i == position ? true : false);
                 }
-                thirdAdapter.notifyDataSetChanged();
                 typeTV.setTextColor(choiceColor);
+                typeStatusV.setBackground(asceD);
+                thirdAdapter.notifyDataSetChanged();
                 typeTV.setText(grands.get(position).getName());
                 provideCache().put("categoryId", grands.get(position).getCategoryId());
-                provideCache().put("secondCategoryId", secondAdapter.getInfos().get(currentSecentIndex).getCategoryId());
                 showFilter(false);
                 mPresenter.getGoodsList(true);
                 break;
@@ -400,5 +377,18 @@ public class GoodsListActivity extends BaseActivity<GoodsListPresenter> implemen
     @Override
     public void onRefresh() {
         mPresenter.getGoodsList(true);
+    }
+
+    @Override
+    public void onChildItemClick(View v, GoodsListAdapter.ViewName viewname, int position) {
+        switch (viewname) {
+            case BUY:
+                Intent intent = new Intent(ArmsUtils.getContext(), OrderConfirmActivity.class);
+                intent.putExtra("goods", mAdapter.getItem(position));
+                ArmsUtils.startActivity(intent);
+                break;
+            case ITEM:
+                break;
+        }
     }
 }

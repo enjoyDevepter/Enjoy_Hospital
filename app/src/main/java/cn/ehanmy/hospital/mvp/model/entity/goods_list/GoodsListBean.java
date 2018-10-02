@@ -2,8 +2,10 @@ package cn.ehanmy.hospital.mvp.model.entity.goods_list;
 
 import java.io.Serializable;
 
-/**下单中心，在列表中展示的商品的实体类*/
-public class GoodsListBean implements Serializable{
+/**
+ * 下单中心，在列表中展示的商品的实体类
+ */
+public class GoodsListBean implements Serializable {
     private int attention;
     private int cnt;
     private double costPrice;
@@ -17,7 +19,8 @@ public class GoodsListBean implements Serializable{
     private double salePrice;
     private int sales;
     private String title;
-
+    private int nums = 1;
+    private String code;
 
     @Override
     public String toString() {
@@ -36,6 +39,7 @@ public class GoodsListBean implements Serializable{
                 ", sales=" + sales +
                 ", title='" + title + '\'' +
                 ", nums=" + nums +
+                ", code='" + code + '\'' +
                 '}';
     }
 
@@ -46,8 +50,6 @@ public class GoodsListBean implements Serializable{
     public void setNums(int nums) {
         this.nums = nums;
     }
-
-    private int nums = 1;
 
     public int getAttention() {
         return attention;
@@ -151,5 +153,13 @@ public class GoodsListBean implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

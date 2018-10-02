@@ -1,7 +1,7 @@
-package cn.ehanmy.hospital.mvp.model.entity.request;
+package cn.ehanmy.hospital.mvp.model.entity.placeOrder;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmBean;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
+import cn.ehanmy.hospital.mvp.model.entity.request.BaseRequest;
 
 // 2.3.3	医美项目下单
 public class GoodsBuyRequest extends BaseRequest {

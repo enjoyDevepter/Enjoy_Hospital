@@ -46,29 +46,29 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Inject
     MainAdapter mAdapter;
 
-    private void showResolution(){
+    private void showResolution() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Resolution: "+dm.widthPixels+","+dm.heightPixels);
+        sb.append("Resolution: " + dm.widthPixels + "," + dm.heightPixels);
         sb.append("\n");
-        sb.append("valuesType = "+getResources().getString(R.string.values_type));
+        sb.append("valuesType = " + getResources().getString(R.string.values_type));
         sb.append("\n");
-        sb.append("density = "+dm.density);
+        sb.append("density = " + dm.density);
         sb.append("\n");
 
         Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
         int ori = mConfiguration.orientation; //获取屏幕方向
         String orientationStr = "";
-        if(ori == Configuration.ORIENTATION_LANDSCAPE){
+        if (ori == Configuration.ORIENTATION_LANDSCAPE) {
             orientationStr = "land";
-        }else if(ori == Configuration.ORIENTATION_PORTRAIT){
+        } else if (ori == Configuration.ORIENTATION_PORTRAIT) {
             orientationStr = "port";
-        }else{
+        } else {
             orientationStr = ori + "";
         }
-        sb.append("orientation = "+orientationStr);
+        sb.append("orientation = " + orientationStr);
 
         Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
     }
@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        showResolution();
+//        showResolution();
         titleTV.setText("医院中心");
         settingV.setVisibility(View.VISIBLE);
         settingV.setOnClickListener(this);

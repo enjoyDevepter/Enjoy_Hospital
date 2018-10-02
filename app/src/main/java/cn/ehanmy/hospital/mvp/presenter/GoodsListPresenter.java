@@ -3,37 +3,35 @@ package cn.ehanmy.hospital.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.support.v7.widget.RecyclerView;
 
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.integration.cache.Cache;
+import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.integration.cache.IntelligentCache;
 import com.jess.arms.mvp.BasePresenter;
-import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
-import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-import cn.ehanmy.hospital.mvp.model.entity.UserBean;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageRequest;
-import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageResponse;
-import cn.ehanmy.hospital.util.CacheUtil;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.GoodsListContract;
+import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.CategoryResponse;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageRequest;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsPageResponse;
+import cn.ehanmy.hospital.mvp.model.entity.goods_list.OrderBy;
+import cn.ehanmy.hospital.mvp.ui.adapter.GoodsFilterSecondAdapter;
+import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
+import cn.ehanmy.hospital.util.CacheUtil;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
@@ -50,16 +48,14 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
 
     @Inject
     List<Category> categories;
-    private int preEndIndex;
-    private int lastPageIndex = 1;
-
     @Inject
     GoodsFilterSecondAdapter secondAdapter;
-
     @Inject
-    RecyclerView.Adapter mAdapter;
+    GoodsListAdapter mAdapter;
     @Inject
     List<GoodsListBean> GoodsList;
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public GoodsListPresenter(GoodsListContract.Model model, GoodsListContract.View rootView) {
@@ -75,55 +71,50 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
         this.mApplication = null;
     }
 
-    public void getCategory() {
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mApplication).extras();
-        if (cache.get("category") != null) {
-            mRootView.refreshNaviTitle((List<Category>) cache.get("category"));
-            return;
-        }
+    private void getCategory() {
         CategoryRequest request = new CategoryRequest();
         mModel.getCategory(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<CategoryResponse>() {
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<CategoryResponse>(mErrorHandler) {
                     @Override
-                    public void accept(CategoryResponse response) throws Exception {
+                    public void onNext(CategoryResponse response) {
                         if (response.isSuccess()) {
-//                            mRootView.refreshNaviTitle(response.getGoodsCategoryList());
                             categories.clear();
-                            Category e = new Category();
-                            e.setName("全部商品");
-                            categories.add(e);
-                            Category category = response.getGoodsCategoryList().get(0);
-                            if(category != null){
-                                categories.addAll(category.getGoodsCategoryList());
-                            }
+                            Category allCategory = new Category();
+                            allCategory.setChoice(true);
+                            allCategory.setName("全部商品");
+                            ArrayList<Category> childsCategory = new ArrayList<>();
+                            Category allChildCategory = new Category();
+                            allChildCategory.setChoice(true);
+                            allChildCategory.setName("全部");
+                            childsCategory.add(allChildCategory);
+                            allCategory.setGoodsCategoryList(childsCategory);
+                            categories.add(allCategory);
+                            categories.addAll(response.getGoodsCategoryList().get(0).getGoodsCategoryList());
                             secondAdapter.notifyDataSetChanged();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void init(){
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void init() {
+        getCategory();
         getGoodsList(true);
     }
 
     public void getGoodsList(boolean pullToRefresh) {
 
         GoodsPageRequest request = new GoodsPageRequest();
-        Cache<String, Object> cache = ArmsUtils.obtainAppComponentFromContext(mRootView.getActivity()).extras();
         Object secondCategoryId = mRootView.getCache().get("secondCategoryId");
         Object categoryId = mRootView.getCache().get("categoryId");
-        if(secondCategoryId != null && categoryId != null){
+        if (secondCategoryId != null && categoryId != null) {
             request.setSecondCategoryId((String) secondCategoryId);
             request.setCategoryId((String) categoryId);
         }
-        request.setPageIndex(1);
-        request.setPageSize(10);
-        UserBean cacheUserBean = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(IntelligentCache.KEY_KEEP+CacheUtil.CACHE_KEY_USER);
+        UserBean cacheUserBean = (UserBean) ArmsUtils.obtainAppComponentFromContext(ArmsUtils.getContext()).extras().get(IntelligentCache.KEY_KEEP + CacheUtil.CACHE_KEY_USER);
         request.setToken(cacheUserBean.getToken());
 
         if (!ArmsUtils.isEmpty(String.valueOf(mRootView.getCache().get("orderByField")))) {
@@ -155,25 +146,22 @@ public class GoodsListPresenter extends BasePresenter<GoodsListContract.Model, G
                 .subscribe(new ErrorHandleSubscriber<GoodsPageResponse>(mErrorHandler) {
                     @Override
                     public void onNext(GoodsPageResponse response) {
-
                         if (response.isSuccess()) {
-                    if (pullToRefresh) {
-                        GoodsList.clear();
+                            if (pullToRefresh) {
+                                GoodsList.clear();
+                            }
+                            mRootView.showContent(response.getGoodsList().size() > 0);
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
+                            GoodsList.addAll(response.getGoodsList());
+                            preEndIndex = GoodsList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = GoodsList.size() / 10;
+                            if (pullToRefresh) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter.notifyItemRangeInserted(preEndIndex, GoodsList.size());
+                            }
+                        }
                     }
-                    mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
-                    GoodsList.addAll(response.getGoodsList());
-                    preEndIndex = GoodsList.size();//更新之前列表总长度,用于确定加载更多的起始位置
-                    lastPageIndex = GoodsList.size() / 10;
-                    if (pullToRefresh) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemRangeInserted(preEndIndex, GoodsList.size());
-                        mAdapter.notifyDataSetChanged();
-                    }
-                } else {
-                    mRootView.showMessage(response.getRetDesc());
-                }
-            }
-        });
+                });
     }
 }
