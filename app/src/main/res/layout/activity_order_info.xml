@@ -264,8 +264,7 @@
                 android:layout_marginBottom="21dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="18dp"
-                android:background="#f00"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/default_image" />
 
             <TextView
                 android:id="@+id/order_time"
