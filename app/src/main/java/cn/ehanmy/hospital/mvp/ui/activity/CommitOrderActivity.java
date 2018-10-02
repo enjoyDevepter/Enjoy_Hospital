@@ -158,7 +158,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                         public void bindView(View view) {
                             MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
                             ((TextView) view.findViewById(R.id.project_name)).setText(response.getGoods().getName());
-                            ((TextView) view.findViewById(R.id.project_id)).setText(response.getGoods().getCode());
+                            ((TextView) view.findViewById(R.id.project_id)).setText(response.getOrderId());
                             ((TextView) view.findViewById(R.id.project_leader)).setText(memberBean.getUserName());
                             ((TextView) view.findViewById(R.id.project_time)).setText(sdf.format(response.getOrderTime()));
                             view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {

@@ -45,6 +45,7 @@
             android:id="@+id/project_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:maxLines="1"
             android:textColor="#ff333333"
             android:textSize="9sp" />
@@ -61,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="项目ID:"
+            android:text="订单号："
             android:textColor="#ff333333"
             android:textSize="9sp" />
 
@@ -69,6 +70,7 @@
             android:id="@+id/project_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:maxLines="1"
             android:textColor="#ff333333"
             android:textSize="9sp" />
@@ -85,7 +87,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="负责人:"
+            android:text="下单人:"
             android:textColor="#ff333333"
             android:textSize="9sp" />
 
@@ -93,6 +95,7 @@
             android:id="@+id/project_leader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:maxLines="1"
             android:textColor="#ff333333"
             android:textSize="9sp" />
@@ -118,6 +121,7 @@
             android:id="@+id/project_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:maxLines="1"
             android:textColor="#ff333333"
             android:textSize="9sp" />
