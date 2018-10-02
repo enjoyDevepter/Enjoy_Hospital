@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
@@ -126,7 +129,8 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
                     break;
                 case R.id.clear_btn:
                     searchKey.setText("");
-                    contentList.setAdapter(null);
+                    provideCache().put("key",null);
+                    mPresenter.init();
                     break;
             }
             hideImm();
@@ -225,6 +229,22 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         });
 
         initPaginate();
+        searchKey.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                provideCache().put("key",s+"");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -286,6 +306,8 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
             showMessage("请输入搜索关键字后重试");
             return;
         }
+
+        mPresenter.init();
     }
 
     @Override
@@ -306,4 +328,8 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
 }

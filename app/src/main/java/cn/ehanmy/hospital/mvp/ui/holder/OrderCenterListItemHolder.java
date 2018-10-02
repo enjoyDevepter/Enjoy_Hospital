@@ -29,6 +29,7 @@ import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderMemberInfoBean;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 
 /**
@@ -115,7 +116,10 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             orderIdTV.setText(order.getOrderId());
             GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
             order_secend_price.setText(String.format("¥%.0f", goodsOrderBean.getTailMoney()));
-            phoneTV.setText("");
+            OrderMemberInfoBean member = order.getMember();
+            if (member != null){
+                phoneTV.setText(member.getMobile());
+            }
             if (goodsOrderBean != null) {
                 priceTV.setText(String.format("¥%.0f", goodsOrderBean.getSalePrice()));
                 projectTV.setText(goodsOrderBean.getName());

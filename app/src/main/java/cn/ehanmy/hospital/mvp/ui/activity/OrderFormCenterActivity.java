@@ -9,6 +9,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -48,7 +50,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
     @BindView(R.id.clear_btn)
     View clear;
     @BindView(R.id.search_key)
-    EditText searchKey;
+    EditText searchKey;  // provideCache().put("tellphone", phone.getText().toString());
     @BindView(R.id.tab)
     TabLayout tabLayout;
     @BindView(R.id.contentList)
@@ -103,6 +105,23 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         initPaginate();
         provideCache().put("type", "1");
         mPresenter.getOrderList(true);
+
+        searchKey.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                provideCache().put("key",s+"");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -147,10 +166,12 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
                     showMessage("请输入搜索关键字后重试");
                     return;
                 }
+                mPresenter.getOrderList(true);
                 break;
             case R.id.clear_btn:
                 searchKey.setText("");
-                contentList.setAdapter(null);
+                provideCache().put("key",null);
+                mPresenter.getOrderList(true);
                 break;
         }
     }

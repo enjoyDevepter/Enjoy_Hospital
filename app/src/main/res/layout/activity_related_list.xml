@@ -24,7 +24,7 @@
 
             <TextView
                 android:layout_marginTop="14dp"
-                android:text="基本信息"
+                android:text="关联列表"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:textColor="#3DBFE8"

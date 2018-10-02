@@ -8,8 +8,6 @@
     android:background="@drawable/order_center_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
     app:layout_anchorGravity="center_horizontal">
 
 
@@ -85,22 +83,9 @@
                 <TextView
                     android:id="@+id/tv3"
                     android:visibility="invisible"
-
-                    android:layout_marginRight="0dp"
                     style="@style/btn_in_list"
                     />
 
-                <TextView
-                    android:id="@+id/tv4"
-                    android:visibility="gone"
-                    style="@style/btn_in_list"
-                    />
-
-                <TextView
-                    android:id="@+id/tv5"
-                    android:visibility="gone"
-                    style="@style/btn_in_list"
-                    />
             </LinearLayout>
         </FrameLayout>
         <LinearLayout

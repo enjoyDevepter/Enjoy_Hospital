@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -95,6 +96,11 @@ public class UserAppointmentPresenter extends BasePresenter<UserAppointmentContr
         request.setPageIndex(pageIndex);
         request.setStatus(type);
         request.setPageSize(10);
+
+        String key = mRootView.getCache().get("key") + "";
+        if(!TextUtils.isEmpty(key)){
+            request.setSearch(key);
+        }
 
         UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(cacheUserBean.getToken());

@@ -128,6 +128,9 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
                     public void onNext(SettingProjectResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showMessage(response.isSuccess() ? "项目设置成功!" : "项目设置失败!");
+                            if(response.isSuccess()){
+                                mRootView.killMyself();
+                            }
                         }
                     }
                 });

@@ -8,8 +8,6 @@
     android:background="@drawable/order_center_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
     app:layout_anchorGravity="center_horizontal">
 
 
@@ -118,6 +116,7 @@
                 android:id="@+id/pay"
                 android:text="支付"
                 style="@style/btn_in_list"
+                android:layout_marginRight="0dp"
                 />
 
         </LinearLayout>

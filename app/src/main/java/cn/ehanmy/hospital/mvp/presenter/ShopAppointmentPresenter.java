@@ -1,6 +1,7 @@
 package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -91,6 +92,11 @@ public class ShopAppointmentPresenter extends BasePresenter<ShopAppointmentContr
         request.setPageIndex(pageIndex);
         request.setStatus(type);
         request.setPageSize(10);
+
+        String key = mRootView.getCache().get("key") + "";
+        if(!TextUtils.isEmpty(key)){
+            request.setSearch(key);
+        }
 
         UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(cacheUserBean.getToken());

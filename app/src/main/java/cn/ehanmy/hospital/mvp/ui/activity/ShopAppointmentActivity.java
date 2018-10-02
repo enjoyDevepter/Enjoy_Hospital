@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
 
@@ -133,7 +136,8 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                     break;
                 case R.id.clear_btn:
                     searchKey.setText("");
-                    contentList.setAdapter(null);
+                    provideCache().put("key",null);
+                    mPresenter.init();
                     break;
             }
             hideImm();
@@ -211,7 +215,9 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                         break;
                     case RELATED:
                         Intent intent = new Intent(ShopAppointmentActivity.this,RelatedListActivity.class);
-                        intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID,mAdapter.getItem(position).getMember().getMemberId());
+                        cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean item = mAdapter.getItem(position);
+                        intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID, item.getMember().getMemberId());
+                        intent.putExtra(RelatedListActivity.KEY_FOR_RESERVATION_ID,item.getReservationId());
                         launchActivity(intent);
                         break;
                 }
@@ -226,6 +232,22 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
         });
 
         initPaginate();
+        searchKey.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                provideCache().put("key",s+"");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -284,6 +306,7 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
             return;
         }
 
+        mPresenter.init();
     }
 
 
@@ -300,5 +323,10 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
         contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 }

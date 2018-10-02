@@ -75,11 +75,11 @@ public class HospitalInfoPresenter extends BasePresenter<HospitalInfoContract.Mo
                 });
     }
 
-    public void changeHospitalInfo() {
+    public void changeHospitalInfo(String phone,String startTime,String endTime) {
         ChangeHospitalInfoRequest request = new ChangeHospitalInfoRequest();
-        request.setEndTime((String) mRootView.getCache().get("endTime"));
-        request.setStartTime((String) mRootView.getCache().get("startTime"));
-        request.setTellphone((String) mRootView.getCache().get("tellphone"));
+        request.setEndTime(endTime);
+        request.setStartTime(startTime);
+        request.setTellphone(phone);
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(ub.getToken());
 

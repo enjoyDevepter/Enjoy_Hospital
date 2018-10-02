@@ -58,6 +58,7 @@ public class ActivityInfoListHolder extends BaseHolder<ActivityInfoBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(data.getImage())
                         .imageView(image)
                         .build());

@@ -46,9 +46,9 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     @Inject
     ImageLoader mImageLoader;
 
-    @BindView(R.id.form_id)
+    @BindView(R.id.appointment_order)
     TextView form_id;
-    @BindView(R.id.form_state)
+    @BindView(R.id.appointment_state)
     TextView form_state;
 
     @BindView(R.id.name)
@@ -59,8 +59,8 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     TextView form_tel;
     @BindView(R.id.form_add)
     TextView form_add;
-    @BindView(R.id.image)
-    ImageView image;
+    @BindView(R.id.image_view)
+    ImageView image_view;
     @BindView(R.id.project_name)
     TextView project_name;
     @BindView(R.id.order_time)
@@ -119,8 +119,9 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(goodsOrderBean.getImage())
-                        .imageView(image)
+                        .imageView(image_view)
                         .build());
 
         related.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +129,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
             public void onClick(View v) {
                 Intent intent = new Intent(ShopAppointmentInfoActivity.this,RelatedListActivity.class);
                 intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID,orderInfoBean.getMember().getMemberId());
+                intent.putExtra(RelatedListActivity.KEY_FOR_RESERVATION_ID,orderInfoBean.getReservationId());
                 launchActivity(intent);
             }
         });
@@ -137,7 +139,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         time.setText(orderInfoBean.getCreateDate());
         name.setText(orderInfoBean.getMember().getMemberId());
         form_tel.setText(orderInfoBean.getMember().getMobile());
-        form_add.setText("");
+        form_add.setText(orderInfoBean.getAddress());
         project_name.setText(goodsOrderBean.getName());
         order_time.setText(orderInfoBean.getReservationTime());
     }

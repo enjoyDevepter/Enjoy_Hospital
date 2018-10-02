@@ -3,6 +3,8 @@ package cn.ehanmy.hospital.mvp.model.entity.order;
 import java.io.Serializable;
 import java.util.List;
 
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
+
 public class OrderBean implements Serializable {
     private long orderTime;
     private int nums;
@@ -15,6 +17,16 @@ public class OrderBean implements Serializable {
     private long price;
     private long totalPrice;
     private List<GoodsOrderBean> goodsList;
+
+    public OrderMemberInfoBean getMember() {
+        return member;
+    }
+
+    public void setMember(OrderMemberInfoBean member) {
+        this.member = member;
+    }
+
+    private OrderMemberInfoBean member;
 
     public String getOrderListStatus() {
         return orderListStatus;

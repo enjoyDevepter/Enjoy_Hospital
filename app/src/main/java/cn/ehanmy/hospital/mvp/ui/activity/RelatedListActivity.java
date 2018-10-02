@@ -41,6 +41,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 public class RelatedListActivity extends BaseActivity<RelatedListPresenter> implements RelatedListContract.View {
 
     public static final String KEY_FOR_MEMBER_ID = "key_for_project_id";
+    public static final String KEY_FOR_RESERVATION_ID = "key_for_reservation_id";
+            // 每一个用相同的reservationID？
 
     @BindView(R.id.title_Layout)
     View title;
@@ -80,13 +82,14 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
     public void initData(@Nullable Bundle savedInstanceState) {
         new TitleUtil(title,this,"关联列表");
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        String reservationId = getIntent().getStringExtra(KEY_FOR_RESERVATION_ID);
         ((RelatedListAdapter)mAdapter).setOnChildItemClickLinstener(new RelatedListHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, RelatedListHolder.ViewName viewname, int position) {
                 switch (viewname){
                     case RELATED:
                         RelatedOrderBean item = ((RelatedListAdapter) mAdapter).getItem(position);
-//                        mPresenter.confirmShopAppointment(item.getOrderId(),item.id);
+                        mPresenter.confirmShopAppointment(item.getOrderId(),reservationId);
                     break;
                 }
             }

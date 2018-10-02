@@ -1,6 +1,7 @@
 package cn.ehanmy.hospital.mvp.presenter;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -52,7 +53,9 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
     public void getOrderList(boolean pullToRefresh) {
         OrderListRequest request = new OrderListRequest();
         request.setOrderStatus((String) mRootView.getCache().get("type"));
-
+        String key = mRootView.getCache().get("key") + "";
+        if(!TextUtils.isEmpty(key)){
+        }
         UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(cacheUserBean.getToken());
         if (pullToRefresh) lastPageIndex = 1;

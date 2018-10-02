@@ -87,7 +87,7 @@
             android:textColor="#ff333333"
             android:textSize="12sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/start_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -110,7 +110,7 @@
             android:textColor="#ff333333"
             android:textSize="12sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/end_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -81,11 +81,9 @@
             <TextView
                 android:id="@+id/appointment_order"
                 android:layout_gravity="left"
-                android:text="appointment_order"
                 style="@style/form_info_text" />
             <TextView
                 android:id="@+id/appointment_state"
-                android:text="appointment_state"
                 android:layout_gravity="left"
                 style="@style/form_info_text" />
 
@@ -137,13 +135,11 @@
             <TextView
                 android:layout_gravity="left"
                 android:id="@+id/name"
-                android:text="name"
                 style="@style/form_info_text"/>
 
             <TextView
                 android:layout_gravity="left"
                 android:id="@+id/time"
-                android:text="time"
                 style="@style/form_info_text"/>
         </LinearLayout>
 
@@ -180,13 +176,11 @@
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/form_tel"
-                android:text="form_tel"
                 android:layout_gravity="left"
                 style="@style/form_info_text"/>
 
             <TextView
                 android:id="@+id/form_add"
-                android:text="form_add"
                 android:layout_gravity="left"
                 style="@style/form_info_text"/>
         </LinearLayout>
@@ -232,34 +226,40 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/image_view"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/title2"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="18dp"
-            android:src="@mipmap/ic_launcher"
-            android:background="#f00"
             android:layout_width="75dp"
             android:layout_marginBottom="21dp"
             android:layout_height="75dp" />
 
         <TextView
-            android:id="@+id/order_time"
-            android:text="order_time"
-            android:layout_alignBottom="@id/image"
+            android:id="@+id/order_time_title"
+            android:layout_alignBottom="@id/image_view"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/image"
+            android:text="预约时间："
+            android:layout_toRightOf="@id/image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:text="预约时间"
+            android:id="@+id/order_time"
+            android:layout_alignBottom="@id/order_time_title"
+            android:layout_toRightOf="@id/order_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/project_name"
-            android:layout_toRightOf="@id/image"
+            android:layout_toRightOf="@id/image_view"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="3dp"
-            android:layout_alignTop="@id/image"
-            android:text="project_name"
+            android:layout_alignTop="@id/image_view"
             android:textColor="#000000"
             android:textSize="14sp"
             android:layout_width="wrap_content"

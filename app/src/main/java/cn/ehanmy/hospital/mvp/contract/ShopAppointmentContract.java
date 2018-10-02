@@ -2,6 +2,7 @@ package cn.ehanmy.hospital.mvp.contract;
 
 import android.app.Activity;
 
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
@@ -26,6 +27,7 @@ public interface ShopAppointmentContract {
         void setEnd(boolean isEnd);
         Activity getActivity();
         void showError(boolean hasDate);
+        Cache getCache();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
