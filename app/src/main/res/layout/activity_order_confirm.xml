@@ -26,7 +26,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="6px"
                     android:background="@color/white"
                     android:gravity="center_vertical">
 
@@ -34,12 +34,12 @@
                         android:id="@+id/member_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="22dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="44px"
+                        android:layout_marginRight="20px"
+                        android:layout_marginTop="20px"
                         android:text="会员编号："
                         android:textColor="#FF666666"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <TextView
                         android:id="@+id/member_code"
@@ -48,7 +48,7 @@
                         android:layout_alignTop="@id/member_id"
                         android:layout_toRightOf="@id/member_id"
                         android:textColor="#FF333333"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <TextView
                         android:id="@+id/phone_tag"
@@ -56,11 +56,11 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@id/member_id"
                         android:layout_below="@id/member_id"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20px"
+                        android:layout_marginTop="20px"
                         android:text="手机号码："
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <TextView
                         android:id="@+id/member_phone"
@@ -69,7 +69,7 @@
                         android:layout_alignLeft="@id/member_code"
                         android:layout_alignTop="@id/phone_tag"
                         android:textColor="#FF333333"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <TextView
                         android:id="@+id/hospital_tag"
@@ -77,11 +77,11 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@id/member_id"
                         android:layout_below="@id/phone_tag"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20px"
+                        android:layout_marginTop="20px"
                         android:text="选择医院："
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <TextView
                         android:id="@+id/hosptial"
@@ -90,64 +90,65 @@
                         android:layout_alignLeft="@id/member_code"
                         android:layout_alignTop="@id/hospital_tag"
                         android:textColor="#FF333333"
-                        android:textSize="13sp" />
+                        android:textSize="26px" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="27dp"
+                        android:layout_height="54px"
                         android:layout_below="@id/hospital_tag"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="22dp"
-                        android:layout_marginRight="22dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20px"
+                        android:layout_marginLeft="44px"
+                        android:layout_marginRight="44px"
+                        android:layout_marginTop="20px"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/remark_tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="50px"
+                            android:layout_marginRight="20px"
                             android:text="备注："
                             android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
 
                         <EditText
                             android:id="@+id/remark"
                             android:layout_width="match_parent"
-                            android:layout_height="27dp"
+                            android:layout_height="54px"
                             android:background="@drawable/remark_edit_back"
-                            android:paddingLeft="5dp"
+                            android:paddingLeft="10px"
                             android:textColor="#FF333333"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
                     </LinearLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="142dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_height="284px"
+                    android:layout_marginTop="6px"
                     android:background="@drawable/list_item_bg"
                     android:gravity="center_vertical"
-                    android:paddingLeft="22dp"
-                    android:paddingRight="22dp">
+                    android:paddingLeft="44px"
+                    android:paddingRight="44px">
 
                     <ImageView
                         android:id="@+id/image"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="200px"
+                        android:layout_height="200px"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true" />
+                        android:layout_alignParentTop="true"
+                        money:layout_auto_baseheight="width" />
 
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@id/image"
-                        android:layout_marginLeft="22dp"
+                        android:layout_marginLeft="44px"
                         android:layout_toRightOf="@id/image"
                         android:textColor="#FF000000"
-                        android:textSize="14sp" />
+                        android:textSize="28px" />
 
                     <TextView
                         android:id="@+id/price_title"
@@ -158,7 +159,7 @@
                         android:layout_toRightOf="@id/image"
                         android:text="金额"
                         android:textColor="#FF666666"
-                        android:textSize="14sp" />
+                        android:textSize="28px" />
 
 
                     <com.github.cchao.MoneyView
@@ -166,17 +167,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@id/price_title"
-                        android:layout_marginLeft="3dp"
+                        android:layout_marginLeft="6px"
                         android:layout_toRightOf="@id/price_title"
-                        money:cent_size="13sp"
+                        money:cent_size="26px"
                         money:money_color="#FF666666"
                         money:money_text="0.00"
-                        money:point_padding_left="1dp"
-                        money:point_padding_right="5dp"
+                        money:point_padding_left="2px"
+                        money:point_padding_right="10px"
                         money:prefix_color="#FF666666"
-                        money:prefix_padding="2dp"
-                        money:prefix_size="13sp"
-                        money:yuan_size="17sp" />
+                        money:prefix_padding="4px"
+                        money:prefix_size="26px"
+                        money:yuan_size="34px" />
 
                 </RelativeLayout>
 
@@ -188,12 +189,12 @@
                     <LinearLayout
                         android:id="@+id/spec"
                         android:layout_width="match_parent"
-                        android:layout_height="42dp"
+                        android:layout_height="84px"
                         android:background="@drawable/list_item_bg"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingLeft="22dp"
-                        android:paddingRight="22dp">
+                        android:paddingLeft="44px"
+                        android:paddingRight="44px">
 
                         <TextView
                             android:layout_width="0dp"
@@ -201,32 +202,33 @@
                             android:layout_weight="1"
                             android:text="规格选择："
                             android:textColor="#FF666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
 
                         <TextView
                             android:id="@+id/goods_spec"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20px"
                             android:textColor="#FF666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
 
                         <View
-                            android:layout_width="14dp"
-                            android:layout_height="5dp"
-                            android:layout_marginLeft="8dp"
-                            android:background="@mipmap/three_point" />
+                            android:layout_width="28px"
+                            android:layout_height="10px"
+                            android:layout_marginLeft="16px"
+                            android:background="@mipmap/three_point"
+                            money:layout_auto_baseheight="width" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="42dp"
+                        android:layout_height="84px"
                         android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingLeft="22dp"
-                        android:paddingRight="22dp">
+                        android:paddingLeft="44px"
+                        android:paddingRight="44px">
 
                         <TextView
                             android:layout_width="0dp"
@@ -234,50 +236,51 @@
                             android:layout_weight="1"
                             android:text="消费币"
                             android:textColor="#FF666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="10px"
                             android:text="剩余"
                             android:textColor="#FFB5B5B5"
-                            android:textSize="11sp" />
+                            android:textSize="22px" />
 
                         <TextView
                             android:id="@+id/balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="10px"
                             android:textColor="#FFB5B5B5"
-                            android:textSize="11sp" />
+                            android:textSize="22px" />
 
                         <EditText
                             android:id="@+id/money"
-                            android:layout_width="80dp"
-                            android:layout_height="20dp"
+                            android:layout_width="160px"
+                            android:layout_height="40px"
                             android:background="@drawable/order_input_bg"
                             android:gravity="center"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:textColor="#FFB5B5B5"
-                            android:textSize="11sp" />
+                            android:textSize="22px"
+                            money:layout_auto_baseheight="width" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="74dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_height="148px"
+                    android:layout_marginBottom="6px"
+                    android:layout_marginTop="6px"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="22dp"
-                    android:paddingRight="22dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="20px"
+                    android:paddingLeft="44px"
+                    android:paddingRight="44px"
+                    android:paddingTop="20px">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -289,7 +292,7 @@
                             android:layout_height="wrap_content"
                             android:text="商品金额"
                             android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -305,21 +308,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="32px"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="消费币"
-                            android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:textColor="#Ff666666"
+                            android:textSize="26px" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -328,14 +331,14 @@
                             android:gravity="right"
                             android:text="- ¥"
                             android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:textSize="26px" />
 
                         <TextView
                             android:id="@+id/payMoney"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:textColor="#FF666666"
+                            android:textSize="26px" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -343,7 +346,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="76px"
             android:background="@drawable/list_item_up_bg"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -351,26 +354,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="6dp"
+                android:layout_marginLeft="40px"
+                android:layout_marginRight="12px"
                 android:text="合计："
                 android:textColor="#ff333333"
-                android:textSize="13sp" />
+                android:textSize="26px" />
 
 
             <com.github.cchao.MoneyView
                 android:id="@+id/pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                money:cent_size="13sp"
+                money:cent_size="26px"
                 money:money_color="#FF666666"
                 money:money_text="0.00"
-                money:point_padding_left="1dp"
-                money:point_padding_right="5dp"
+                money:point_padding_left="2px"
+                money:point_padding_right="10px"
                 money:prefix_color="#FF666666"
-                money:prefix_padding="2dp"
-                money:prefix_size="13sp"
-                money:yuan_size="17sp" />
+                money:prefix_padding="4px"
+                money:prefix_size="26px"
+                money:yuan_size="34px" />
 
             <View
                 android:layout_width="0dp"
@@ -379,20 +382,20 @@
 
             <TextView
                 android:id="@+id/confirm"
-                android:layout_width="120dp"
+                android:layout_width="240px"
                 android:layout_height="match_parent"
                 android:background="#ffff5656"
                 android:gravity="center"
                 android:text="确认订单"
                 android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textSize="28px" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="38dp"
+        android:layout_marginBottom="76px"
         android:orientation="vertical">
 
         <View
@@ -407,35 +410,38 @@
         <RelativeLayout
             android:id="@+id/spec_layout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="400px"
             android:background="#FFFFFFFF"
             android:clickable="true"
             android:visibility="gone">
 
             <ImageView
                 android:id="@+id/spec_image"
-                android:layout_width="83dp"
-                android:layout_height="83dp"
+                android:layout_width="166px"
+                android:layout_height="166px"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp" />
+                android:layout_marginLeft="30px"
+                android:layout_marginTop="30px"
+                money:layout_auto_baseheight="width" />
 
 
             <LinearLayout
                 android:id="@+id/spec_close"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="70px"
+                android:layout_height="70px"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center">
+                android:layout_marginRight="30px"
+                android:layout_marginTop="20px"
+                android:gravity="center"
+                money:layout_auto_baseheight="width">
 
                 <View
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:background="@mipmap/close_black" />
+                    android:layout_width="24px"
+                    android:layout_height="24px"
+                    android:background="@mipmap/close_black"
+                    money:layout_auto_baseheight="width" />
 
             </LinearLayout>
 
@@ -443,14 +449,14 @@
                 android:id="@+id/spec_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="24px"
+                android:layout_marginRight="20px"
+                android:layout_marginTop="20px"
                 android:layout_toLeftOf="@id/spec_close"
                 android:layout_toRightOf="@id/spec_image"
                 android:lines="2"
                 android:textColor="#FF000000"
-                android:textSize="13sp" />
+                android:textSize="26px" />
 
 
             <LinearLayout
@@ -460,8 +466,8 @@
                 android:layout_alignLeft="@id/spec_name"
                 android:layout_below="@id/spec_name"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="2dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginRight="4px"
+                android:layout_marginTop="20px"
                 android:orientation="horizontal">
 
 
@@ -471,14 +477,14 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/name"
                     android:layout_centerVertical="true"
-                    money:cent_size="17sp"
+                    money:cent_size="34px"
                     money:money_color="#FFFF0000"
                     money:money_text="0.00"
-                    money:point_padding_left="1dp"
-                    money:point_padding_right="5dp"
-                    money:prefix_padding="2dp"
-                    money:prefix_size="12sp"
-                    money:yuan_size="20sp" />
+                    money:point_padding_left="2px"
+                    money:point_padding_right="10px"
+                    money:prefix_padding="4px"
+                    money:prefix_size="24px"
+                    money:yuan_size="40px" />
 
             </LinearLayout>
 
@@ -489,20 +495,20 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/spce_price_layout"
                 android:layout_below="@id/spce_price_layout"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20px"
                 android:text="项目编号："
                 android:textColor="#FF666666"
-                android:textSize="13sp" />
+                android:textSize="26px" />
 
             <TextView
                 android:id="@+id/spec_goods_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spce_price_layout"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20px"
                 android:layout_toRightOf="@+id/spec_id_info"
                 android:textColor="#FF666666"
-                android:textSize="13sp" />
+                android:textSize="26px" />
 
 
             <TextView
@@ -511,10 +517,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/spec_image"
                 android:layout_below="@id/spec_image"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="30px"
                 android:text="规格"
                 android:textColor="#FF666666"
-                android:textSize="13sp" />
+                android:textSize="26px" />
 
             <cn.ehanmy.hospital.mvp.ui.widget.LabelsView
                 android:id="@+id/specs"
@@ -522,17 +528,17 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/spce_tag"
                 android:layout_below="@id/spce_tag"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20px"
                 money:labelBackground="@drawable/goods_spec_item_bg"
                 money:labelTextColor="@drawable/goods_spec_item_text_bg"
-                money:labelTextPaddingBottom="5dp"
-                money:labelTextPaddingLeft="10dp"
-                money:labelTextPaddingRight="10dp"
-                money:labelTextPaddingTop="5dp"
-                money:labelTextSize="12sp"
-                money:lineMargin="10dp"
+                money:labelTextPaddingBottom="10px"
+                money:labelTextPaddingLeft="20px"
+                money:labelTextPaddingRight="20px"
+                money:labelTextPaddingTop="10px"
+                money:labelTextSize="24px"
+                money:lineMargin="20px"
                 money:selectType="SINGLE"
-                money:wordMargin="10dp" />
+                money:wordMargin="20px" />
 
         </RelativeLayout>
 
