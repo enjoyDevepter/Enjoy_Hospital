@@ -287,6 +287,10 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
                 startActivity(intent);
                 break;
             case PAY:
+                Intent payIntent = new Intent(OrderFormCenterActivity.this,CommitOrderActivity.class);
+                payIntent.putExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE,CommitOrderActivity.GO_IN_TYPE_ORDER_LIST);
+                payIntent.putExtra(CommitOrderActivity.KEY_FOR_ORDER_BEAN,mAdapter.getItem(position));
+                startActivity(payIntent);
                 break;
         }
     }

@@ -18,9 +18,15 @@ import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderMemberInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyRequest;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
+import cn.ehanmy.hospital.mvp.ui.activity.CommitOrderActivity;
 import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -46,6 +52,71 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void init(){
+        int type = mRootView.getActivity().getIntent().getIntExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE,0);
+        switch (type){
+            case CommitOrderActivity.GO_IN_TYPE_CONFIRM:
+                placeGoodsOrder();
+                break;
+            case CommitOrderActivity.GO_IN_TYPE_ORDER_LIST:
+                goPay();
+                break;
+        }
+    }
+
+    public void goPay(){
+        Intent intent = mRootView.getActivity().getIntent();
+        OrderBean orderBean = (OrderBean) intent.getSerializableExtra(CommitOrderActivity.KEY_FOR_ORDER_BEAN);
+        UserBean userBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        GoPayRequest request = new GoPayRequest();
+        request.setOrderId(orderBean.getOrderId());
+        request.setToken(userBean.getToken());
+
+        OrderMemberInfoBean member = orderBean.getMember();
+        if(member != null){
+            requestHospitalInfo(member.getMobile());
+        }
+
+        mModel.goPay(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<GoPayResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(GoPayResponse response) {
+                        if (response.isSuccess()) {
+                            mRootView.showPaySuccess(response,orderBean);
+                        }
+                    }
+                });
+
+    }
+
+    public void requestHospitalInfo(String username) {
+        MemberInfoRequest memberInfoRequest = new MemberInfoRequest();
+        UserBean user = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        memberInfoRequest.setUsername(username);
+        memberInfoRequest.setToken(user.getToken());
+        mModel.requestMemberinfo(memberInfoRequest)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(response -> {
+                    if (response.isSuccess()) {
+                        MemberBean member = response.getMember();
+                        mRootView.updateMember(member);
+                    } else {
+                    }
+                });
+    }
+
     public void placeGoodsOrder() {
         Intent intent = mRootView.getActivity().getIntent();
         GoodsConfirmResponse goodsConfirmResponse = (GoodsConfirmResponse) intent.getSerializableExtra("order_info");

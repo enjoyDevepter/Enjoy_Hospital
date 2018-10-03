@@ -11,6 +11,10 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.CommitOrderContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyRequest;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import io.reactivex.Observable;
@@ -39,5 +43,16 @@ public class CommitOrderModel extends BaseModel implements CommitOrderContract.M
     public Observable<GoodsBuyResponse> placeGoodsOrder(GoodsBuyRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .placeGoodsOrder(request);
+    }
+    @Override
+    public Observable<GoPayResponse> goPay(GoPayRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .goPay(request);
+    }
+
+    @Override
+    public Observable<MemberInfoResponse> requestMemberinfo(MemberInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .requestMemberInfo(request);
     }
 }

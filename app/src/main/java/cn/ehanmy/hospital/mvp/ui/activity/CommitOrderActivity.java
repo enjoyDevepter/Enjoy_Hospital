@@ -30,6 +30,9 @@ import cn.ehanmy.hospital.mvp.contract.CommitOrderContract;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.PayEntry;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.presenter.CommitOrderPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.PayItemAdapter;
@@ -44,7 +47,12 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * 显示订单信息并提供支付入口（支付二维码）
  */
 public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View, View.OnClickListener {
+    public static final String KEY_FOR_ORDER_BEAN = "KEY_FOR_ORDER_BEAN";
+    public static final String KEY_FOR_GO_IN_TYPE = "key_for_go_in_type";
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    
+    public static final int GO_IN_TYPE_CONFIRM = 1;  // 从订单详情进入
+    public static final int GO_IN_TYPE_ORDER_LIST = 2;  // 从订单列表进入
 
     @BindView(R.id.title_Layout)
     View title;
@@ -99,24 +107,32 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         return R.layout.activity_commit_order; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
-
-    @Override
-    public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title, this, "提交订单");
-        MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
-        HospitaInfoBean hospitaInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
+    public void updateMember(MemberBean memberBean){
+        if(memberBean == null){
+            return;
+        }
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
                         .url(memberBean.getHeadImage())
+                        .placeholder(R.drawable.place_holder_img)
                         .imageView(head_image)
                         .build());
         name.setText(memberBean.getRealName());
         phone.setText(memberBean.getMobile());
+        member_code.setText(memberBean.getUserName());
+
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        new TitleUtil(title, this, "提交订单");
+        HospitaInfoBean hospitaInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
+        MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
+        updateMember(memberBean);
         hospital.setText(hospitaInfoBean.getName());
         addr.setText(hospitaInfoBean.getAddress());
-        member_code.setText(memberBean.getUserName());
         payV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -164,33 +180,48 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         return this;
     }
 
+
+    @Override
+    public void showPaySuccess(GoPayResponse response, OrderBean orderBean) {
+        GoodsOrderBean goodsOrderBean = orderBean.getGoodsList().get(0);
+        updateView(goodsOrderBean.getImage(),goodsOrderBean.getName()
+        ,response.getPayMoney(),response.getPayStatus(),response.getOrderId(),response.getOrderTime(),response.getPayEntryList());
+    }
+
     public void showPaySuccess(GoodsBuyResponse response) {
+        cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsOrderBean goods = response.getGoods();
+        updateView(goods.getImage(), goods.getName(),response.getPayMoney(),
+                response.getPayStatus(),response.getOrderId(),response.getOrderTime(),response.getPayEntryList());
+    }
+
+    private void updateView(String imageUrl,String orderName,long payMoney,
+                            String payStatus,String orderId,long orderTime,List<PayEntry> payEntries){
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
                         .placeholder(R.drawable.place_holder_img)
-                        .url(response.getGoods().getImage())
+                        .url(imageUrl)
                         .imageView(image)
                         .build());
-        order_name.setText(response.getGoods().getName());
-        priceMV.setMoneyText(ArmsUtils.formatLong(response.getPayMoney()));
-        if ("1".equals(response.getPayStatus())) {
+        order_name.setText(orderName);
+        priceMV.setMoneyText(ArmsUtils.formatLong(payMoney));
+        if ("1".equals(payStatus)) {
             payTypeV.setVisibility(View.GONE);
             payOkDialog = CustomDialog.create(getSupportFragmentManager())
                     .setViewListener(new CustomDialog.ViewListener() {
                         @Override
                         public void bindView(View view) {
                             MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
-                            ((TextView) view.findViewById(R.id.project_name)).setText(response.getGoods().getName());
-                            ((TextView) view.findViewById(R.id.project_id)).setText(response.getOrderId());
+                            ((TextView) view.findViewById(R.id.project_name)).setText(orderName);
+                            ((TextView) view.findViewById(R.id.project_id)).setText(orderId);
                             ((TextView) view.findViewById(R.id.project_leader)).setText(memberBean.getUserName());
-                            ((TextView) view.findViewById(R.id.project_time)).setText(sdf.format(response.getOrderTime()));
+                            ((TextView) view.findViewById(R.id.project_time)).setText(sdf.format(orderTime));
                             view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     payOkDialog.dismiss();
                                     Intent intent = new Intent(CommitOrderActivity.this, OrderInfoActivity.class);
-                                    intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, response.getOrderId());
+                                    intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, orderId);
                                     ArmsUtils.startActivity(intent);
                                     appManager.killAllBeforeClass(BuyCenterActivity.class);
                                 }
@@ -213,16 +244,16 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         } else {
             payTypeV.setVisibility(View.VISIBLE);
             payEntries.clear();
-            payEntries.addAll(response.getPayEntryList());
+            payEntries.addAll(payEntries);
             mAdapter.notifyDataSetChanged();
         }
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pay:
-                mPresenter.placeGoodsOrder();
                 break;
         }
     }

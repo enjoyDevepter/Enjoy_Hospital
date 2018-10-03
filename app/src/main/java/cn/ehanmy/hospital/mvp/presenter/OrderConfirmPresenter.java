@@ -128,6 +128,7 @@ public class OrderConfirmPresenter extends BasePresenter<OrderConfirmContract.Mo
     public void placeGoodsOrder() {
         // 跳转到支付页面
         Intent payIntent = new Intent(mRootView.getActivity(), CommitOrderActivity.class);
+        payIntent.putExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE,CommitOrderActivity.GO_IN_TYPE_CONFIRM);
         payIntent.putExtra("order_info", goodsConfirmResponse);
         payIntent.putExtra("remark", (String) mRootView.getCache().get("remark"));
         ArmsUtils.startActivity(payIntent);

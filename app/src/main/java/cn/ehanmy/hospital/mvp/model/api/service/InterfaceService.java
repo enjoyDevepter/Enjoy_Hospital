@@ -20,6 +20,8 @@ import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderListRequest;
@@ -211,4 +213,8 @@ public interface InterfaceService {
     // 确定上铺预约
     @POST("gateway")
     Observable<ConfirmShopAppointmentResponse> confirmShopAppointment(@Body ConfirmShopAppointmentRequest request);
+
+    // 列表支付接口
+    @POST("gateway")
+    Observable<GoPayResponse> goPay(@Body GoPayRequest request);
 }
