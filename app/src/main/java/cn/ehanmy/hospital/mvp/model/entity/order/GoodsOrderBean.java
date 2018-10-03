@@ -11,9 +11,9 @@ public class GoodsOrderBean implements Serializable{
     private String merchId;
     private String image;
     private String name;
-    private double salePrice;
+    private double salePrice;  // 销售价 单位元
     private double deposit;
-    private double tailMoney;
+    private double tailMoney;  // 尾款，单位元
     private String title;
     private int nums;
     private GoodsSpecValueBean goodsSpecValue;

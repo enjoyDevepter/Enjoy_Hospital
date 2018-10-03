@@ -30,6 +30,7 @@ import cn.ehanmy.hospital.di.component.DaggerOrderFormCenterComponent;
 import cn.ehanmy.hospital.di.module.OrderFormCenterModule;
 import cn.ehanmy.hospital.mvp.contract.OrderFormCenterContract;
 import cn.ehanmy.hospital.mvp.presenter.OrderFormCenterPresenter;
+import cn.ehanmy.hospital.mvp.ui.adapter.HeightItemDecoration;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -99,6 +100,7 @@ public class OrderFormCenterActivity extends BaseActivity<OrderFormCenterPresent
         linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,
                 R.drawable.tablayout_divider_vertical));
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        contentList.addItemDecoration(new HeightItemDecoration(8));
         contentList.setAdapter(mAdapter);
         mAdapter.setOnChildItemClickLinstener(this);
         swipeRefreshLayout.setOnRefreshListener(this);

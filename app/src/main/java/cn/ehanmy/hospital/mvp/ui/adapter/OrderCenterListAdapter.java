@@ -25,6 +25,7 @@ import java.util.List;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListItemHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.OrderCenterListTitleHolder;
 
 /**
  * ================================================
@@ -39,12 +40,24 @@ public class OrderCenterListAdapter extends DefaultAdapter<OrderBean> {
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
+    public static final int ITEM_TYPE_TITLE = 0;
+    public static final int ITEM_TYPE_ITEM = 1;
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? ITEM_TYPE_TITLE : ITEM_TYPE_ITEM;
+    }
+
     public OrderCenterListAdapter(List<OrderBean> ordres) {
         super(ordres);
     }
 
     @Override
     public BaseHolder<OrderBean> getHolder(View v, int viewType) {
+        if(viewType == ITEM_TYPE_TITLE){
+            return new OrderCenterListTitleHolder(v,null);
+        }
+
         return new OrderCenterListItemHolder(v, new OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ViewName viewname, int position) {

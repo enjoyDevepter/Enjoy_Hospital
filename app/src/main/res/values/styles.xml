@@ -68,11 +68,9 @@
     </style>
 
     <style name="recycler_item_style">
-        <item name="android:textSize">24px</item>
+        <item name="android:textSize">22px</item>
         <item name="android:textColor">#FF333333</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginRight">10px</item>
     </style>
 
     <style name="form_info_text">

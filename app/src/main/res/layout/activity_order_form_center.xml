@@ -29,9 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:paddingLeft="20px"
-        android:paddingRight="20px"
-        android:paddingTop="10px">
+        >
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -41,7 +39,6 @@
                 android:id="@+id/contentList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="18px"
                 android:scrollbars="none"
                 tools:listitem="@layout/recycle_list" />
 
