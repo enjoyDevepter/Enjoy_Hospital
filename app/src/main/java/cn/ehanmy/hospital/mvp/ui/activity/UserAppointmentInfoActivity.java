@@ -16,23 +16,17 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerUserAppointmentInfoComponent;
 import cn.ehanmy.hospital.di.module.UserAppointmentInfoModule;
 import cn.ehanmy.hospital.mvp.contract.UserAppointmentInfoContract;
-import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
-import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoBean;
-import cn.ehanmy.hospital.mvp.model.entity.order.OrderRecipientInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.UserAppointmentGoodsBean;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentInfoPresenter;
-
-import cn.ehanmy.hospital.R;
-
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -41,17 +35,14 @@ public class UserAppointmentInfoActivity extends BaseActivity<UserAppointmentInf
 
 
     public static final String KEY_FOR_APPOINTMENT_ID = "key_for_appointment_id";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     ImageLoader mImageLoader;
-
     @BindView(R.id.title_Layout)
     View title;
     @BindView(R.id.form_id)
     TextView form_id;
     @BindView(R.id.form_state)
     TextView form_state;
-
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.time)
@@ -66,13 +57,14 @@ public class UserAppointmentInfoActivity extends BaseActivity<UserAppointmentInf
     TextView project_name;
     @BindView(R.id.order_time)
     TextView order_time;
-
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public void updateOrderInfo(OrderProjectDetailBean orderInfoBean){
         UserAppointmentGoodsBean goodsOrderBean = orderInfoBean.getGoods();
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(goodsOrderBean.getImage())
                         .imageView(image)
                         .build());

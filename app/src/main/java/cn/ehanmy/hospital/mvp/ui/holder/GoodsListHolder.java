@@ -52,6 +52,7 @@ public class GoodsListHolder extends BaseHolder<GoodsListBean> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(data.getImage())
                         .isCenterCrop(true)
                         .imageView(image)

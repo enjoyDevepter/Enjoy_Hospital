@@ -22,7 +22,7 @@
                 android:layout_marginTop="6px"
                 android:background="@color/white">
 
-                <ImageView
+                <cn.ehanmy.hospital.mvp.ui.widget.ShapeImageView
                     android:id="@+id/head_image"
                     android:layout_width="128px"
                     android:layout_height="128px"

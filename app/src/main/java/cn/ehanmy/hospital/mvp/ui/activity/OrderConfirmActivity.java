@@ -38,7 +38,6 @@ import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
 import cn.ehanmy.hospital.mvp.presenter.OrderConfirmPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.SpecLabelTextProvider;
-import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
 import cn.ehanmy.hospital.mvp.ui.widget.LabelsView;
 import cn.ehanmy.hospital.util.CacheUtil;
 
@@ -55,8 +54,6 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     TextView titleTV;
     @BindView(R.id.member_code)
     TextView memberCodeTV;
-    @BindView(R.id.member_phone)
-    TextView phoneTV;
     @BindView(R.id.hosptial)
     TextView hosptialTV;
     @BindView(R.id.remark)
@@ -102,7 +99,6 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     @Inject
     ImageLoader mImageLoader;
     GoodsConfirmResponse response;
-    CustomDialog payOkDialog;
     private volatile boolean shouldSubmit;
 
     @Override
@@ -132,7 +128,6 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         moneyET.setOnEditorActionListener(this);
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
         memberCodeTV.setText(memberBean.getUserName());
-        phoneTV.setText(memberBean.getMobile());
         HospitaInfoBean hospitalInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
         hosptialTV.setText(hospitalInfoBean.getName());
     }

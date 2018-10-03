@@ -381,6 +381,21 @@ public final class AppManager {
         return null;
     }
 
+    /**
+     * 关闭指定Activity之前所以有Activity
+     *
+     * @param excludeActivityClasses
+     */
+    public void killAllBeforeClass(Class excludeActivityClasses) {
+        synchronized (AppManager.class) {
+            for (int i = getActivityList().size() - 1; ; i--) {
+                if (excludeActivityClasses.getName().equals(getActivityList().get(i).getClass().getName()))
+                    return;
+                getActivityList().get(i).finish();
+            }
+        }
+    }
+
 
     /**
      * 关闭所有 {@link Activity}

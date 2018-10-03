@@ -15,6 +15,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +35,7 @@ import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.presenter.CommitOrderPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.PayItemAdapter;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
+import cn.ehanmy.hospital.mvp.ui.widget.ShapeImageView;
 import cn.ehanmy.hospital.util.CacheUtil;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -47,7 +49,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     @BindView(R.id.title_Layout)
     View title;
     @BindView(R.id.head_image)
-    ImageView head_image;  // 用户头像
+    ShapeImageView head_image;  // 用户头像
     @BindView(R.id.image)
     ImageView image;  // 项目图片
     @BindView(R.id.order_name)
@@ -78,6 +80,8 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     RecyclerView.LayoutManager mLayoutManager;
     @Inject
     ImageLoader mImageLoader;
+    @Inject
+    AppManager appManager;
     private CustomDialog payOkDialog;
 
     @Override
@@ -104,6 +108,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(memberBean.getHeadImage())
                         .imageView(head_image)
                         .build());
@@ -137,6 +142,16 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
         ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (null != payOkDialog && !payOkDialog.isHidden()) {
+            payOkDialog.dismiss();
+            appManager.killAllBeforeClass(BuyCenterActivity.class);
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -177,6 +192,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                                     Intent intent = new Intent(CommitOrderActivity.this, OrderInfoActivity.class);
                                     intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, response.getOrderId());
                                     ArmsUtils.startActivity(intent);
+                                    appManager.killAllBeforeClass(BuyCenterActivity.class);
                                 }
                             });
                             view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -193,7 +209,6 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                     .isCenter(true)
                     .setCancelOutside(false)
                     .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
-                    .setHeight(ArmsUtils.dip2px(CommitOrderActivity.this, 240))
                     .show();
         } else {
             payTypeV.setVisibility(View.VISIBLE);

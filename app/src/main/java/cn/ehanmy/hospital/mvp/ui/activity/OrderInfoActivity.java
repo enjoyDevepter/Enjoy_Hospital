@@ -71,6 +71,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(goodsOrderBean.getImage())
                         .imageView(image)
                         .build());

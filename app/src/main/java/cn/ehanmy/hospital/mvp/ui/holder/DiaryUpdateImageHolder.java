@@ -69,6 +69,7 @@ public class DiaryUpdateImageHolder extends BaseHolder<String> {
             mImageLoader.loadImage(itemView.getContext(),
                     ImageConfigImpl
                             .builder()
+                            .placeholder(R.drawable.place_holder_img)
                             .url(path)
                             .imageView(imageIV)
                             .build());

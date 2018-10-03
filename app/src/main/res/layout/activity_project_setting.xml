@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -7,24 +8,25 @@
     <RelativeLayout
         android:id="@+id/title_Layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="90px"
         android:background="@drawable/title_bg"
         android:orientation="horizontal">
 
 
         <LinearLayout
             android:id="@+id/back"
-            android:layout_width="40dp"
+            android:layout_width="80px"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="8px"
             android:gravity="center">
 
             <View
-                android:layout_width="10dp"
-                android:layout_height="17dp"
-                android:background="@mipmap/back" />
+                android:layout_width="20px"
+                android:layout_height="34px"
+                android:background="@mipmap/back"
+                app:layout_auto_baseheight="width" />
 
         </LinearLayout>
 
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="#FF333333"
-            android:textSize="16sp" />
+            android:textSize="32px" />
 
         <LinearLayout
             android:id="@+id/finish"
@@ -48,21 +50,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingLeft="40px"
+                android:paddingRight="40px"
                 android:text="保存"
                 android:textColor="#FF333333"
-                android:textSize="14sp" />
+                android:textSize="28px" />
         </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="6px"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="20px">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list1"
@@ -75,7 +77,7 @@
             android:id="@+id/list2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16px"
             android:layout_weight="1"
             android:background="#FFF0F0F0" />
 
@@ -83,7 +85,7 @@
             android:id="@+id/list3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16px"
             android:layout_weight="1"
             android:background="#FFF0F0F0" />
     </LinearLayout>

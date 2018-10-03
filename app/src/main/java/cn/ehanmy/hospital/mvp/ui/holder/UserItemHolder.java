@@ -28,9 +28,9 @@ import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.User;
+import io.reactivex.Observable;
 
 /**
  * ================================================
@@ -66,6 +66,7 @@ public class UserItemHolder extends BaseHolder<User> {
         mImageLoader.loadImage(itemView.getContext(),
                 ImageConfigImpl
                         .builder()
+                        .placeholder(R.drawable.place_holder_img)
                         .url(data.getAvatarUrl())
                         .imageView(mAvatar)
                         .build());

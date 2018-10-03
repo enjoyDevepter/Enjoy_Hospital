@@ -51,32 +51,11 @@
                         android:textSize="26px" />
 
                     <TextView
-                        android:id="@+id/phone_tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/member_id"
-                        android:layout_below="@id/member_id"
-                        android:layout_marginRight="20px"
-                        android:layout_marginTop="20px"
-                        android:text="手机号码："
-                        android:textColor="#666666"
-                        android:textSize="26px" />
-
-                    <TextView
-                        android:id="@+id/member_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/member_code"
-                        android:layout_alignTop="@id/phone_tag"
-                        android:textColor="#FF333333"
-                        android:textSize="26px" />
-
-                    <TextView
                         android:id="@+id/hospital_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@id/member_id"
-                        android:layout_below="@id/phone_tag"
+                        android:layout_below="@id/member_id"
                         android:layout_marginRight="20px"
                         android:layout_marginTop="20px"
                         android:text="选择医院："
@@ -118,6 +97,7 @@
                             android:layout_height="54px"
                             android:background="@drawable/remark_edit_back"
                             android:paddingLeft="10px"
+                            android:singleLine="true"
                             android:textColor="#FF333333"
                             android:textSize="26px" />
                     </LinearLayout>

@@ -120,9 +120,9 @@
 
                 <View
                     android:id="@+id/type_status"
-                    android:layout_width="14px"
-                    android:layout_height="8px"
-                    android:layout_marginLeft="12px"
+                    android:layout_width="22px"
+                    android:layout_height="12px"
+                    android:layout_marginLeft="8px"
                     android:background="@mipmap/arrow_down"
                     app:layout_auto_baseheight="width" />
 
@@ -147,9 +147,9 @@
 
                 <View
                     android:id="@+id/sale_status"
-                    android:layout_width="14px"
-                    android:layout_height="8dp"
-                    android:layout_marginLeft="12dp"
+                    android:layout_width="22px"
+                    android:layout_height="12px"
+                    android:layout_marginLeft="8px"
                     android:background="@mipmap/arrow_down"
                     app:layout_auto_baseheight="width" />
 
@@ -175,9 +175,9 @@
 
                 <View
                     android:id="@+id/price_status"
-                    android:layout_width="14px"
-                    android:layout_height="8px"
-                    android:layout_marginLeft="12px"
+                    android:layout_width="22px"
+                    android:layout_height="12px"
+                    android:layout_marginLeft="8px"
                     android:background="@mipmap/arrow_down"
                     app:layout_auto_baseheight="width" />
             </LinearLayout>
