@@ -151,6 +151,7 @@ public class HospitalInfoActivity extends BaseActivity<HospitalInfoPresenter> im
             dialog = null;
         }
 
+        showMessage("医院信息修改成功");
     }
 
 
