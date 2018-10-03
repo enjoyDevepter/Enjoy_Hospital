@@ -46,7 +46,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 /**
  * 显示订单信息并提供支付入口（支付二维码）
  */
-public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View, View.OnClickListener {
+public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View{
     public static final String KEY_FOR_ORDER_BEAN = "KEY_FOR_ORDER_BEAN";
     public static final String KEY_FOR_GO_IN_TYPE = "key_for_go_in_type";
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -133,7 +133,6 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         updateMember(memberBean);
         hospital.setText(hospitaInfoBean.getName());
         addr.setText(hospitaInfoBean.getAddress());
-        payV.setOnClickListener(this);
         ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -196,6 +195,12 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
 
     private void updateView(String imageUrl,String orderName,long payMoney,
                             String payStatus,String orderId,long orderTime,List<PayEntry> payEntries){
+        payV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.getPayStatus(orderId);
+            }
+        });
         mImageLoader.loadImage(this,
                 ImageConfigImpl
                         .builder()
@@ -206,41 +211,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         order_name.setText(orderName);
         priceMV.setMoneyText(ArmsUtils.formatLong(payMoney));
         if ("1".equals(payStatus)) {
-            payTypeV.setVisibility(View.GONE);
-            payOkDialog = CustomDialog.create(getSupportFragmentManager())
-                    .setViewListener(new CustomDialog.ViewListener() {
-                        @Override
-                        public void bindView(View view) {
-                            MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
-                            ((TextView) view.findViewById(R.id.project_name)).setText(orderName);
-                            ((TextView) view.findViewById(R.id.project_id)).setText(orderId);
-                            ((TextView) view.findViewById(R.id.project_leader)).setText(memberBean.getUserName());
-                            ((TextView) view.findViewById(R.id.project_time)).setText(sdf.format(orderTime));
-                            view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    payOkDialog.dismiss();
-                                    Intent intent = new Intent(CommitOrderActivity.this, OrderInfoActivity.class);
-                                    intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, orderId);
-                                    ArmsUtils.startActivity(intent);
-                                    appManager.killAllBeforeClass(BuyCenterActivity.class);
-                                }
-                            });
-                            view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    payOkDialog.dismiss();
-                                    ArmsUtils.startActivity(GoodsListActivity.class);
-                                }
-                            });
-                        }
-                    })
-                    .setLayoutRes(R.layout.pay_ok_dialog_layout)
-                    .setDimAmount(0.5f)
-                    .isCenter(true)
-                    .setCancelOutside(false)
-                    .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
-                    .show();
+            payOk(orderId, orderTime);
         } else {
             payTypeV.setVisibility(View.VISIBLE);
             payEntries.clear();
@@ -249,12 +220,41 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         }
     }
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.pay:
-                break;
-        }
+    public void payOk(String orderId, long orderTime) {
+        payTypeV.setVisibility(View.GONE);
+        payOkDialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        ((TextView) view.findViewById(R.id.project_name)).setText(order_name.getText());
+                        ((TextView) view.findViewById(R.id.project_id)).setText(orderId);
+                        ((TextView) view.findViewById(R.id.project_leader)).setText(name.getText());
+                        ((TextView) view.findViewById(R.id.project_time)).setText(sdf.format(orderTime));
+                        view.findViewById(R.id.project).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                payOkDialog.dismiss();
+                                Intent intent = new Intent(CommitOrderActivity.this, OrderInfoActivity.class);
+                                intent.putExtra(OrderInfoActivity.KEY_FOR_ORDER_ID, orderId);
+                                ArmsUtils.startActivity(intent);
+                                appManager.killAllBeforeClass(BuyCenterActivity.class);
+                            }
+                        });
+                        view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                payOkDialog.dismiss();
+                                ArmsUtils.startActivity(GoodsListActivity.class);
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.pay_ok_dialog_layout)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setCancelOutside(false)
+                .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
+                .show();
     }
+
 }

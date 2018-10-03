@@ -19,6 +19,7 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsConfirmBean;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GetPayStatusRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
@@ -82,11 +83,15 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .subscribe(new ErrorHandleSubscriber<GoPayResponse>(mErrorHandler) {
                     @Override
                     public void onNext(GoPayResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showPaySuccess(response,orderBean);
+                        }else{
+                            mRootView.showMessage(response.getRetDesc());
+                            mRootView.killMyself();
                         }
                     }
                 });
@@ -106,13 +111,39 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
-                })
+                }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
                     if (response.isSuccess()) {
                         MemberBean member = response.getMember();
                         mRootView.updateMember(member);
                     } else {
+
+                    }
+                });
+    }
+
+
+    public void getPayStatus(String orderId) {
+        GetPayStatusRequest request = new GetPayStatusRequest();
+        request.setOrderId(orderId);
+        UserBean user = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(user.getToken());
+        mModel.getPayStatus(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(response -> {
+                    if (response.isSuccess()) {
+                        mRootView.payOk(response.getOrderId(),response.getOrderTime());
+                    } else {
+                        mRootView.showMessage(response.getRetDesc());
                     }
                 });
     }
@@ -149,6 +180,9 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                     public void onNext(GoodsBuyResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showPaySuccess(response);
+                        }else{
+                            mRootView.showMessage(response.getRetDesc());
+                            mRootView.killMyself();
                         }
                     }
                 });

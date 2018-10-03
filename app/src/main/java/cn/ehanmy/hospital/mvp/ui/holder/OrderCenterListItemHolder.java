@@ -102,7 +102,7 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
         if (position == 0) {
             orderIdTV.setText("编号");
             phoneTV.setText("手机");
-            priceTV.setMoneyText("金额");
+//            priceTV.setMoneyText("金额");
             projectTV.setText("项目");
             statusTV.setText("状态");
             timeTV.setText("时间");

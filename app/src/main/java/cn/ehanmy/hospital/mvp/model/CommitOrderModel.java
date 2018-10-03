@@ -13,6 +13,8 @@ import cn.ehanmy.hospital.mvp.contract.CommitOrderContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.order.GetPayStatusRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GetPayStatusResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyRequest;
@@ -54,5 +56,10 @@ public class CommitOrderModel extends BaseModel implements CommitOrderContract.M
     public Observable<MemberInfoResponse> requestMemberinfo(MemberInfoRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .requestMemberInfo(request);
+    }
+    @Override
+    public Observable<GetPayStatusResponse> getPayStatus(GetPayStatusRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .getPayStatus(request);
     }
 }
