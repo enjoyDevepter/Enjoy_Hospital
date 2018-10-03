@@ -244,7 +244,15 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                             @Override
                             public void onClick(View v) {
                                 payOkDialog.dismiss();
-                                ArmsUtils.startActivity(GoodsListActivity.class);
+                                int type = getIntent().getIntExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE,0);
+                                switch (type){
+                                    case CommitOrderActivity.GO_IN_TYPE_CONFIRM:
+                                        ArmsUtils.startActivity(GoodsListActivity.class);
+                                        break;
+                                    case CommitOrderActivity.GO_IN_TYPE_ORDER_LIST:
+                                        killMyself();
+                                        break;
+                                }
                             }
                         });
                     }
