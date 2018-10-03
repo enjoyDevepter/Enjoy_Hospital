@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -39,6 +38,7 @@ import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
 import cn.ehanmy.hospital.mvp.presenter.OrderConfirmPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.SpecLabelTextProvider;
 import cn.ehanmy.hospital.mvp.ui.widget.LabelsView;
+import cn.ehanmy.hospital.mvp.ui.widget.MoneyView;
 import cn.ehanmy.hospital.util.CacheUtil;
 
 import static com.jess.arms.utils.ArmsUtils.getContext;
@@ -71,9 +71,9 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     @BindView(R.id.money)
     EditText moneyET;
     @BindView(R.id.payPrice)
-    TextView payPriceTV;
+    MoneyView payPriceTV;
     @BindView(R.id.payMoney)
-    TextView payMoneyTV;
+    MoneyView payMoneyTV;
     @BindView(R.id.confirm)
     View confirmV;
     @BindView(R.id.spec)
@@ -205,8 +205,8 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         }
         moneyET.setHint(ArmsUtils.formatLong(response.getMoney()));
         balanceTV.setText(ArmsUtils.formatLong(response.getBalance()));
-        payPriceTV.setText(String.valueOf(goods.getSalePrice()));
-        payMoneyTV.setText(ArmsUtils.formatLong(response.getMoney()));
+        payPriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+        payMoneyTV.setMoneyText(ArmsUtils.formatLong(response.getMoney()));
         payMV.setMoneyText(ArmsUtils.formatLong(response.getPayMoney()));
         spceIDTV.setText(goods.getCode());
         spceNameTV.setText(goods.getName());

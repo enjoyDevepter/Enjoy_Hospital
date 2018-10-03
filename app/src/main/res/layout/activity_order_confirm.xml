@@ -142,7 +142,7 @@
                         android:textSize="28px" />
 
 
-                    <com.github.cchao.MoneyView
+                    <cn.ehanmy.hospital.mvp.ui.widget.MoneyView
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -274,21 +274,28 @@
                             android:textColor="#666666"
                             android:textSize="26px" />
 
-                        <TextView
+                        <View
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="¥"
-                            android:textColor="#666666"
-                            android:textSize="13sp" />
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                        <TextView
+                        <cn.ehanmy.hospital.mvp.ui.widget.MoneyView
                             android:id="@+id/payPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#666666"
-                            android:textSize="26px" />
+                            android:layout_alignBottom="@id/price_title"
+                            android:layout_marginLeft="6px"
+                            android:layout_toRightOf="@id/price_title"
+                            money:cent_size="32px"
+                            money:money_color="#FF666666"
+                            money:money_text="0.00"
+                            money:point_padding_left="2px"
+                            money:point_padding_right="10px"
+                            money:prefix_color="#FF666666"
+                            money:prefix_padding="4px"
+                            money:prefix_size="32px"
+                            money:yuan_size="32px" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -309,16 +316,26 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="- ¥"
+                            android:text="-"
                             android:textColor="#666666"
                             android:textSize="26px" />
 
-                        <TextView
+                        <cn.ehanmy.hospital.mvp.ui.widget.MoneyView
                             android:id="@+id/payMoney"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#FF666666"
-                            android:textSize="26px" />
+                            android:layout_alignBottom="@id/price_title"
+                            android:layout_marginLeft="6px"
+                            android:layout_toRightOf="@id/price_title"
+                            money:cent_size="32px"
+                            money:money_color="#FF666666"
+                            money:money_text="0.00"
+                            money:point_padding_left="2px"
+                            money:point_padding_right="10px"
+                            money:prefix_color="#FF666666"
+                            money:prefix_padding="4px"
+                            money:prefix_size="32px"
+                            money:yuan_size="32px" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -341,7 +358,7 @@
                 android:textSize="26px" />
 
 
-            <com.github.cchao.MoneyView
+            <cn.ehanmy.hospital.mvp.ui.widget.MoneyView
                 android:id="@+id/pay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -451,7 +468,7 @@
                 android:orientation="horizontal">
 
 
-                <com.github.cchao.MoneyView
+                <cn.ehanmy.hospital.mvp.ui.widget.MoneyView
                     android:id="@+id/spec_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

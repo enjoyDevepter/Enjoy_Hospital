@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -15,6 +14,7 @@ import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsListBean;
 import cn.ehanmy.hospital.mvp.ui.adapter.GoodsListAdapter;
+import cn.ehanmy.hospital.mvp.ui.widget.MoneyView;
 import io.reactivex.Observable;
 
 public class GoodsListHolder extends BaseHolder<GoodsListBean> {

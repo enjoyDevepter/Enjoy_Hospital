@@ -66,7 +66,7 @@
         android:textColor="#666666"
         android:textSize="28px" />
 
-    <com.github.cchao.MoneyView
+    <cn.ehanmy.hospital.mvp.ui.widget.MoneyView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

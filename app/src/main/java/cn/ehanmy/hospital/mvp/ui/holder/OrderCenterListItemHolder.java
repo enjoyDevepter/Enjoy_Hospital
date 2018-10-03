@@ -31,6 +31,7 @@ import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderMemberInfoBean;
 import cn.ehanmy.hospital.mvp.ui.adapter.OrderCenterListAdapter;
+import cn.ehanmy.hospital.mvp.ui.widget.MoneyView;
 
 /**
  * ================================================
@@ -52,7 +53,7 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
     @BindView(R.id.order_phone)
     TextView phoneTV;
     @BindView(R.id.order_price)
-    TextView priceTV;
+    MoneyView priceTV;
     @BindView(R.id.order_project)
     TextView projectTV;
     @BindView(R.id.order_status)
@@ -66,7 +67,7 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
     @BindView(R.id.button_group)
     View buttonGroup;
     @BindView(R.id.order_secend_price)
-    TextView order_secend_price;
+    MoneyView order_secend_price;
 
     @BindView(R.id.btn_group_title)
     View btn_group_title;
@@ -101,11 +102,11 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
         if (position == 0) {
             orderIdTV.setText("编号");
             phoneTV.setText("手机");
-            priceTV.setText("金额");
+            priceTV.setMoneyText("金额");
             projectTV.setText("项目");
             statusTV.setText("状态");
             timeTV.setText("时间");
-            order_secend_price.setText("尾款");
+//            order_secend_price.setMoneyText("尾款");
             buttonGroup.setVisibility(View.GONE);
             btn_group_title.setVisibility(View.VISIBLE);
             parent.setBackgroundColor(Color.parseColor("#FFE4E4E4"));
@@ -115,13 +116,13 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
             buttonGroup.setVisibility(View.VISIBLE);
             orderIdTV.setText(order.getOrderId());
             GoodsOrderBean goodsOrderBean = order.getGoodsList().get(0);
-            order_secend_price.setText(String.format("¥%.0f", goodsOrderBean.getTailMoney()));
+//            order_secend_price.setMoneyText(String.valueOf(goodsOrderBean.getTailMoney()));
             OrderMemberInfoBean member = order.getMember();
-            if (member != null){
+            if (member != null) {
                 phoneTV.setText(member.getMobile());
             }
             if (goodsOrderBean != null) {
-                priceTV.setText(String.format("¥%.0f", goodsOrderBean.getSalePrice()));
+                priceTV.setMoneyText(String.valueOf(goodsOrderBean.getSalePrice()));
                 projectTV.setText(goodsOrderBean.getName());
             }
             statusTV.setText(order.getOrderStatusDesc());
@@ -129,18 +130,19 @@ public class OrderCenterListItemHolder extends BaseHolder<OrderBean> {
         }
 
         String orderListStatus = order.getOrderListStatus();
-        if(TextUtils.isEmpty(orderListStatus)){
+        if (TextUtils.isEmpty(orderListStatus)) {
             order_secend_price.setVisibility(View.VISIBLE);
-            switch (order.getOrderStatus()){
-                case "1": case "2":
+            switch (order.getOrderStatus()) {
+                case "1":
+                case "2":
                     payV.setVisibility(View.VISIBLE);
                     break;
                 default:
                     payV.setVisibility(View.GONE);
                     break;
             }
-        }else{
-            switch (orderListStatus){
+        } else {
+            switch (orderListStatus) {
                 case "1":
                     payV.setVisibility(View.VISIBLE);
                     order_secend_price.setVisibility(View.GONE);

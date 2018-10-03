@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.cchao.MoneyView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -35,6 +34,7 @@ import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.presenter.CommitOrderPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.PayItemAdapter;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomDialog;
+import cn.ehanmy.hospital.mvp.ui.widget.MoneyView;
 import cn.ehanmy.hospital.mvp.ui.widget.ShapeImageView;
 import cn.ehanmy.hospital.util.CacheUtil;
 
