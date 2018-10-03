@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -84,6 +85,11 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
         if (orderRecipientInfo != null) {
             form_tel.setText(orderRecipientInfo.getMobile());
             form_add.setText(orderRecipientInfo.getAddress());
+            String nameStr = orderRecipientInfo.getRealName();
+            if(TextUtils.isEmpty(nameStr)){
+                nameStr = orderRecipientInfo.getMobile();
+            }
+            name.setText(nameStr);
         }
         skill.setText(goodsOrderBean.getGoodsSpecValue().getSpecValueName());
         project_name.setText(goodsOrderBean.getName());
