@@ -74,7 +74,7 @@ public class ShopAppointmentTitleHolder extends BaseHolder<OrderProjectDetailBea
     @Override
     public void setData(OrderProjectDetailBean order, int position) {
         line1.setVisibility(View.GONE);
-        line2.setBackgroundColor(Color.WHITE);
+        line2.setBackgroundResource(R.drawable.order_list_title_back);
         order_project.setText("项目");
         order_phone.setText("手机");
         order_related.setText("关联");
