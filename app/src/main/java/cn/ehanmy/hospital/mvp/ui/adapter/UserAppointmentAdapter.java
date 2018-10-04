@@ -24,7 +24,9 @@ import java.util.List;
 
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
+import cn.ehanmy.hospital.mvp.ui.activity.TitleUtil;
 import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentTitleHolder;
 
 /**
  * ================================================
@@ -42,6 +44,14 @@ public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
         CONFIRM,  // 已确认
         OVER,  // 已完成
         ALL,  // 所有
+    }
+
+    public static final int ITEM_TYPE_TITLE = 1;
+    public static final int ITEM_TYPE_ITEM = 2;
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? ITEM_TYPE_TITLE : ITEM_TYPE_ITEM;
     }
 
     public void setOnChildItemClickLinstener(UserAppointmentHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
@@ -62,6 +72,10 @@ public class UserAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
 
     @Override
     public BaseHolder<OrderProjectDetailBean> getHolder(View v, int viewType) {
+        if(viewType == ITEM_TYPE_TITLE){
+            return new UserAppointmentTitleHolder(v);
+        }
+
         return new UserAppointmentHolder(v, new UserAppointmentHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, UserAppointmentHolder.ViewName viewname, int position) {

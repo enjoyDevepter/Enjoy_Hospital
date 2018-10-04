@@ -18,6 +18,7 @@ package cn.ehanmy.hospital.mvp.ui.holder;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,16 +51,12 @@ import static cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder.ViewName.OK
  */
 public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
 
+    @BindView(R.id.line1)
+    View line1;
+    @BindView(R.id.line2)
+    View line2;
     @BindView(R.id.order_id)
     TextView order_id;
-    @BindView(R.id.order_phone)
-    TextView order_phone;
-    @BindView(R.id.order_project)
-    TextView order_project;
-    @BindView(R.id.order_status)
-    TextView order_status;
-    @BindView(R.id.order_time)
-    TextView order_time;
 
     @BindView(R.id.ok)
     View ok;
@@ -67,17 +64,19 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
     View change;
     @BindView(R.id.cancel)
     View cancel;
-    @BindView(R.id.button_group)
-    View button_group;
     @BindView(R.id.info)
     View info;
     @BindView(R.id.huakou)
     View huakou;
 
-    @BindView(R.id.parent)
-    View parent;
-    @BindView(R.id.btn_group_title)
-    View btn_group_title;
+    @BindView(R.id.order_project)
+    TextView order_project;
+    @BindView(R.id.order_phone)
+    TextView order_phone;
+    @BindView(R.id.order_status)
+    TextView order_status;
+    @BindView(R.id.order_time)
+    TextView order_time;
 
     private OnChildItemClickLinstener onChildItemClickLinstener;
 
@@ -93,50 +92,40 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
 
     @Override
     public void setData(OrderProjectDetailBean order, int position) {
-        if (position == 0) {
-            order_id.setText("编号");
-            order_phone.setText("手机");
-            order_project.setText("项目");
-            order_status.setText("状态");
-            order_time.setText("时间");
-            btn_group_title.setVisibility(View.VISIBLE);
-            button_group.setVisibility(View.GONE);
-            parent.setBackgroundColor(Color.parseColor("#E4E4E4"));
-        } else {
-            btn_group_title.setVisibility(View.GONE);
-            parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            button_group.setVisibility(View.VISIBLE);
-            order_id.setText(order.getReservationId());
-            order_phone.setText(order.getPhone());
-            order_time.setText(order.getReservationDate());
-            order_status.setText(order.getReservationStatusDesc());
-            order_project.setText(order.getGoods().getName());
 
-            ok.setVisibility(View.GONE);
-            change.setVisibility(View.GONE);
-            cancel.setVisibility(View.GONE);
-            huakou.setVisibility(View.GONE);
-            info.setVisibility(View.GONE);
+        line1.setVisibility(View.VISIBLE);
+        line2.setBackgroundColor(Color.WHITE);
+        order_id.setText(order.getReservationId());
+        order_phone.setText(order.getPhone());
+        order_time.setText(order.getReservationDate());
+        order_status.setText(order.getReservationStatusDesc());
+        order_project.setText(order.getGoods().getName());
+        order_project.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 
-            String status = order.getReservationStatus();
-            if(!TextUtils.isEmpty(status)){
-                switch (status){
-                    case "0":
-                        ok.setVisibility(View.VISIBLE);
-                        change.setVisibility(View.VISIBLE);
-                        cancel.setVisibility(View.VISIBLE);
-                        break;
-                    case "1":
-                        change.setVisibility(View.VISIBLE);
-                        cancel.setVisibility(View.VISIBLE);
-                        huakou.setVisibility(View.VISIBLE);
-                        break;
-                    case "2":
-                        info.setVisibility(View.VISIBLE);
-                        break;
-                    default:
-                        break;
-                }
+        ok.setVisibility(View.GONE);
+        change.setVisibility(View.GONE);
+        cancel.setVisibility(View.GONE);
+        huakou.setVisibility(View.GONE);
+        info.setVisibility(View.GONE);
+
+        String status = order.getReservationStatus();
+        if (!TextUtils.isEmpty(status)) {
+            switch (status) {
+                case "0":
+                    ok.setVisibility(View.VISIBLE);
+                    change.setVisibility(View.VISIBLE);
+                    cancel.setVisibility(View.VISIBLE);
+                    break;
+                case "1":
+                    change.setVisibility(View.VISIBLE);
+                    cancel.setVisibility(View.VISIBLE);
+                    huakou.setVisibility(View.VISIBLE);
+                    break;
+                case "2":
+                    info.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -187,6 +176,9 @@ public class UserAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
         this.ok = null;
         this.change = null;
         this.cancel = null;
-        this.button_group = null;
+        this.huakou = null;
+        this.info = null;
+        this.line1 = null;
+        this.line2 = null;
     }
 }

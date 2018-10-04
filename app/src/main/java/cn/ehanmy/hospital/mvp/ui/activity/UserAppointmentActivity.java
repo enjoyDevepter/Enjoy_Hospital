@@ -32,6 +32,7 @@ import cn.ehanmy.hospital.mvp.contract.UserAppointmentContract;
 import cn.ehanmy.hospital.mvp.model.UserAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.UserAppointmentPresenter;
+import cn.ehanmy.hospital.mvp.ui.adapter.HeightItemDecoration;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 import cn.ehanmy.hospital.mvp.ui.widget.CustomProgressDailog;
@@ -193,6 +194,7 @@ public class UserAppointmentActivity extends BaseActivity<UserAppointmentPresent
         search.setOnClickListener(onSearchClickListener);
         clear.setOnClickListener(onSearchClickListener);
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
+        contentList.addItemDecoration(new HeightItemDecoration(8));
         mAdapter.setOnChildItemClickLinstener(new UserAppointmentHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, UserAppointmentHolder.ViewName viewname, int position) {
