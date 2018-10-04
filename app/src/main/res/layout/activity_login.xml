@@ -16,7 +16,7 @@
             android:layout_width="142px"
             android:layout_height="142px"
             android:layout_gravity="center"
-            android:background="@mipmap/logo"
+            android:background="@mipmap/app_logo"
             app:layout_auto_baseheight="width" />
 
     </FrameLayout>
