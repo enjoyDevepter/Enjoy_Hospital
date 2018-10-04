@@ -28,6 +28,7 @@ import cn.ehanmy.hospital.di.module.OrderInfoModule;
 import cn.ehanmy.hospital.mvp.contract.OrderInfoContract;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoodsOrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderInfoBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderMemberInfoBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderRecipientInfoBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderInfoPresenter;
 
@@ -96,6 +97,8 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
             name.setText(nameStr);
         }else{
             perple_info_parent.setVisibility(View.GONE);
+            OrderMemberInfoBean member = orderInfoBean.getMember();
+            name.setText(member.getMobile());
         }
         skill.setText(goodsOrderBean.getGoodsSpecValue().getSpecValueName());
         project_name.setText(goodsOrderBean.getName());

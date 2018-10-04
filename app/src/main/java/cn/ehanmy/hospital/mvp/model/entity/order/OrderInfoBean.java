@@ -30,6 +30,16 @@ public class OrderInfoBean implements Serializable{
     private OrderRecipientInfoBean orderRecipientInfo;
     private HospitaInfoBean hospital;
 
+    public OrderMemberInfoBean getMember() {
+        return member;
+    }
+
+    public void setMember(OrderMemberInfoBean member) {
+        this.member = member;
+    }
+
+    private OrderMemberInfoBean member;
+
     @Override
     public String toString() {
         return "OrderInfoBean{" +
