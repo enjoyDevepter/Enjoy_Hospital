@@ -53,7 +53,7 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
     public void getOrderList(boolean pullToRefresh) {
         OrderListRequest request = new OrderListRequest();
         request.setOrderStatus((String) mRootView.getCache().get("type"));
-        String key = mRootView.getCache().get("key") + "";
+        String key = (String) mRootView.getCache().get("key");
         if(!TextUtils.isEmpty(key)){
             request.setSearch(key);
         }

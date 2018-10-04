@@ -225,6 +225,7 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
                 showSpec();
                 break;
             case R.id.confirm:
+                getCache().put("remark",remarkET.getText()+"");
                 mPresenter.placeGoodsOrder();
                 break;
         }

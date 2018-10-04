@@ -81,7 +81,7 @@
 
             <LinearLayout
                 android:id="@+id/grid2"
-                android:layout_width="wrap_content"
+                android:layout_width="300px"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title1"
                 android:layout_toRightOf="@id/grid1"
@@ -146,7 +146,7 @@
                 android:id="@+id/perple_info_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/grid1">
+                android:layout_below="@id/grid2">
 
                 <View
                     android:id="@+id/divider2"
