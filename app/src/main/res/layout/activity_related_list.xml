@@ -42,16 +42,14 @@
         <View style="@style/divider_1"/>
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_marginTop="16px"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="19px"
-        android:layout_marginRight="19px"
-        android:background="@color/white">
+        android:background="@color/white"
+        >
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -59,38 +57,38 @@
                 android:id="@+id/contentList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="9dp"
                 android:scrollbars="none"
                 tools:listitem="@layout/recycle_list" />
-
-
 
             <LinearLayout
                 android:id="@+id/no_date"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <View
-                    android:layout_width="94dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="150dp"
+                    android:layout_width="188px"
+                    android:layout_height="120px"
+                    android:layout_marginTop="20px"
                     android:background="@mipmap/nodata" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="30px"
                     android:text="暂无数据"
                     android:textColor="#FF666666"
-                    android:textSize="13sp" />
+                    android:textSize="26px" />
 
             </LinearLayout>
-        </android.support.v4.widget.SwipeRefreshLayout>
 
-    </FrameLayout>
+        </FrameLayout>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>

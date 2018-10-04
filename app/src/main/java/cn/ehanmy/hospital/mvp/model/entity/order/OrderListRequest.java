@@ -8,6 +8,16 @@ public class OrderListRequest extends BaseRequest {
     private int pageIndex = 1;
     private int pageSize = 10;
     private String token;
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    private String search;
     private String orderStatus;
 
     public String getOrderStatus() {

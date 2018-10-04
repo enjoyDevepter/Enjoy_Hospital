@@ -67,6 +67,9 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
     TextView order_time;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    @BindView(R.id.perple_info_parent)
+    View perple_info_parent;
+
     public void updateOrderInfo(OrderInfoBean orderInfoBean) {
         GoodsOrderBean goodsOrderBean = orderInfoBean.getGoodsList().get(0);
         mImageLoader.loadImage(this,
@@ -83,6 +86,7 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
         time.setText(simpleDateFormat.format(new Date(orderInfoBean.getOrderTime())));
         OrderRecipientInfoBean orderRecipientInfo = orderInfoBean.getOrderRecipientInfo();
         if (orderRecipientInfo != null) {
+            perple_info_parent.setVisibility(View.VISIBLE);
             form_tel.setText(orderRecipientInfo.getMobile());
             form_add.setText(orderRecipientInfo.getAddress());
             String nameStr = orderRecipientInfo.getRealName();
@@ -90,6 +94,8 @@ public class OrderInfoActivity extends BaseActivity<OrderInfoPresenter> implemen
                 nameStr = orderRecipientInfo.getMobile();
             }
             name.setText(nameStr);
+        }else{
+            perple_info_parent.setVisibility(View.GONE);
         }
         skill.setText(goodsOrderBean.getGoodsSpecValue().getSpecValueName());
         project_name.setText(goodsOrderBean.getName());

@@ -55,6 +55,7 @@ public class OrderFormCenterPresenter extends BasePresenter<OrderFormCenterContr
         request.setOrderStatus((String) mRootView.getCache().get("type"));
         String key = mRootView.getCache().get("key") + "";
         if(!TextUtils.isEmpty(key)){
+            request.setSearch(key);
         }
         UserBean cacheUserBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(cacheUserBean.getToken());
