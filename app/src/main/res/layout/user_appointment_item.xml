@@ -105,7 +105,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:layout_marginLeft="10px"
+            android:layout_marginLeft="20px"
             android:id="@+id/order_phone"
             android:text="手机"
             style="@style/recycler_item_style"

@@ -77,7 +77,7 @@
         android:background="@drawable/order_list_title_back"
         android:id="@+id/line2"
         android:layout_width="match_parent"
-        android:layout_height="57px"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="25px"
@@ -89,12 +89,15 @@
             style="@style/recycler_item_style"
             android:layout_width="0dp"
             android:text="项目"
+            android:maxLines="2"
+            android:layout_marginTop="14px"
+            android:layout_marginBottom="14px"
             android:gravity="center_vertical|left"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <TextView
-            android:layout_marginLeft="5px"
+            android:layout_marginLeft="20px"
             android:id="@+id/order_phone"
             android:text="手机"
             style="@style/recycler_item_style"
