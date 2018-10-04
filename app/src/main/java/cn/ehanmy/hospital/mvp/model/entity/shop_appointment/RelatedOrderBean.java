@@ -6,7 +6,7 @@ import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsOrderBean;
 
 public class RelatedOrderBean implements Serializable {
     private String orderId;
-    private String orderTime;
+    private long orderTime;
     private String orderType;
     private String orderTypeDesc;
     private String orderStatus;
@@ -42,11 +42,11 @@ public class RelatedOrderBean implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getOrderTime() {
+    public long getOrderTime() {
         return orderTime;
     }
 
-    public void setOrderTime(String orderTime) {
+    public void setOrderTime(long orderTime) {
         this.orderTime = orderTime;
     }
 

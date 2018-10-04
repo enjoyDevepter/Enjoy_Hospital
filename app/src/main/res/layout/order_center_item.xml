@@ -133,8 +133,8 @@
                 app:point_padding_right="10px"
                 app:prefix_color="#FF333333"
                 app:prefix_padding="4px"
-                app:prefix_size="24px"
-                app:yuan_size="24px" />
+                app:prefix_size="22px"
+                app:yuan_size="22px" />
 
         </FrameLayout>
 
@@ -166,8 +166,8 @@
                 app:point_padding_right="10px"
                 app:prefix_color="#FF333333"
                 app:prefix_padding="4px"
-                app:prefix_size="24px"
-                app:yuan_size="24px" />
+                app:prefix_size="22px"
+                app:yuan_size="22px" />
         </FrameLayout>
 
 

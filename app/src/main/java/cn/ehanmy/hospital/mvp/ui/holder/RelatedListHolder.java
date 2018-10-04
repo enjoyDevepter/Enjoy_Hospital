@@ -22,6 +22,9 @@ import android.widget.TextView;
 
 import com.jess.arms.base.BaseHolder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.RelatedOrderBean;
@@ -91,9 +94,9 @@ public class RelatedListHolder extends BaseHolder<RelatedOrderBean> {
             parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
             button_group.setVisibility(View.VISIBLE);
             order_id.setText(order.getOrderId());
-            order_phone.setText("");
-            order_time.setText(order.getOrderTime());
-            money.setText(String.format("¥.2f",(order.getTotalPrice()/100.0)));
+            order_phone.setText("13121251463");
+            order_time.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(order.getOrderTime())));
+            money.setText(String.format("¥%.2f",(order.getTotalPrice()/100.0)));
             order_project.setText(order.getGoods().getName());
 
             related.setVisibility(View.VISIBLE);
@@ -104,7 +107,7 @@ public class RelatedListHolder extends BaseHolder<RelatedOrderBean> {
     public void onClick(View view) {
         if (null != onChildItemClickLinstener) {
             switch (view.getId()) {
-                case R.id.ok:
+                case R.id.related:
                     onChildItemClickLinstener.onChildItemClick(view, RELATED, getAdapterPosition());
                     return;
             }
