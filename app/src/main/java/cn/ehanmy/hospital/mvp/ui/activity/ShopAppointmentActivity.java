@@ -36,6 +36,7 @@ import cn.ehanmy.hospital.mvp.model.ShopAppointmentModel;
 import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentPresenter;
+import cn.ehanmy.hospital.mvp.ui.adapter.HeightItemDecoration;
 import cn.ehanmy.hospital.mvp.ui.adapter.ShopAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.adapter.UserAppointmentAdapter;
 import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder;
@@ -223,6 +224,7 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
                 }
             }
         });
+        contentList.addItemDecoration(new HeightItemDecoration(8));
         contentList.setAdapter(mAdapter);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

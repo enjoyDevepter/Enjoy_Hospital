@@ -25,6 +25,7 @@ import java.util.List;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder;
+import cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentTitleHolder;
 import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 
 /**
@@ -45,6 +46,14 @@ public class ShopAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
         ALL,  // 所有
     }
 
+    public static final int ITEM_TYPE_TITLE = 1;
+    public static final int ITEM_TYPE_ITEM = 2;
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? ITEM_TYPE_TITLE : ITEM_TYPE_ITEM;
+    }
+
     public void setOnChildItemClickLinstener(ShopAppointmentHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
         this.onChildItemClickLinstener = onChildItemClickLinstener;
         setOnItemClickListener(new OnRecyclerViewItemClickListener() {
@@ -63,6 +72,10 @@ public class ShopAppointmentAdapter extends DefaultAdapter<OrderProjectDetailBea
 
     @Override
     public BaseHolder<OrderProjectDetailBean> getHolder(View v, int viewType) {
+        if(viewType == ITEM_TYPE_TITLE){
+            return new ShopAppointmentTitleHolder(v);
+        }
+
         return new ShopAppointmentHolder(v, new ShopAppointmentHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, ShopAppointmentHolder.ViewName viewname, int position) {

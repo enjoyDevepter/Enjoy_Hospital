@@ -25,7 +25,6 @@ import com.jess.arms.base.BaseHolder;
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
-import cn.ehanmy.hospital.mvp.model.entity.user_appointment.UserAppointmentGoodsBean;
 
 import static cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder.ViewName.CANCEL;
 import static cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder.ViewName.INFO;
@@ -41,7 +40,7 @@ import static cn.ehanmy.hospital.mvp.ui.holder.ShopAppointmentHolder.ViewName.RE
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class ShopAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
+public class ShopAppointmentTitleHolder extends BaseHolder<OrderProjectDetailBean> {
 
     @BindView(R.id.line1)
     View line1;
@@ -68,80 +67,19 @@ public class ShopAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
     @BindView(R.id.order_time)
     TextView order_time;
 
-    private OnChildItemClickLinstener onChildItemClickLinstener;
-
-    public ShopAppointmentHolder(View itemView, OnChildItemClickLinstener onChildItemClickLinstener) {
+    public ShopAppointmentTitleHolder(View itemView) {
         super(itemView);
-        cancel.setOnClickListener(this);
-        info.setOnClickListener(this);
-        related.setOnClickListener(this);
-        this.onChildItemClickLinstener = onChildItemClickLinstener;
     }
 
     @Override
     public void setData(OrderProjectDetailBean order, int position) {
-        line1.setVisibility(View.VISIBLE);
+        line1.setVisibility(View.GONE);
         line2.setBackgroundColor(Color.WHITE);
-        order_id.setText(order.getReservationId());
-        order_phone.setText(order.getPhone());
-        order_related.setText(order.getStatusDesc());
-        order_time.setText(order.getReservationDate());
-        order_status.setText(order.getRelateStatusDesc());
-        UserAppointmentGoodsBean goods = order.getGoods();
-        if(goods != null){
-            order_project.setText(goods.getName());
-        }
-
-        cancel.setVisibility(View.GONE);
-        related.setVisibility(View.GONE);
-        info.setVisibility(View.GONE);
-
-        String status = order.getReservationStatus();
-        if (!TextUtils.isEmpty(status)) {
-            switch (status) {
-                case "0":
-                    info.setVisibility(View.VISIBLE);
-                    related.setVisibility(View.VISIBLE);
-                    cancel.setVisibility(View.VISIBLE);
-                    break;
-                case "2":
-                    info.setVisibility(View.VISIBLE);
-                    break;
-                case "3":
-                    info.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (null != onChildItemClickLinstener) {
-            switch (view.getId()) {
-                case R.id.info:
-                    onChildItemClickLinstener.onChildItemClick(view, INFO, getAdapterPosition());
-                    return;
-                case R.id.related:
-                    onChildItemClickLinstener.onChildItemClick(view, RELATED, getAdapterPosition());
-                    return;
-                case R.id.cancel:
-                    onChildItemClickLinstener.onChildItemClick(view, CANCEL, getAdapterPosition());
-                    return;
-            }
-        }
-        super.onClick(view);
-    }
-
-    public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, ViewName viewname, int position);
-    }
-
-    public enum ViewName {
-        CANCEL,
-        RELATED,
-        INFO,
+        order_project.setText("项目");
+        order_phone.setText("手机");
+        order_related.setText("关联");
+        order_status.setText("状态");
+        order_time.setText("预约时间");
     }
 
     @Override
