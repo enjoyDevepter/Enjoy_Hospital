@@ -3,6 +3,7 @@ package cn.ehanmy.hospital.mvp.model.entity.shop_appointment;
 import java.io.Serializable;
 
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsOrderBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderMemberInfoBean;
 
 public class RelatedOrderBean implements Serializable {
     private String orderId;
@@ -16,6 +17,16 @@ public class RelatedOrderBean implements Serializable {
     private long totalPrice;
     private long payMoney;
     private RelatedOrderGoodsBean goods;
+
+    public OrderMemberInfoBean getMember() {
+        return member;
+    }
+
+    public void setMember(OrderMemberInfoBean member) {
+        this.member = member;
+    }
+
+    private OrderMemberInfoBean member;
 
     @Override
     public String toString() {

@@ -113,6 +113,7 @@
                     android:paddingRight="44px">
 
                     <ImageView
+                        android:src="@mipmap/default_image"
                         android:id="@+id/image"
                         android:layout_width="200px"
                         android:layout_height="200px"
@@ -202,6 +203,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="84px"
                         android:background="@color/white"
@@ -251,7 +253,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="148px"
+                    android:layout_height="100px"
                     android:layout_marginBottom="6px"
                     android:layout_marginTop="6px"
                     android:background="@color/white"
@@ -269,7 +271,8 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
                             android:text="商品金额"
                             android:textColor="#666666"
                             android:textSize="26px" />
@@ -299,6 +302,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32px"

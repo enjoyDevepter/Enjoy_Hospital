@@ -94,7 +94,7 @@ public class RelatedListHolder extends BaseHolder<RelatedOrderBean> {
             parent.setBackgroundColor(Color.parseColor("#FFFFFF"));
             button_group.setVisibility(View.VISIBLE);
             order_id.setText(order.getOrderId());
-            order_phone.setText("13121251463");
+            order_phone.setText(order.getMember().getMobile());
             order_time.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(order.getOrderTime())));
             money.setText(String.format("¥%.2f",(order.getTotalPrice()/100.0)));
             order_project.setText(order.getGoods().getName());

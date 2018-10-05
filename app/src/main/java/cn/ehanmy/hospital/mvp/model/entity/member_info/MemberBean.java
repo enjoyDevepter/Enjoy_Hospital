@@ -16,6 +16,16 @@ public class MemberBean implements Serializable{
     private String address;
     private String memberId;
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    private String nickName;
+
     @Override
     public String toString() {
         return "MemberBean{" +

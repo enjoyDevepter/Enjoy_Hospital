@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,7 +18,9 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerBuyCenterComponent;
 import cn.ehanmy.hospital.di.module.BuyCenterModule;
 import cn.ehanmy.hospital.mvp.contract.BuyCenterContract;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.presenter.BuyCenterPresenter;
+import cn.ehanmy.hospital.util.CacheUtil;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -95,7 +98,15 @@ public class BuyCenterActivity extends BaseActivity<BuyCenterPresenter> implemen
     public void updateCodeisRight(boolean codeIsRight) {
         image.setVisibility(View.VISIBLE);
         image.setBackground(getResources().getDrawable(codeIsRight ? R.mipmap.member_code_right : R.mipmap.member_code_wrong));
-        hide.setText(codeIsRight ? "会员编号正确，请继续下单" : "会员编号错误，请重新查询！");
+        String defaultStr = "会员编号错误，请重新查询！";
+        if(codeIsRight){
+            MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
+            defaultStr = memberBean.getNickName();
+            if(!TextUtils.isEmpty(memberBean.getRealName())){
+                defaultStr += ("("+memberBean.getRealName()+")");
+            }
+        }
+        hide.setText(defaultStr);
         buy.setVisibility(codeIsRight ? View.VISIBLE : View.GONE);
     }
 
