@@ -20,9 +20,11 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerMainComponent;
 import cn.ehanmy.hospital.di.module.MainModule;
 import cn.ehanmy.hospital.mvp.contract.MainContract;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 import cn.ehanmy.hospital.mvp.presenter.MainPresenter;
 import cn.ehanmy.hospital.mvp.ui.adapter.MainAdapter;
 import cn.ehanmy.hospital.mvp.ui.widget.SpacesItemDecoration;
+import cn.ehanmy.hospital.util.CacheUtil;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -58,9 +60,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         return R.layout.activity_main; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    private static final String FORMAT_FOR_ACTIVITY_TITLE = "%s(%s)";
+
     @Override
     public void initData(Bundle savedInstanceState) {
-        titleTV.setText("医院中心");
+        String loginUserName = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME);
+        HospitaInfoBean hospitaInfoBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO);
+        titleTV.setText(String.format(FORMAT_FOR_ACTIVITY_TITLE,hospitaInfoBean.getName(),loginUserName));
         settingV.setVisibility(View.VISIBLE);
         settingV.setOnClickListener(this);
         backV.setVisibility(View.GONE);

@@ -75,4 +75,31 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/exit"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="退出登录"
+            android:textColor="#ff333333"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="14dp"
+            android:layout_marginRight="15dp"
+            android:background="@mipmap/arrow_right" />
+
+    </LinearLayout>
 </LinearLayout>

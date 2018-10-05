@@ -102,6 +102,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                                             mRootView.hideLoading();
                                             if (s.isSuccess()) {
                                                 CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO, s.getHospital());
+                                                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,username);
                                                 mRootView.killMyself();
                                                 mRootView.goMainPage();
                                             } else {

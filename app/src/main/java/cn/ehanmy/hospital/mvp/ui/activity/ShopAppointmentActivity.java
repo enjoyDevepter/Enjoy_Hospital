@@ -188,7 +188,7 @@ public class ShopAppointmentActivity extends BaseActivity<ShopAppointmentPresent
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title, this, "店铺预约");
+        new TitleUtil(title, this, "店铺引流");
         currTextView = appointment;
         appointment.setTextColor(currColor);
 

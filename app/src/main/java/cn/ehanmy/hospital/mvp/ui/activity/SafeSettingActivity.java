@@ -27,6 +27,8 @@ public class SafeSettingActivity extends BaseActivity<SafeSettingPresenter> impl
 
     @BindView(R.id.go_to_change_password)
     View go_to_change_password;
+    @BindView(R.id.exit)
+    View exit;
 
     @BindView(R.id.name)
     TextView name;
@@ -58,6 +60,20 @@ public class SafeSettingActivity extends BaseActivity<SafeSettingPresenter> impl
             @Override
             public void onClick(View v) {
                 ArmsUtils.startActivity(ChangePasswordActivity.class);
+            }
+        });
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,null);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,null);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER,null);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,null);
+                Intent intent = new Intent(SafeSettingActivity.this,LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ArmsUtils.startActivity(intent);
             }
         });
 
