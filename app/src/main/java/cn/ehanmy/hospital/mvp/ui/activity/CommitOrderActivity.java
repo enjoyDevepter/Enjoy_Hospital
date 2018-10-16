@@ -6,9 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -76,21 +81,15 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     TextView addr;
     @BindView(R.id.pay)
     View payV;
-    @BindView(R.id.pay_type)
-    View payTypeV;
-    @BindView(R.id.arList)
-    RecyclerView mRecyclerView;
-    @Inject
-    PayItemAdapter mAdapter;
-    @Inject
-    List<PayEntry> payEntries;
-    @Inject
-    RecyclerView.LayoutManager mLayoutManager;
     @Inject
     ImageLoader mImageLoader;
     @Inject
     AppManager appManager;
     private CustomDialog payOkDialog;
+    private CustomDialog confirmPayDialog;
+
+    @BindView(R.id.pay_item)
+    RadioGroup pay_item;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -100,6 +99,28 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                 .commitOrderModule(new CommitOrderModule(this))
                 .build()
                 .inject(this);
+    }
+
+    public void updatePayEntry(List<PayEntry> payEntries){
+        pay_item.removeAllViews();
+        LayoutInflater from = LayoutInflater.from(this);
+        for(int i = 0;i<payEntries.size();i++){
+            PayEntry payEntry = payEntries.get(i);
+            RadioButton v = (RadioButton) from.inflate(R.layout.pay_list_item,null);
+            v.setText(payEntry.getName());
+            v.setId(i);
+            pay_item.addView(v);
+        }
+        pay_item.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == 0 || checkedId == 1 || checkedId == 2){
+
+                }else{
+
+                }
+            }
+        });
     }
 
     @Override
@@ -133,8 +154,6 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         updateMember(memberBean);
         hospital.setText(hospitaInfoBean.getName());
         addr.setText(hospitaInfoBean.getAddress());
-        ArmsUtils.configRecyclerView(mRecyclerView, mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -184,21 +203,25 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     public void showPaySuccess(GoPayResponse response, OrderBean orderBean) {
         GoodsOrderBean goodsOrderBean = orderBean.getGoodsList().get(0);
         updateView(goodsOrderBean.getImage(),goodsOrderBean.getName()
-        ,response.getPayMoney(),response.getPayStatus(),response.getOrderId(),response.getOrderTime(),response.getPayEntryList());
+        ,response.getPayMoney(),response.getPayStatus(),response.getOrderId(),response.getOrderTime());
     }
 
     public void showPaySuccess(GoodsBuyResponse response) {
         cn.ehanmy.hospital.mvp.model.entity.goods_list.GoodsOrderBean goods = response.getGoods();
         updateView(goods.getImage(), goods.getName(),response.getPayMoney(),
-                response.getPayStatus(),response.getOrderId(),response.getOrderTime(),response.getPayEntryList());
+                response.getPayStatus(),response.getOrderId(),response.getOrderTime());
     }
 
     private void updateView(String imageUrl,String orderName,long payMoney,
-                            String payStatus,String orderId,long orderTime,List<PayEntry> payEntries){
+                            String payStatus,String orderId,long orderTime){
         payV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getPayStatus(orderId);
+//                mPresenter.getPayStatus(orderId);
+                int checkedRadioButtonId = pay_item.getCheckedRadioButtonId();
+                if(checkedRadioButtonId == 0 || checkedRadioButtonId == 1 || checkedRadioButtonId == 2){
+                    confirmPay();
+                }
             }
         });
         mImageLoader.loadImage(this,
@@ -212,16 +235,37 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         priceMV.setMoneyText(ArmsUtils.formatLong(payMoney));
         if ("1".equals(payStatus)) {
             payOk(orderId, orderTime);
-        } else {
-            payTypeV.setVisibility(View.VISIBLE);
-            payEntries.clear();
-            payEntries.addAll(payEntries);
-            mAdapter.notifyDataSetChanged();
         }
     }
 
+    private void confirmPay(){
+        confirmPayDialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                        view.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                confirmPayDialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.confirm_pay_dialog_layout)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setCancelOutside(false)
+                .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
+                .show();
+    }
+
     public void payOk(String orderId, long orderTime) {
-        payTypeV.setVisibility(View.GONE);
         payOkDialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override

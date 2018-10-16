@@ -89,6 +89,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                     public void onNext(GoPayResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showPaySuccess(response,orderBean);
+                            mRootView.updatePayEntry(response.getPayEntryList());
                         }else{
                             mRootView.showMessage(response.getRetDesc());
                             mRootView.killMyself();
@@ -180,6 +181,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                     public void onNext(GoodsBuyResponse response) {
                         if (response.isSuccess()) {
                             mRootView.showPaySuccess(response);
+                            mRootView.updatePayEntry(response.getPayEntryList());
                         }else{
                             mRootView.showMessage(response.getRetDesc());
                             mRootView.killMyself();
