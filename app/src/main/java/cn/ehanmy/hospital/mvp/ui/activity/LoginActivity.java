@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -20,6 +21,7 @@ import cn.ehanmy.hospital.di.component.DaggerLoginComponent;
 import cn.ehanmy.hospital.di.module.LoginModule;
 import cn.ehanmy.hospital.mvp.contract.LoginContract;
 import cn.ehanmy.hospital.mvp.presenter.LoginPresenter;
+import cn.ehanmy.hospital.util.SPUtils;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -55,6 +57,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        if(!TextUtils.isEmpty(SPUtils.get(SPUtils.KEY_FOR_USER_TOKEN,""))){
+            goMainPage();
+            return;
+        }
         loginV.setOnClickListener(this);
         parent.setOnClickListener(this);
         mPresenter.requestPermissions();

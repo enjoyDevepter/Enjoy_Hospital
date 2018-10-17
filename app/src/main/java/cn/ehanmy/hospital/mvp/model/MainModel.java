@@ -10,6 +10,10 @@ import com.jess.arms.mvp.BaseModel;
 import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.MainContract;
+import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
+import io.reactivex.Observable;
 
 
 @ActivityScope
@@ -29,6 +33,12 @@ public class MainModel extends BaseModel implements MainContract.Model {
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<HospitalInfoResponse> requestHospitalInfo(HospitalInfoRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .requestHosptialInfo(request);
     }
 
 }

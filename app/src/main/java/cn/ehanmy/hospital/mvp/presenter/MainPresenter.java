@@ -3,11 +3,14 @@ package cn.ehanmy.hospital.mvp.presenter;
 import android.app.Application;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Intent;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.util.List;
 
@@ -16,8 +19,18 @@ import javax.inject.Inject;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.contract.MainContract;
 import cn.ehanmy.hospital.mvp.model.entity.MainItem;
+import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
+import cn.ehanmy.hospital.mvp.ui.activity.LoginActivity;
+import cn.ehanmy.hospital.mvp.ui.activity.SafeSettingActivity;
 import cn.ehanmy.hospital.mvp.ui.adapter.MainAdapter;
+import cn.ehanmy.hospital.util.CacheUtil;
+import cn.ehanmy.hospital.util.SPUtils;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 @ActivityScope
@@ -61,6 +74,33 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    private void checkUser(){
+        UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
+        hospitalInfoRequest.setToken(ub.getToken());
+        mModel.requestHospitalInfo(hospitalInfoRequest)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<HospitalInfoResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(HospitalInfoResponse s) {
+                        mRootView.hideLoading();
+                        if (s.isSuccess()) {
+
+                        } else {
+                            mRootView.showMessage("用户信息失效，请重新登录");
+                            Intent intent = new Intent(ArmsUtils.getContext(),LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            ArmsUtils.startActivity(intent);
+                        }
+                    }
+                });
     }
 
 }
