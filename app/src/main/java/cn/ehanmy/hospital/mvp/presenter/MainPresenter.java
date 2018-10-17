@@ -76,7 +76,8 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         this.mApplication = null;
     }
 
-    private void checkUser(){
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void checkUser(){
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
         hospitalInfoRequest.setToken(ub.getToken());
@@ -91,7 +92,8 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     public void onNext(HospitalInfoResponse s) {
                         mRootView.hideLoading();
                         if (s.isSuccess()) {
-
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO, s.getHospital());
+                            SPUtils.put(SPUtils.KEY_FOR_HOSPITAL_INFO, s.getHospital() );
                         } else {
                             mRootView.showMessage("用户信息失效，请重新登录");
                             Intent intent = new Intent(ArmsUtils.getContext(),LoginActivity.class);

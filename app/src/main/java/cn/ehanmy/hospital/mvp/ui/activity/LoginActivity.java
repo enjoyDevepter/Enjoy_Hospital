@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 
@@ -20,7 +21,10 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerLoginComponent;
 import cn.ehanmy.hospital.di.module.LoginModule;
 import cn.ehanmy.hospital.mvp.contract.LoginContract;
+import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
 import cn.ehanmy.hospital.mvp.presenter.LoginPresenter;
+import cn.ehanmy.hospital.util.CacheUtil;
 import cn.ehanmy.hospital.util.SPUtils;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -57,9 +61,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        if(!TextUtils.isEmpty(SPUtils.get(SPUtils.KEY_FOR_USER_TOKEN,""))){
-            goMainPage();
-            return;
+        UserBean spUserbean = SPUtils.get(SPUtils.KEY_FOR_USER_INFO, new UserBean("","",""));
+        if((spUserbean != null) && (!TextUtils.isEmpty(spUserbean.getToken()))){
+            HospitaInfoBean value = SPUtils.get(SPUtils.KEY_FOR_HOSPITAL_INFO, new HospitaInfoBean());
+            if((value != null) && (!TextUtils.isEmpty(value.getHospitalId()))){
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,spUserbean);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,SPUtils.get(SPUtils.KEY_FOR_USER_NAME,""));
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO, value);
+                goMainPage();
+                return;
+            }
         }
         loginV.setOnClickListener(this);
         parent.setOnClickListener(this);

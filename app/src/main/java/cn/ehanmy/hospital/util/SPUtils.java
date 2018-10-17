@@ -15,7 +15,9 @@ import java.util.Map;
  */
 public class SPUtils {
 
-    public static final String KEY_FOR_USER_TOKEN = "key_for_user_token";
+    public static final String KEY_FOR_USER_INFO = "key_for_user_info";
+    public static final String KEY_FOR_USER_NAME = "key_for_user_name";
+    public static final String KEY_FOR_HOSPITAL_INFO = "key_for_hospital_info";
 
     public static final String FILE_NAME = "cache";
     public static SharedPreferences sp = ArmsUtils.getContext().getSharedPreferences(FILE_NAME,

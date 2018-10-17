@@ -71,7 +71,9 @@ public class SafeSettingActivity extends BaseActivity<SafeSettingPresenter> impl
                 CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,null);
                 CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER,null);
                 CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,null);
-                SPUtils.remove(getApplicationContext(),SPUtils.KEY_FOR_USER_TOKEN);
+                SPUtils.remove(ArmsUtils.getContext(),SPUtils.KEY_FOR_HOSPITAL_INFO);
+                SPUtils.remove(ArmsUtils.getContext(),SPUtils.KEY_FOR_USER_NAME);
+                SPUtils.remove(ArmsUtils.getContext(),SPUtils.KEY_FOR_USER_NAME);
                 Intent intent = new Intent(SafeSettingActivity.this,LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -87,7 +87,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     @Override
                     public void onNext(LoginResponse response) {
                         if (response.isSuccess()) {
-                            UserBean value = new UserBean(username, response.getToken(), response.getSignkey());
+                            final UserBean value = new UserBean(username, response.getToken(), response.getSignkey());
                             CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER, value);
                             HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
                             hospitalInfoRequest.setToken(response.getToken());
@@ -104,7 +104,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                                             if (s.isSuccess()) {
                                                 CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO, s.getHospital());
                                                 CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,username);
-                                                SPUtils.put(SPUtils.KEY_FOR_USER_TOKEN,response.getToken());
+                                                SPUtils.put(SPUtils.KEY_FOR_HOSPITAL_INFO, s.getHospital() );
+                                                SPUtils.put(SPUtils.KEY_FOR_USER_INFO,value);
+                                                SPUtils.put(SPUtils.KEY_FOR_USER_NAME,username);
                                                 mRootView.killMyself();
                                                 mRootView.goMainPage();
                                             } else {
