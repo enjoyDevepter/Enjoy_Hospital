@@ -9,7 +9,7 @@ import java.io.Serializable;
 		},
 * */
 public class Rank implements Serializable{
-    private String pointLevelId;
+    private String pointLevelId;  // 1:普通会员,2:黄金会员,3:白金会员,4:钻石会员,5:金牌会员,6:超级会员
     private String pointLevelName;
 
     @Override

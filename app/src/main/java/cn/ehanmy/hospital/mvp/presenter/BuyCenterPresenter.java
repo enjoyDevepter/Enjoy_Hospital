@@ -12,12 +12,17 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.BuyCenterContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
+import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdRequest;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 @ActivityScope
@@ -60,13 +65,46 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
                     mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
-                .subscribe(response -> {
-                    if (response.isSuccess()) {
-                        MemberBean member = response.getMember();
-                        CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
-                        mRootView.updateCodeisRight(true);
-                    } else {
-                        mRootView.updateCodeisRight(false);
+                .subscribe(new ErrorHandleSubscriber<MemberInfoResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(MemberInfoResponse s) {
+                        if (s.isSuccess()) {
+                            MemberBean member = s.getMember();
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
+                            mRootView.updateCodeisRight(true);
+                        } else {
+                            mRootView.updateCodeisRight(false);
+                        }
+                    }
+                });
+    }
+
+
+    public void requestMemberInfoById(String memberId) {
+        MemberInfoByIdRequest request = new MemberInfoByIdRequest();
+        UserBean user = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setMemberId(memberId);
+        request.setToken(user.getToken());
+        mModel.requestMemberinfoById(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<MemberInfoByIdResponse>(mErrorHandler) {
+                    @Override
+                    public void onNext(MemberInfoByIdResponse s) {
+                        if (s.isSuccess()) {
+                            MemberBean member = s.getMember();
+                            CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, member);
+                            mRootView.updateCodeisRight(true);
+                        } else {
+                            mRootView.updateCodeisRight(false);
+                        }
                     }
                 });
     }

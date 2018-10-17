@@ -20,6 +20,8 @@ import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdRequest;
+import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.GetPayStatusRequest;
@@ -89,6 +91,9 @@ public interface InterfaceService {
 
     @POST("gateway")
     Observable<MemberInfoResponse> requestMemberInfo(@Body MemberInfoRequest request);
+
+    @POST("gateway")
+    Observable<MemberInfoByIdResponse> requestMemberInfoById(@Body MemberInfoByIdRequest request);
 
     @POST("gateway")
     Observable<GoodsPageResponse> requestGoodsInfo(@Body GoodsPageRequest request);
