@@ -222,6 +222,23 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
             @Override
             public void onRequestPermissionSuccess() {
                 //request permission success, do something.
+                PermissionUtil.launchCamera(new PermissionUtil.RequestPermission() {
+                    @Override
+                    public void onRequestPermissionSuccess() {
+                        ImageUploadUtils.startCamera(ActivityAddActivity.this, CAMERA_OPEN_REQUEST_CODE, generateCameraFilePath());
+
+                    }
+
+                    @Override
+                    public void onRequestPermissionFailure(List<String> permissions) {
+
+                    }
+
+                    @Override
+                    public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+
+                    }
+                }, mRxPermissions, mErrorHandler);
             }
 
             @Override
@@ -232,7 +249,6 @@ public class ActivityAddActivity extends BaseActivity<ActivityAddPresenter> impl
             public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
             }
         }, mRxPermissions, mErrorHandler);
-        ImageUploadUtils.startCamera(this, CAMERA_OPEN_REQUEST_CODE, generateCameraFilePath());
     }
 
     @Override

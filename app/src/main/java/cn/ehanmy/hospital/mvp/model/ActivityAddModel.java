@@ -12,6 +12,8 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.ActivityAddContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.QiniuRequest;
+import cn.ehanmy.hospital.mvp.model.entity.QiniuResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoRequest;
@@ -41,13 +43,11 @@ public class ActivityAddModel extends BaseModel implements ActivityAddContract.M
         this.mGson = null;
         this.mApplication = null;
     }
-
     @Override
-    public Observable<BaseResponse> uploadImage(String type, MultipartBody.Part imgs) {
+    public Observable<QiniuResponse> getQiniuInfo(QiniuRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
-                .uploadImage(type, imgs);
+                .getQiniuInfo(request);
     }
-
 
     @Override
     public Observable<AddActivityResponse> addActivity(AddActivityRequest request) {
