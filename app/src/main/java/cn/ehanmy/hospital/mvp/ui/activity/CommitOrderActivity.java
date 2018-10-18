@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -109,16 +110,18 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
             RadioButton v = (RadioButton) from.inflate(R.layout.pay_list_item,null);
             v.setText(payEntry.getName());
             v.setId(i);
-            pay_item.addView(v);
+            v.setTag(payEntry);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,72);
+            pay_item.addView(v,params);
+            if(i == 0){
+                v.setChecked(true);
+            }
         }
         pay_item.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == 0 || checkedId == 1 || checkedId == 2){
-
-                }else{
-
-                }
+                View viewById = group.findViewById(checkedId);
+                CommitOrderActivity.this.payEntry = (PayEntry) viewById.getTag();
             }
         });
     }
@@ -198,6 +201,9 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         return this;
     }
 
+    private String orderId;
+    private long money;
+    private PayEntry payEntry;
 
     @Override
     public void showPaySuccess(GoPayResponse response, OrderBean orderBean) {
@@ -214,12 +220,12 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
 
     private void updateView(String imageUrl,String orderName,long payMoney,
                             String payStatus,String orderId,long orderTime){
+        this.orderId = orderId;
+        this.money = payMoney;
         payV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mPresenter.getPayStatus(orderId);
-                int checkedRadioButtonId = pay_item.getCheckedRadioButtonId();
-                if(checkedRadioButtonId == 0 || checkedRadioButtonId == 1 || checkedRadioButtonId == 2){
+                if(CommitOrderActivity.this.payEntry.getPayId().startsWith("OFFLINE_")){
                     confirmPay();
                 }
             }
@@ -238,6 +244,12 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         }
     }
 
+    public void orderPayOk(){
+        if(confirmPayDialog != null){
+            confirmPayDialog.dismiss();
+        }
+    }
+
     private void confirmPay(){
         confirmPayDialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
@@ -246,7 +258,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                         view.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                mPresenter.orderPay(payEntry.getPayId(),money,orderId);
                             }
                         });
                         view.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {

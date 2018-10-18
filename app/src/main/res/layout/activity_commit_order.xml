@@ -153,6 +153,7 @@
             </RelativeLayout>
 
             <RadioGroup
+                android:layout_marginTop="7px"
                 android:background="@color/white"
                 android:id="@+id/pay_item"
                 android:dividerPadding="1px"

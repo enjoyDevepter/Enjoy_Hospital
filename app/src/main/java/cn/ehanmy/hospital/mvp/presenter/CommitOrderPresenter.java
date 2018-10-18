@@ -24,6 +24,7 @@ import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoPayResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderBean;
 import cn.ehanmy.hospital.mvp.model.entity.order.OrderMemberInfoBean;
+import cn.ehanmy.hospital.mvp.model.entity.order.OrderPayRequest;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyRequest;
 import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
@@ -143,6 +144,33 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .subscribe(response -> {
                     if (response.isSuccess()) {
                         mRootView.payOk(response.getOrderId(),response.getOrderTime());
+                    } else {
+                        mRootView.showMessage(response.getRetDesc());
+                    }
+                });
+    }
+
+
+    public void orderPay(String payId,long money,String orderId) {
+        OrderPayRequest request = new OrderPayRequest();
+        request.setAmount(money);
+        request.setPayId(payId);
+        request.setOrderId(orderId);
+        UserBean user = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
+        request.setToken(user.getToken());
+        mModel.orderPay(request)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+                    mRootView.showLoading();//显示下拉刷新的进度条
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    mRootView.hideLoading();
+                }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(response -> {
+                    if (response.isSuccess()) {
+                        mRootView.orderPayOk();
                     } else {
                         mRootView.showMessage(response.getRetDesc());
                     }
