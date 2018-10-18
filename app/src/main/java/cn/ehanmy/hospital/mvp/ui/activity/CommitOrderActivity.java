@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,6 +55,10 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * 显示订单信息并提供支付入口（支付二维码）
  */
 public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> implements CommitOrderContract.View{
+
+    public static final String PAY_WEIXIN = "WEIXIN_QRCODE";
+    public static final String PAY_ZHIFUBAO = "ALIPAY_QRCODE";
+
     public static final String KEY_FOR_ORDER_BEAN = "KEY_FOR_ORDER_BEAN";
     public static final String KEY_FOR_GO_IN_TYPE = "key_for_go_in_type";
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -104,6 +110,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
 
     public void updatePayEntry(List<PayEntry> payEntries){
         pay_item.removeAllViews();
+        RadioButton rb = null;
         LayoutInflater from = LayoutInflater.from(this);
         for(int i = 0;i<payEntries.size();i++){
             PayEntry payEntry = payEntries.get(i);
@@ -114,7 +121,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,72);
             pay_item.addView(v,params);
             if(i == 0){
-                v.setChecked(true);
+                rb = v;
             }
         }
         pay_item.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -122,9 +129,30 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 View viewById = group.findViewById(checkedId);
                 CommitOrderActivity.this.payEntry = (PayEntry) viewById.getTag();
+
+                String payId = payEntry.getPayId();
+                if(cacheView != null){
+                    group.removeView(cacheView);
+                    cacheView = null;
+                }
+                if(PAY_WEIXIN.equals(payId) || PAY_ZHIFUBAO.equals(payId)){
+                    int index = group.indexOfChild(viewById);
+                    View root = LayoutInflater.from(CommitOrderActivity.this).inflate(R.layout.commit_pay_rq_item,null);
+                    cacheView = root;
+                    ImageView imageView = root.findViewById(R.id.image);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    root.setLayoutParams(params);
+                    group.addView(root,index+1);
+                    mPresenter.orderPay(payId,money,orderId,imageView);
+                }
             }
         });
+        if(rb != null){
+            rb.setChecked(true);
+        }
     }
+
+    private View cacheView;
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
@@ -225,7 +253,8 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         payV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(CommitOrderActivity.this.payEntry.getPayId().startsWith("OFFLINE_")){
+                String payId = CommitOrderActivity.this.payEntry.getPayId();
+                if(payId.startsWith("OFFLINE_")){
                     confirmPay();
                 }
             }
