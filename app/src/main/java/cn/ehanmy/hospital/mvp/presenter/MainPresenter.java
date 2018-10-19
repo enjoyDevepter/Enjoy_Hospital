@@ -99,6 +99,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                             Intent intent = new Intent(ArmsUtils.getContext(),LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            SPUtils.clear(mRootView.getActivity());
                             ArmsUtils.startActivity(intent);
                         }
                     }
