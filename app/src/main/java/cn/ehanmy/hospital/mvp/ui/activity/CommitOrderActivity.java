@@ -94,6 +94,7 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     AppManager appManager;
     private CustomDialog payOkDialog;
     private CustomDialog confirmPayDialog;
+    private CustomDialog payErrorDialog;
 
     @BindView(R.id.pay_item)
     RadioGroup pay_item;
@@ -256,6 +257,8 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                 String payId = CommitOrderActivity.this.payEntry.getPayId();
                 if(payId.startsWith("OFFLINE_")){
                     confirmPay();
+                }else if(PAY_WEIXIN.equals(payId) || PAY_ZHIFUBAO.equals(payId)){
+                    mPresenter.getPayStatus(orderId);
                 }
             }
         });
@@ -270,12 +273,6 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         priceMV.setMoneyText(ArmsUtils.formatLong(payMoney));
         if ("1".equals(payStatus)) {
             payOk(orderId, orderTime);
-        }
-    }
-
-    public void orderPayOk(){
-        if(confirmPayDialog != null){
-            confirmPayDialog.dismiss();
         }
     }
 
@@ -307,6 +304,10 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
     }
 
     public void payOk(String orderId, long orderTime) {
+        if(confirmPayDialog != null){
+            confirmPayDialog.dismiss();
+            confirmPayDialog = null;
+        }
         payOkDialog = CustomDialog.create(getSupportFragmentManager())
                 .setViewListener(new CustomDialog.ViewListener() {
                     @Override
@@ -347,6 +348,30 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
                 .isCenter(true)
                 .setCancelOutside(false)
                 .setWidth(ArmsUtils.dip2px(CommitOrderActivity.this, 228))
+                .show();
+    }
+
+    public void showPayError(String errorInfo){
+        payErrorDialog = CustomDialog.create(getSupportFragmentManager())
+                .setViewListener(new CustomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View view) {
+                        TextView content = view.findViewById(R.id.content);
+                        content.setText(errorInfo);
+                        view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                payErrorDialog.dismiss();
+                                payErrorDialog = null;
+                            }
+                        });
+                    }
+                })
+                .setLayoutRes(R.layout.pay_error_dialog)
+                .setDimAmount(0.5f)
+                .isCenter(true)
+                .setCancelOutside(false)
+                .setWidth(456)
                 .show();
     }
 

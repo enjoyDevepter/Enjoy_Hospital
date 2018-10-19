@@ -146,7 +146,13 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
                     if (response.isSuccess()) {
-                        mRootView.payOk(response.getOrderId(),response.getOrderTime());
+                        if("1".equals(response.getPayStatus())){
+                            // 已支付
+                            mRootView.payOk(response.getOrderId(),response.getOrderTime());
+                        }else if("0".equals(response.getPayStatus())){
+                            // 未支付
+                            mRootView.showPayError(response.getRemind());
+                        }
                     } else {
                         mRootView.showMessage(response.getRetDesc());
                     }
@@ -173,7 +179,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
                     if (response.isSuccess()) {
-                        mRootView.orderPayOk();
+                        mRootView.payOk(orderId,System.currentTimeMillis());
                     } else {
                         mRootView.showMessage(response.getRetDesc());
                     }
