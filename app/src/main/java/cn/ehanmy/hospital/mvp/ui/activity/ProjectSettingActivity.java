@@ -22,12 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerProjectSettingComponent;
 import cn.ehanmy.hospital.di.module.ProjectSettingModule;
 import cn.ehanmy.hospital.mvp.contract.ProjectSettingContract;
 import cn.ehanmy.hospital.mvp.model.entity.goods_list.Category;
+import cn.ehanmy.hospital.mvp.model.entity.user.MerchBean;
 import cn.ehanmy.hospital.mvp.presenter.ProjectSettingPresenter;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -61,7 +64,7 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
     private List1Adapter list1Adapter = new List1Adapter();
     private List2Adapter list2Adapter = new List2Adapter();
     private List3Adapter list3Adapter = new List3Adapter();
-    private List3Adapter list4Adapter = new List3Adapter();
+    private List4Adapter list4Adapter = new List4Adapter();
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -117,24 +120,16 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
     }
 
     public void updateCategory(List<Category> categoryList, List<String> selectList) {
-        for (int i = 0; i < categoryList.size(); i++) {
-            Category category1 = categoryList.get(i);
-            List<Category> goodsCategoryList = category1.getGoodsCategoryList();
-            for (int j = 0; j < goodsCategoryList.size(); j++) {
-                Category category2 = goodsCategoryList.get(j);
-                List<Category> goodsCategoryList1 = category2.getGoodsCategoryList();
-                for (int k = 0; k < goodsCategoryList1.size(); k++) {
-                    Category category3 = goodsCategoryList1.get(k);
-                    if (selectList.contains(category3.getCategoryId())) {
-                    }
-                }
-            }
+        currentIndex4.clear();
+        if(selectList != null && selectList.size() != 0){
+            currentIndex4.addAll(selectList);
         }
         categoryList1.clear();
         categoryList1.addAll(categoryList);
         list1.setAdapter(list1Adapter);
         list2.setAdapter(list2Adapter);
         list3.setAdapter(list3Adapter);
+        list4.setAdapter(list4Adapter);
     }
 
     @Override
@@ -144,13 +139,20 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                 killMyself();
                 break;
             case R.id.finish:
-//                List<String> list = new ArrayList<>();
-//                for (Category c : selectItems) {
-//                    list.add(c.getCategoryId());
-//                }
-//                mPresenter.setProjectSetting(list);
+                List<String> list = new ArrayList<>();
+                for (MerchBean mb : merchBeanList) {
+                    list.add(mb.getMerchId());
+                }
+                mPresenter.setProjectSetting(list);
                 break;
         }
+    }
+
+    private List<MerchBean> merchBeanList = new ArrayList<>();
+    public void updateGoodsList(List<MerchBean> lists){
+        merchBeanList.clear();
+        merchBeanList.addAll(lists);
+        list4.setAdapter(list4Adapter);
     }
 
     private class ListHolder extends RecyclerView.ViewHolder {
@@ -230,6 +232,11 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                     }
                     list2.setAdapter(list2Adapter);
                     list3.setAdapter(list3Adapter);
+                    Category category1 = categoryList1.get(currentIndex1);
+                    Integer key = currentIndex2;
+                    Category category2 = category1.getGoodsCategoryList().get(key);
+                    Category category3 = category2.getGoodsCategoryList().get(0);
+                    mPresenter.getGoodsList(category2.getCategoryId(),category3.getCategoryId());
                 }
             });
         }
@@ -267,13 +274,16 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         public void onBindViewHolder(@NonNull ListHolder holder, int position) {
             TextView content = holder.content;
             Integer key = currentIndex2;
-            Category category = categoryList1.get(currentIndex1).getGoodsCategoryList().get(key).getGoodsCategoryList().get(position);
-            content.setText(category.getName());
+            Category category1 = categoryList1.get(currentIndex1);
+            Category category2 = category1.getGoodsCategoryList().get(key);
+            Category category3 = category2.getGoodsCategoryList().get(position);
+            content.setText(category3.getName());
             content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currentIndex3.put(currentIndex2,position);
                     list3.setAdapter(list3Adapter);
+                    mPresenter.getGoodsList(category2.getCategoryId(),category3.getCategoryId());
                 }
             });
         }
@@ -291,6 +301,52 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         @Override
         public int getItemCount() {
             return categoryList1.get(currentIndex1).getGoodsCategoryList().get(currentIndex2).getGoodsCategoryList().size();
+        }
+    }
+
+    private class List4Adapter extends RecyclerView.Adapter<ListHolder> {
+
+        @NonNull
+        @Override
+        public ListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            int layoutId = R.layout.project_setting_normal_item;
+            if (viewType == ITEM_TYPE_SELECT) {
+                layoutId = R.layout.project_setting_choose_item;
+            }
+            View inflate = LayoutInflater.from(parent.getContext()).inflate(layoutId, null);
+            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ArmsUtils.dip2px(ArmsUtils.getContext(), 30)));
+            return new ListHolder(inflate);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ListHolder holder, int position) {
+            TextView content = holder.content;
+            MerchBean mb = merchBeanList.get(position);
+            content.setText(mb.getName());
+            content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentIndex4.contains(mb.getMerchId())) {
+                        currentIndex4.remove(mb.getMerchId());
+                    } else {
+                        currentIndex4.add(mb.getMerchId());
+                    }
+                    list3.setAdapter(list3Adapter);
+                }
+            });
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (!currentIndex4.contains(merchBeanList.get(position).getMerchId())) {
+                return ITEM_TYPE_NORMAL;
+            }
+            return ITEM_TYPE_SELECT;
+        }
+
+        @Override
+        public int getItemCount() {
+            return merchBeanList.size();
         }
     }
 }
