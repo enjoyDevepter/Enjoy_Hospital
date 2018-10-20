@@ -337,7 +337,11 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                     } else {
                         currentIndex4.add(mb.getMerchId());
                     }
-                    list4.setAdapter(list4Adapter);
+                    if(list4.getAdapter() == null){
+                        list4.setAdapter(list4Adapter);
+                    }else{
+                        list4Adapter.notifyDataSetChanged();
+                    }
                 }
             });
         }
