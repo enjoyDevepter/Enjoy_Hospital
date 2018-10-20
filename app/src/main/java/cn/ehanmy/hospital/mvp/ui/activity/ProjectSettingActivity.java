@@ -58,6 +58,8 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
     // 保存2级列表的选中状态
     private int currentIndex2 = 0;
     private Map<Integer,Integer> currentIndex3 = new HashMap<>();
+
+    /**保存当前被选中的商品*/
     private Set<String> currentIndex4 = new HashSet<>();
 
     private List<Category> categoryList1 = new ArrayList<>();
@@ -129,7 +131,12 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
         list1.setAdapter(list1Adapter);
         list2.setAdapter(list2Adapter);
         list3.setAdapter(list3Adapter);
-        list4.setAdapter(list4Adapter);
+
+        Category category1 = categoryList1.get(currentIndex1);
+        Integer key = currentIndex2;
+        Category category2 = category1.getGoodsCategoryList().get(0);
+        Category category3 = category2.getGoodsCategoryList().get(0);
+        mPresenter.getGoodsList(category3.getCategoryId(),category2.getCategoryId());
     }
 
     @Override
@@ -140,14 +147,13 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                 break;
             case R.id.finish:
                 List<String> list = new ArrayList<>();
-                for (MerchBean mb : merchBeanList) {
-                    list.add(mb.getMerchId());
-                }
+                list.addAll(currentIndex4);
                 mPresenter.setProjectSetting(list);
                 break;
         }
     }
 
+    /**保存当前分类下的商品*/
     private List<MerchBean> merchBeanList = new ArrayList<>();
     public void updateGoodsList(List<MerchBean> lists){
         merchBeanList.clear();
@@ -236,7 +242,7 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                     Integer key = currentIndex2;
                     Category category2 = category1.getGoodsCategoryList().get(key);
                     Category category3 = category2.getGoodsCategoryList().get(0);
-                    mPresenter.getGoodsList(category2.getCategoryId(),category3.getCategoryId());
+                    mPresenter.getGoodsList(category3.getCategoryId(),category2.getCategoryId());
                 }
             });
         }
@@ -283,7 +289,7 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                 public void onClick(View v) {
                     currentIndex3.put(currentIndex2,position);
                     list3.setAdapter(list3Adapter);
-                    mPresenter.getGoodsList(category2.getCategoryId(),category3.getCategoryId());
+                    mPresenter.getGoodsList(category3.getCategoryId(),category2.getCategoryId());
                 }
             });
         }
@@ -314,7 +320,7 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                 layoutId = R.layout.project_setting_choose_item;
             }
             View inflate = LayoutInflater.from(parent.getContext()).inflate(layoutId, null);
-            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ArmsUtils.dip2px(ArmsUtils.getContext(), 30)));
+            inflate.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             return new ListHolder(inflate);
         }
 
@@ -331,14 +337,15 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
                     } else {
                         currentIndex4.add(mb.getMerchId());
                     }
-                    list3.setAdapter(list3Adapter);
+                    list4.setAdapter(list4Adapter);
                 }
             });
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (!currentIndex4.contains(merchBeanList.get(position).getMerchId())) {
+            MerchBean merchBean = merchBeanList.get(position);
+            if (!currentIndex4.contains(merchBean.getMerchId())) {
                 return ITEM_TYPE_NORMAL;
             }
             return ITEM_TYPE_SELECT;

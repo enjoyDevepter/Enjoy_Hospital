@@ -144,7 +144,7 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
 
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(ub.getToken());
-        request.setCategoryList(list);
+        request.setMerchIdList(list);
 
         mModel.setProjectSetting(request)
                 .subscribeOn(Schedulers.io())
