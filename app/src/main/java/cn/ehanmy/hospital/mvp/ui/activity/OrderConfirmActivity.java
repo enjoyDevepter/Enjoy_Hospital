@@ -101,6 +101,11 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
     GoodsConfirmResponse response;
     private volatile boolean shouldSubmit;
 
+    @BindView(R.id.time_parent)
+    View time_parent;
+    @BindView(R.id.time)
+    TextView time;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerOrderConfirmComponent //如找不到该类,请编译一下项目
