@@ -157,7 +157,9 @@ public class ProjectSettingActivity extends BaseActivity<ProjectSettingPresenter
     private List<MerchBean> merchBeanList = new ArrayList<>();
     public void updateGoodsList(List<MerchBean> lists){
         merchBeanList.clear();
-        merchBeanList.addAll(lists);
+        if(lists != null && lists.size() != 0){
+            merchBeanList.addAll(lists);
+        }
         list4.setAdapter(list4Adapter);
     }
 
