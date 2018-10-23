@@ -203,6 +203,39 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/time_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="84px"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="44px"
+                        android:paddingRight="44px">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="预约时间："
+                            android:textColor="#FF666666"
+                            android:textSize="26px" />
+
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20px"
+                            android:textColor="#FF666666"
+                            android:textSize="26px" />
+
+                        <View
+                            android:layout_width="28px"
+                            android:layout_height="10px"
+                            android:layout_marginLeft="16px"
+                            android:background="@mipmap/three_point"
+                            money:layout_auto_baseheight="width" />
+
+                    </LinearLayout>
+                    <LinearLayout
                         android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="84px"
