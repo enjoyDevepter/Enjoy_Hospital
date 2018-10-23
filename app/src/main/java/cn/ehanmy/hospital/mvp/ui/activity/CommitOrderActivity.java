@@ -22,6 +22,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.integration.AppManager;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.text.SimpleDateFormat;
@@ -176,6 +177,11 @@ public class CommitOrderActivity extends BaseActivity<CommitOrderPresenter> impl
         phone.setText(memberBean.getMobile());
         member_code.setText(memberBean.getUserName());
 
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
     }
 
     @Override

@@ -1,26 +1,68 @@
 package cn.ehanmy.hospital.mvp.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import cn.ehanmy.hospital.di.component.DaggerOrderChoiceTimeComponent;
 import cn.ehanmy.hospital.di.module.OrderChoiceTimeModule;
+import cn.ehanmy.hospital.mvp.contract.ChoiceTimeContract;
 import cn.ehanmy.hospital.mvp.contract.OrderChoiceTimeContract;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ReservationDateBean;
+import cn.ehanmy.hospital.mvp.model.entity.user_appointment.ReservationTimeBean;
 import cn.ehanmy.hospital.mvp.presenter.OrderChoiceTimePresenter;
 
 import cn.ehanmy.hospital.R;
+import cn.ehanmy.hospital.mvp.ui.adapter.DateAdapter;
+import cn.ehanmy.hospital.mvp.ui.adapter.TimeAdapter;
+import cn.ehanmy.hospital.util.CacheUtil;
 
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
-public class OrderChoiceTimeActivity extends BaseActivity<OrderChoiceTimePresenter> implements OrderChoiceTimeContract.View {
+public class OrderChoiceTimeActivity extends BaseActivity<OrderChoiceTimePresenter>  implements OrderChoiceTimeContract.View,View.OnClickListener,DefaultAdapter.OnRecyclerViewItemClickListener {
+
+    public static final String KEY_FOR_GOODS_ID = "key_for_goods_id";
+    public static final String KEY_FOR_MERCH_ID = "key_for_merch_id";
+
+
+    @BindView(R.id.back)
+    View backV;
+    @BindView(R.id.title)
+    TextView titleTV;
+    @BindView(R.id.confirm)
+    TextView confrimTV;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.date)
+    RecyclerView dateRV;
+    @BindView(R.id.time)
+    RecyclerView timeRV;
+    @Inject
+    DateAdapter dateAdapter;
+    @Inject
+    RecyclerView.LayoutManager layoutManager;
+    @Inject
+    TimeAdapter timeAdapter;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -39,17 +81,24 @@ public class OrderChoiceTimeActivity extends BaseActivity<OrderChoiceTimePresent
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        titleTV.setText("选择时间");
+        backV.setOnClickListener(this);
+        confrimTV.setOnClickListener(this);
+        dateAdapter.setOnItemClickListener(this);
+        timeAdapter.setOnItemClickListener(this);
+        ArmsUtils.configRecyclerView(dateRV, layoutManager);
+        ArmsUtils.configRecyclerView(timeRV, new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        dateRV.setAdapter(dateAdapter);
+        timeRV.setAdapter(timeAdapter);
     }
-
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -67,5 +116,72 @@ public class OrderChoiceTimeActivity extends BaseActivity<OrderChoiceTimePresent
     @Override
     public void killMyself() {
         finish();
+    }
+
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                killMyself();
+                break;
+            case R.id.confirm:
+                if (ArmsUtils.isEmpty((String) provideCache().get("appointmentsTime"))) {
+                    showMessage("请选择预约时间");
+                    return;
+                }
+                CacheUtil.saveCache("appointmentsDate",provideCache().get("appointmentsDate"));
+                CacheUtil.saveCache("appointmentsTime",provideCache().get("appointmentsTime"));
+                killMyself();
+                break;
+        }
+    }
+
+
+    @Override
+    public void onItemClick(View view, int viewType, Object data, int position) {
+        List<ReservationDateBean> appointments = dateAdapter.getInfos();
+        List<ReservationTimeBean> timeList = timeAdapter.getInfos();
+        switch (viewType) {
+            case R.layout.goods_filter_second_item:
+                for (int i = 0; i < appointments.size(); i++) {
+                    appointments.get(i).setChoose(i == position ? true : false);
+                }
+                timeList.clear();
+                timeList.addAll(appointments.get(position).getReservationTimeList());
+                for (ReservationTimeBean time : timeList) {
+                    time.setChoose(false);
+                }
+                provideCache().put("appointmentsTime", "");
+                provideCache().put("appointmentsDate", appointments.get(position).getDate());
+                dateAdapter.notifyDataSetChanged();
+                timeAdapter.notifyDataSetChanged();
+                break;
+            case R.layout.goods_filter_third_item:
+                for (int i = 0; i < timeList.size(); i++) {
+                    timeList.get(i).setChoose(i == position ? true : false);
+                }
+                timeAdapter.notifyDataSetChanged();
+                provideCache().put("appointmentsTime", timeList.get(position).getTime());
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        DefaultAdapter.releaseAllHolder(dateRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        DefaultAdapter.releaseAllHolder(timeRV);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 }

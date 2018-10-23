@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -216,6 +217,16 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
         spceIDTV.setText(goods.getCode());
         spceNameTV.setText(goods.getName());
         spcePriceTV.setMoneyText(String.valueOf(goods.getSalePrice()));
+        time_parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderConfirmActivity.this,OrderChoiceTimeActivity.class);
+                GoodsListBean goods1 = response.getGoods();
+                intent.putExtra(OrderChoiceTimeActivity.KEY_FOR_GOODS_ID, goods1.getGoodsId());
+                intent.putExtra(OrderChoiceTimeActivity.KEY_FOR_MERCH_ID,goods1.getMerchId());
+                startActivityForResult(intent,0);
+            }
+        });
     }
 
     @Override
@@ -347,5 +358,18 @@ public class OrderConfirmActivity extends BaseActivity<OrderConfirmPresenter> im
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String dateStr = CacheUtil.getCaChe("appointmentsDate");
+        String timeStr = CacheUtil.getCaChe("appointmentsTime");
+        if(TextUtils.isEmpty(dateStr) || TextUtils.isEmpty(timeStr)){
+            time.setText("");
+        }else{
+            getCache().put("appointmentsDate",dateStr);
+            getCache().put("appointmentsTime",timeStr);
+            time.setText(dateStr+" "+timeStr);
+        }
     }
 }

@@ -131,6 +131,8 @@ public class OrderConfirmPresenter extends BasePresenter<OrderConfirmContract.Mo
         payIntent.putExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE,CommitOrderActivity.GO_IN_TYPE_CONFIRM);
         payIntent.putExtra("order_info", goodsConfirmResponse);
         payIntent.putExtra("remark", (String) mRootView.getCache().get("remark"));
+        payIntent.putExtra("appointmentsDate",(String)mRootView.getCache().get("appointmentsDate"));
+        payIntent.putExtra("appointmentsTime",(String)mRootView.getCache().get("appointmentsTime"));
         ArmsUtils.startActivity(payIntent);
     }
 }

@@ -24,6 +24,8 @@ import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdRequest;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.order.GetOrderAppointmentTimeRequest;
+import cn.ehanmy.hospital.mvp.model.entity.order.GetOrderAppointmentTimeResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.GetPayStatusRequest;
 import cn.ehanmy.hospital.mvp.model.entity.order.GetPayStatusResponse;
 import cn.ehanmy.hospital.mvp.model.entity.order.GoPayRequest;
@@ -189,6 +191,10 @@ public interface InterfaceService {
     @POST("gateway")
     Observable<GetUserAppointmentTimeResponse> getUserAppointmentTime
     (@Body GetUserAppointmentTimeRequest request);
+    // 获取用户预约时间
+    @POST("gateway")
+    Observable<GetOrderAppointmentTimeResponse> getOrderAppointmentTime
+    (@Body GetOrderAppointmentTimeRequest request);
 
     // 划扣账单
     @POST("gateway")

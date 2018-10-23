@@ -226,6 +226,8 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
         MemberBean memberBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_MEMBER);
         UserBean userBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         GoodsBuyRequest request = new GoodsBuyRequest();
+        request.setReservationDate(intent.getStringExtra("appointmentsDate"));
+        request.setReservationTime(intent.getStringExtra("appointmentsTime"));
         GoodsListBean goods = goodsConfirmResponse.getGoods();
         GoodsConfirmBean goodsConfirmBean = new GoodsConfirmBean();
         goodsConfirmBean.setSalePrice(goods.getSalePrice());

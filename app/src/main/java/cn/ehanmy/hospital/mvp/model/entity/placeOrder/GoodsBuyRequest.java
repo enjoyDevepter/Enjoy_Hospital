@@ -14,6 +14,8 @@ public class GoodsBuyRequest extends BaseRequest {
     private long totalPrice;
     private long payMoney;
     private String remark;
+    private String reservationDate;
+    private String reservationTime;
 
     @Override
     public String toString() {
@@ -27,7 +29,25 @@ public class GoodsBuyRequest extends BaseRequest {
                 ", totalPrice=" + totalPrice +
                 ", payMoney=" + payMoney +
                 ", remark='" + remark + '\'' +
+                ", reservationDate='" + reservationDate + '\'' +
+                ", reservationTime='" + reservationTime + '\'' +
                 '}';
+    }
+
+    public String getReservationDate() {
+        return reservationDate;
+    }
+
+    public void setReservationDate(String reservationDate) {
+        this.reservationDate = reservationDate;
+    }
+
+    public String getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(String reservationTime) {
+        this.reservationTime = reservationTime;
     }
 
     public int getCmd() {

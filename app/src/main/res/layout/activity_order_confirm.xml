@@ -170,7 +170,7 @@
                     <LinearLayout
                         android:id="@+id/spec"
                         android:layout_width="match_parent"
-                        android:layout_height="84px"
+                        android:layout_height="60px"
                         android:background="@drawable/list_item_bg"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
@@ -205,7 +205,8 @@
                     <LinearLayout
                         android:id="@+id/time_parent"
                         android:layout_width="match_parent"
-                        android:layout_height="84px"
+                        android:layout_height="60px"
+                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="44px"
