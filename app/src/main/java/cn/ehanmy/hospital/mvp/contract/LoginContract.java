@@ -6,11 +6,11 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import io.reactivex.Observable;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
-import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
+import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
+import io.reactivex.Observable;
 
 
 public interface LoginContract {
@@ -28,6 +28,7 @@ public interface LoginContract {
     interface Model extends IModel {
 
         Observable<LoginResponse> login(LoginRequest request);
+
         Observable<HospitalInfoResponse> requestHospitalInfo(HospitalInfoRequest request);
 
     }

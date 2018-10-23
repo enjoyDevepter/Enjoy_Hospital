@@ -65,7 +65,12 @@ public class GoodsListHolder extends BaseHolder<GoodsListBean> {
                 .subscribe(s -> count.setText(String.valueOf(s)));
         Observable.just(data.getSalePrice())
                 .subscribe(s -> priceMV.setMoneyText(String.valueOf(s)));
-        buy.setOnClickListener(this);
+        if ("1".equals(data.getCanSale())) {
+            buy.setOnClickListener(this);
+            buy.setBackgroundResource(R.drawable.buy_btn);
+        } else {
+            buy.setBackgroundResource(R.drawable.no_buy_btn);
+        }
     }
 
     @Override

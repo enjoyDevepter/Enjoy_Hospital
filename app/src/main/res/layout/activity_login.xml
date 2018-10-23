@@ -97,6 +97,7 @@
                     android:background="@android:color/transparent"
                     android:hint="请输入密码"
                     android:imeOptions="actionDone"
+                    android:inputType="textPassword"
                     android:textSize="28px" />
 
             </LinearLayout>

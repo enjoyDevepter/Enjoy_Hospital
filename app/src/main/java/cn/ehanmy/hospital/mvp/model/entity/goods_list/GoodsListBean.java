@@ -21,6 +21,7 @@ public class GoodsListBean implements Serializable {
     private String title;
     private int nums = 1;
     private String code;
+    private String canSale;
 
     @Override
     public String toString() {
@@ -40,7 +41,16 @@ public class GoodsListBean implements Serializable {
                 ", title='" + title + '\'' +
                 ", nums=" + nums +
                 ", code='" + code + '\'' +
+                ", canSale='" + canSale + '\'' +
                 '}';
+    }
+
+    public String getCanSale() {
+        return canSale;
+    }
+
+    public void setCanSale(String canSale) {
+        this.canSale = canSale;
     }
 
     public int getNums() {
