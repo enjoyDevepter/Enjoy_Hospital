@@ -2,6 +2,8 @@ package cn.ehanmy.hospital.mvp.model.api.service;
 
 import cn.ehanmy.hospital.mvp.model.entity.QiniuRequest;
 import cn.ehanmy.hospital.mvp.model.entity.QiniuResponse;
+import cn.ehanmy.hospital.mvp.model.entity.UpdateRequest;
+import cn.ehanmy.hospital.mvp.model.entity.UpdateResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityRequest;
 import cn.ehanmy.hospital.mvp.model.entity.activity.AddActivityResponse;
 import cn.ehanmy.hospital.mvp.model.entity.activity.ChangeActivityInfoRequest;
@@ -41,7 +43,6 @@ import cn.ehanmy.hospital.mvp.model.entity.placeOrder.GoodsBuyResponse;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmRequest;
 import cn.ehanmy.hospital.mvp.model.entity.request.GoodsConfirmWithSpecRequest;
 import cn.ehanmy.hospital.mvp.model.entity.request.LoginRequest;
-import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.GoodsConfirmResponse;
 import cn.ehanmy.hospital.mvp.model.entity.response.LoginResponse;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.CancelShopAppointmentRequest;
@@ -77,17 +78,18 @@ import cn.ehanmy.hospital.mvp.model.entity.user_appointment.GetUserAppointmentTi
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouRequest;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.HuakouResponse;
 import io.reactivex.Observable;
-import okhttp3.MultipartBody;
 import retrofit2.http.Body;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 
 
 /**
  * 服务器接口类
  */
 public interface InterfaceService {
+
+    // 升级检查
+    @POST("gateway")
+    Observable<UpdateResponse> checkUpdate(@Body UpdateRequest request);
 
     @POST("gateway")
     Observable<LoginResponse> login(@Body LoginRequest request);
@@ -191,6 +193,7 @@ public interface InterfaceService {
     @POST("gateway")
     Observable<GetUserAppointmentTimeResponse> getUserAppointmentTime
     (@Body GetUserAppointmentTimeRequest request);
+
     // 获取用户预约时间
     @POST("gateway")
     Observable<GetOrderAppointmentTimeResponse> getOrderAppointmentTime
@@ -243,6 +246,7 @@ public interface InterfaceService {
     @POST("gateway")
         // 获取七牛上传信息
     Observable<OrderPayResponse> orderPay(@Body OrderPayRequest request);
+
     @POST("gateway")
         // 获取七牛上传信息
     Observable<GetCategoryGoodsListResponse> getCategoryGoodsList(@Body GetCategoryGoodsListRequest request);

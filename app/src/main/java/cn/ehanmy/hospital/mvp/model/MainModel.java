@@ -11,6 +11,8 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.MainContract;
 import cn.ehanmy.hospital.mvp.model.api.service.InterfaceService;
+import cn.ehanmy.hospital.mvp.model.entity.UpdateRequest;
+import cn.ehanmy.hospital.mvp.model.entity.UpdateResponse;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import io.reactivex.Observable;
@@ -39,6 +41,12 @@ public class MainModel extends BaseModel implements MainContract.Model {
     public Observable<HospitalInfoResponse> requestHospitalInfo(HospitalInfoRequest request) {
         return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
                 .requestHosptialInfo(request);
+    }
+
+    @Override
+    public Observable<UpdateResponse> checkUpdate(UpdateRequest request) {
+        return mRepositoryManager.obtainRetrofitService(InterfaceService.class)
+                .checkUpdate(request);
     }
 
 }
