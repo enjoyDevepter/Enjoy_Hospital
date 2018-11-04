@@ -67,9 +67,9 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
+                    mRootView.hideLoading();
                 })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<CategoryResponse>(mErrorHandler) {
@@ -92,12 +92,7 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
 
         mModel.getProjectSetting(request)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-                })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<ProjectSettingResponse>(mErrorHandler) {
                     @Override
@@ -119,12 +114,7 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
 
         mModel.getCategoryGoodsList(request)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                    mRootView.hideLoading();//隐藏下拉刷新的进度条
-                })
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<GetCategoryGoodsListResponse>(mErrorHandler) {
                     @Override
@@ -148,11 +138,7 @@ public class ProjectSettingPresenter extends BasePresenter<ProjectSettingContrac
 
         mModel.setProjectSetting(request)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> {
-                })
                 .subscribe(new ErrorHandleSubscriber<SettingProjectResponse>(mErrorHandler) {
                     @Override
                     public void onNext(SettingProjectResponse response) {

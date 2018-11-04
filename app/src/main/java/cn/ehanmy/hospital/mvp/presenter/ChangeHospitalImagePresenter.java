@@ -19,7 +19,6 @@ import cn.ehanmy.hospital.mvp.model.entity.UserBean;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageRequest;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.ChangeHospitalImageResponse;
 import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitaInfoBean;
-import cn.ehanmy.hospital.mvp.model.entity.response.BaseResponse;
 import cn.ehanmy.hospital.util.CacheUtil;
 import cn.ehanmy.hospital.util.ImageUploadManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,9 +26,6 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 
 @ActivityScope
@@ -117,11 +113,11 @@ public class ChangeHospitalImagePresenter extends BasePresenter<ChangeHospitalIm
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();//隐藏下拉刷新的进度条
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<ChangeHospitalImageResponse>(mErrorHandler) {
                     @Override

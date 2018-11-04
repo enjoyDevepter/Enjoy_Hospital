@@ -34,6 +34,7 @@ import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.utils.ArmsUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
 

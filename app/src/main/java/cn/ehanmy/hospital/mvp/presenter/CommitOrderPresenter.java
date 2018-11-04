@@ -57,9 +57,9 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void init(){
-        int type = mRootView.getActivity().getIntent().getIntExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE,0);
-        switch (type){
+    public void init() {
+        int type = mRootView.getActivity().getIntent().getIntExtra(CommitOrderActivity.KEY_FOR_GO_IN_TYPE, 0);
+        switch (type) {
             case CommitOrderActivity.GO_IN_TYPE_CONFIRM:
                 placeGoodsOrder();
                 break;
@@ -69,7 +69,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
         }
     }
 
-    public void goPay(){
+    public void goPay() {
         Intent intent = mRootView.getActivity().getIntent();
         OrderBean orderBean = (OrderBean) intent.getSerializableExtra(CommitOrderActivity.KEY_FOR_ORDER_BEAN);
         UserBean userBean = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
@@ -78,7 +78,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
         request.setToken(userBean.getToken());
 
         OrderMemberInfoBean member = orderBean.getMember();
-        if(member != null){
+        if (member != null) {
             requestHospitalInfo(member.getMobile());
         }
 
@@ -92,9 +92,9 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                     @Override
                     public void onNext(GoPayResponse response) {
                         if (response.isSuccess()) {
-                            mRootView.showPaySuccess(response,orderBean);
+                            mRootView.showPaySuccess(response, orderBean);
                             mRootView.updatePayEntry(response.getPayEntryList());
-                        }else{
+                        } else {
                             mRootView.showMessage(response.getRetDesc());
                             mRootView.killMyself();
                         }
@@ -112,8 +112,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
                 }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -138,18 +137,18 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
                 }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
                     if (response.isSuccess()) {
-                        if("1".equals(response.getPayStatus())){
+                        if ("1".equals(response.getPayStatus())) {
                             // 已支付
-                            mRootView.payOk(response.getOrderId(),response.getOrderTime());
-                        }else if("0".equals(response.getPayStatus())){
+                            mRootView.payOk(response.getOrderId(), response.getOrderTime());
+                        } else if ("0".equals(response.getPayStatus())) {
                             // 未支付
                             mRootView.showPayError(response.getRemind());
                         }
@@ -160,7 +159,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
     }
 
 
-    public void orderPay(String payId,long money,String orderId) {
+    public void orderPay(String payId, long money, String orderId) {
         OrderPayRequest request = new OrderPayRequest();
         request.setAmount(money);
         request.setPayId(payId);
@@ -171,15 +170,14 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
                 }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
                     if (response.isSuccess()) {
-                        mRootView.payOk(orderId,System.currentTimeMillis());
+                        mRootView.payOk(orderId, System.currentTimeMillis());
                     } else {
                         mRootView.showMessage(response.getRetDesc());
                     }
@@ -198,11 +196,11 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
                 }).retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(response -> {
                     if (response.isSuccess()) {
@@ -254,7 +252,7 @@ public class CommitOrderPresenter extends BasePresenter<CommitOrderContract.Mode
                         if (response.isSuccess()) {
                             mRootView.showPaySuccess(response);
                             mRootView.updatePayEntry(response.getPayEntryList());
-                        }else{
+                        } else {
                             mRootView.showMessage(response.getRetDesc());
                             mRootView.killMyself();
                         }

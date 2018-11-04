@@ -99,14 +99,12 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void checkUser(){
+    public void checkUser() {
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         HospitalInfoRequest hospitalInfoRequest = new HospitalInfoRequest();
         hospitalInfoRequest.setToken(ub.getToken());
         mModel.requestHospitalInfo(hospitalInfoRequest)
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> {
-                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<HospitalInfoResponse>(mErrorHandler) {
@@ -115,10 +113,10 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                         mRootView.hideLoading();
                         if (s.isSuccess()) {
                             CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_HOSPITAL_INFO, s.getHospital());
-                            SPUtils.put(SPUtils.KEY_FOR_HOSPITAL_INFO, s.getHospital() );
+                            SPUtils.put(SPUtils.KEY_FOR_HOSPITAL_INFO, s.getHospital());
                         } else {
                             mRootView.showMessage("用户信息失效，请重新登录");
-                            Intent intent = new Intent(ArmsUtils.getContext(),LoginActivity.class);
+                            Intent intent = new Intent(ArmsUtils.getContext(), LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             SPUtils.clear(mRootView.getActivity());

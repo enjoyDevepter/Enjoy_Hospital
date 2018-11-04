@@ -54,7 +54,6 @@ public class RxUtils {
                                 view.showLoading();//显示进度条
                             }
                         })
-                        .subscribeOn(AndroidSchedulers.mainThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally(new Action() {
                             @Override

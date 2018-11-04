@@ -12,7 +12,6 @@ import javax.inject.Inject;
 
 import cn.ehanmy.hospital.mvp.contract.BuyCenterContract;
 import cn.ehanmy.hospital.mvp.model.entity.UserBean;
-import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberBean;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdRequest;
 import cn.ehanmy.hospital.mvp.model.entity.member_info.MemberInfoByIdResponse;
@@ -23,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
 
 @ActivityScope
@@ -59,11 +59,11 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<MemberInfoResponse>(mErrorHandler) {
                     @Override
@@ -89,11 +89,11 @@ public class BuyCenterPresenter extends BasePresenter<BuyCenterContract.Model, B
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
                     mRootView.showLoading();//显示下拉刷新的进度条
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                     mRootView.hideLoading();
                 })
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
                 .subscribe(new ErrorHandleSubscriber<MemberInfoByIdResponse>(mErrorHandler) {
                     @Override
