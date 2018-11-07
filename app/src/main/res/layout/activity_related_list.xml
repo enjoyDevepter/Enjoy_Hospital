@@ -21,23 +21,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="14dp">
+            android:paddingLeft="28px">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:layout_marginTop="28px"
+                android:paddingLeft="16px"
+                android:paddingRight="16px"
                 android:text="关联列表"
                 android:textColor="#3DBFE8"
-                android:textSize="14sp" />
+                android:textSize="28px" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="11dp"
-                android:background="#3DBFE8" />
+                android:layout_height="4px"
+                android:layout_marginTop="22px"
+                android:background="#FF3DBFE8" />
         </LinearLayout>
 
         <View style="@style/divider_1"/>

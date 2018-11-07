@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -17,22 +16,25 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="80px"
         android:divider="@null"
-        android:dividerPadding="2dp"
-        android:showDividers="middle">
+        android:dividerPadding="4px"
+        android:showDividers="middle"
+        app:layout_auto_baseheight="width">
 
         <TextView
             android:id="@+id/appointmentint"
             style="@style/tab_item"
-            android:text="预约中" />
+            android:text="预约中"
+            app:layout_auto_baseheight="width" />
 
         <View style="@style/tab_divider" />
 
         <TextView
             android:id="@+id/over"
             style="@style/tab_item"
-            android:text="已完成" />
+            android:text="已完成"
+            app:layout_auto_baseheight="width" />
 
         <View style="@style/tab_divider" />
 
@@ -46,7 +48,8 @@
         <TextView
             android:id="@+id/all"
             style="@style/tab_item"
-            android:text="全部" />
+            android:text="全部"
+            app:layout_auto_baseheight="width" />
     </LinearLayout>
 
     <View style="@style/divider_1" />
@@ -65,8 +68,7 @@
                 android:id="@+id/contentList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
-                tools:listitem="@layout/recycle_list" />
+                android:scrollbars="none" />
 
             <LinearLayout
                 android:id="@+id/no_date"
@@ -91,13 +93,7 @@
                     android:text="暂无数据"
                     android:textColor="#FF666666"
                     android:textSize="26px" />
-
             </LinearLayout>
-
         </FrameLayout>
-
-
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
 </LinearLayout>

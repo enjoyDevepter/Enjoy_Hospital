@@ -67,14 +67,12 @@ public class SafeSettingActivity extends BaseActivity<SafeSettingPresenter> impl
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,null);
-                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER,null);
-                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER,null);
-                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME,null);
-                SPUtils.remove(ArmsUtils.getContext(),SPUtils.KEY_FOR_HOSPITAL_INFO);
-                SPUtils.remove(ArmsUtils.getContext(),SPUtils.KEY_FOR_USER_NAME);
-                SPUtils.remove(ArmsUtils.getContext(),SPUtils.KEY_FOR_USER_NAME);
-                Intent intent = new Intent(SafeSettingActivity.this,LoginActivity.class);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME, null);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER, null);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_MEMBER, null);
+                CacheUtil.saveConstant(CacheUtil.CACHE_KEY_USER_LOGIN_NAME, null);
+                SPUtils.clear(ArmsUtils.getContext());
+                Intent intent = new Intent(SafeSettingActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ArmsUtils.startActivity(intent);

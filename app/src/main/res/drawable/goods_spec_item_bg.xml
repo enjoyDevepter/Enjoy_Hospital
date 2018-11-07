@@ -3,14 +3,14 @@
     <!-- 标签选中时的背景 -->
     <item android:state_selected="true">
         <shape>
-            <corners android:radius="10dp" />
+            <corners android:radius="20px" />
             <solid android:color="#FFFF5656" />
         </shape>
     </item>
     <!-- 标签的正常背景 -->
     <item>
         <shape>
-            <corners android:radius="10dp" />
+            <corners android:radius="20px" />
             <solid android:color="#FFEAEAEA" />
         </shape>
     </item>

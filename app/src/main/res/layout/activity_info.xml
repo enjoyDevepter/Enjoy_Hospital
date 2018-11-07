@@ -25,7 +25,8 @@
             <View
                 android:layout_width="20px"
                 android:layout_height="34px"
-                android:background="@mipmap/back" />
+                android:background="@mipmap/back"
+                app:layout_auto_baseheight="width" />
 
         </LinearLayout>
 
@@ -75,8 +76,7 @@
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
         <FrameLayout
             android:layout_width="match_parent"

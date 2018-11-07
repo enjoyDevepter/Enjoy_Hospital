@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -34,22 +35,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingLeft="14dp">
+                    android:paddingLeft="28px">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
+                        android:layout_marginTop="28px"
+                        android:paddingLeft="16px"
+                        android:paddingRight="16px"
                         android:text="基本信息"
                         android:textColor="#3DBFE8"
-                        android:textSize="14sp" />
+                        android:textSize="28px" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="11dp"
+                        android:layout_height="4px"
+                        android:layout_marginTop="22px"
                         android:background="#3DBFE8" />
                 </LinearLayout>
             </LinearLayout>
@@ -61,7 +62,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/title1"
                 android:orientation="vertical"
-                android:paddingLeft="21dp">
+                android:paddingLeft="40px">
 
                 <TextView
                     style="@style/form_info_text"
@@ -110,7 +111,7 @@
                 android:layout_below="@id/title1"
                 android:layout_toRightOf="@id/grid2"
                 android:orientation="vertical"
-                android:paddingLeft="100dp">
+                android:paddingLeft="200px">
 
                 <TextView
                     style="@style/form_info_text"
@@ -151,7 +152,7 @@
                 <View
                     android:id="@+id/divider2"
                     style="@style/divider_1"
-                    android:layout_marginTop="17dp" />
+                    android:layout_marginTop="34px" />
 
                 <LinearLayout
                     android:id="@+id/grid5"
@@ -159,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/divider2"
                     android:orientation="vertical"
-                    android:paddingLeft="21dp">
+                    android:paddingLeft="40px">
 
                     <TextView
                         style="@style/form_info_text"
@@ -198,15 +199,15 @@
                 style="@style/divider_3"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/perple_info_parent"
-                android:layout_marginTop="17dp" />
+                android:layout_marginTop="34px" />
 
             <TextView
                 android:id="@+id/guige"
                 style="@style/form_info_text"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/divider3"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="21dp"
+                android:layout_marginBottom="36px"
+                android:paddingLeft="40px"
                 android:text="规格" />
 
             <TextView
@@ -214,7 +215,7 @@
                 style="@style/form_info_text"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/divider3"
-                android:layout_marginRight="25dp" />
+                android:layout_marginRight="50px" />
 
             <View
                 android:id="@+id/divider4"
@@ -232,22 +233,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingLeft="14dp">
+                    android:paddingLeft="28px">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
+                        android:layout_marginTop="28px"
+                        android:paddingLeft="16px"
+                        android:paddingRight="16px"
                         android:text="项目信息"
                         android:textColor="#3DBFE8"
-                        android:textSize="14sp" />
+                        android:textSize="28px" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="11dp"
+                        android:layout_height="4px"
+                        android:layout_marginTop="22px"
                         android:background="#3DBFE8" />
                 </LinearLayout>
 
@@ -256,22 +257,23 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="150px"
+                android:layout_height="150px"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/title2"
-                android:layout_marginBottom="21dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="18dp"
-                android:src="@mipmap/default_image" />
+                android:layout_marginBottom="40px"
+                android:layout_marginLeft="48px"
+                android:layout_marginTop="36px"
+                android:src="@mipmap/default_image"
+                app:layout_auto_baseheight="width" />
 
             <TextView
                 android:id="@+id/order_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/image"
-                android:layout_marginBottom="3dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="6px"
+                android:layout_marginLeft="30px"
                 android:layout_toRightOf="@id/image" />
 
             <TextView
@@ -279,11 +281,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/image"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginLeft="30px"
+                android:layout_marginTop="6px"
                 android:layout_toRightOf="@id/image"
                 android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textSize="28px" />
 
             <View
                 style="@style/divider_3"

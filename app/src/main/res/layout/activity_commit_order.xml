@@ -90,7 +90,7 @@
                     android:layout_below="@id/member_code_title"
                     android:layout_marginTop="14px"
                     android:drawableLeft="@mipmap/location_icon"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="10px"
                     android:textColor="#ff333333"
                     android:textSize="24px" />
             </RelativeLayout>
@@ -153,15 +153,15 @@
             </RelativeLayout>
 
             <RadioGroup
+                android:id="@+id/pay_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7px"
                 android:background="@color/white"
-                android:id="@+id/pay_item"
-                android:dividerPadding="1px"
-                android:showDividers="middle"
                 android:divider="@drawable/linearlayout_divider_v"
+                android:dividerPadding="1px"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></RadioGroup>
+                android:showDividers="middle"></RadioGroup>
 
             <!--<LinearLayout-->
                 <!--android:id="@+id/pay_type"-->

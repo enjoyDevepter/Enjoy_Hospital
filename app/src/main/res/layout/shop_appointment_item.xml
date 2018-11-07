@@ -15,11 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="56px"
         android:background="#F5F5F5"
-        android:visibility="gone"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="25px"
-        android:paddingRight="29px">
+        android:paddingRight="29px"
+        android:visibility="gone">
 
         <TextView
             style="@style/recycler_item_style"
@@ -32,9 +32,9 @@
             android:id="@+id/order_id"
             style="@style/recycler_item_style"
             android:layout_width="0dp"
-            android:gravity="left|center_vertical"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
             app:layout_auto_baseheight="width" />
 
 
@@ -48,20 +48,20 @@
 
             <TextView
                 android:id="@+id/info"
-                android:text="详细"
                 style="@style/btn_in_list"
+                android:text="详细"
                 />
 
             <TextView
                 android:id="@+id/related"
-                android:text="关联"
                 style="@style/btn_in_list"
+                android:text="关联"
                 />
 
             <TextView
                 android:id="@+id/cancel"
-                android:text="取消"
                 style="@style/btn_in_list"
+                android:text="取消"
                 />
 
         </LinearLayout>
@@ -69,10 +69,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/order_list_title_back"
         android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/order_list_title_back"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="25px"
@@ -83,32 +83,32 @@
             android:id="@+id/order_project"
             style="@style/recycler_item_style"
             android:layout_width="0dp"
-            android:text="项目"
-            android:layout_marginTop="14px"
-            android:maxLines="2"
-            android:layout_marginBottom="14px"
-            android:gravity="center_vertical|left"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_marginBottom="14px"
+            android:layout_marginTop="14px"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:maxLines="2"
+            android:text="项目" />
 
         <TextView
-            android:layout_marginLeft="20px"
             android:id="@+id/order_phone"
-            android:text="手机"
             style="@style/recycler_item_style"
             android:layout_width="146px"
             android:layout_height="match_parent"
+            android:layout_marginLeft="20px"
+            android:text="手机"
             app:layout_auto_baseheight="width"
             />
 
         <TextView
-            app:layout_auto_baseheight="width"
-            android:layout_height="match_parent"
-            android:layout_width="60dp"
-            android:text="关联"
-            style="@style/recycler_item_style"
-            android:layout_marginLeft="5px"
             android:id="@+id/order_related"
+            style="@style/recycler_item_style"
+            android:layout_width="120px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5px"
+            android:text="关联"
+            app:layout_auto_baseheight="width"
             />
 
         <TextView
@@ -116,18 +116,18 @@
             style="@style/recycler_item_style"
             android:layout_width="80px"
             android:layout_height="match_parent"
-            android:text="未支付"
             android:layout_marginLeft="5px"
+            android:text="未支付"
             app:layout_auto_baseheight="width" />
 
 
         <TextView
             android:id="@+id/order_time"
-            android:text="预约时间"
-            android:layout_marginLeft="5px"
             style="@style/recycler_item_style"
             android:layout_width="120px"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5px"
+            android:text="预约时间"
             app:layout_auto_baseheight="width" />
 
     </LinearLayout>
