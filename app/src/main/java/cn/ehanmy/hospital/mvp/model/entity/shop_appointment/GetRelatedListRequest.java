@@ -6,7 +6,7 @@ public class GetRelatedListRequest extends BaseRequest {
     private final int cmd = 5405;
     private String token;
     private int pageIndex;
-    private int pageSize;
+    private int pageSize = 10;
     private String memberId;
 
     @Override

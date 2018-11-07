@@ -24,9 +24,7 @@ import java.util.List;
 
 import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.RelatedOrderBean;
-import cn.ehanmy.hospital.mvp.model.entity.user_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.ui.holder.RelatedListHolder;
-import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
 
 /**
  * ================================================
@@ -38,16 +36,6 @@ import cn.ehanmy.hospital.mvp.ui.holder.UserAppointmentHolder;
  * ================================================
  */
 public class RelatedListAdapter extends DefaultAdapter<RelatedOrderBean> {
-
-    public void setOnChildItemClickLinstener(RelatedListHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
-        this.onChildItemClickLinstener = onChildItemClickLinstener;
-        setOnItemClickListener(new OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int viewType, Object data, int position) {
-
-            }
-        });
-    }
 
     private RelatedListHolder.OnChildItemClickLinstener onChildItemClickLinstener;
 
@@ -74,6 +62,16 @@ public class RelatedListAdapter extends DefaultAdapter<RelatedOrderBean> {
 
     public RelatedListHolder.OnChildItemClickLinstener getOnChildItemClickLinstener() {
         return onChildItemClickLinstener;
+    }
+
+    public void setOnChildItemClickLinstener(RelatedListHolder.OnChildItemClickLinstener onChildItemClickLinstener) {
+        this.onChildItemClickLinstener = onChildItemClickLinstener;
+        setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int viewType, Object data, int position) {
+
+            }
+        });
     }
 
 

@@ -6,32 +6,27 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.utils.ArmsUtils;
 import com.paginate.Paginate;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerRelatedListComponent;
 import cn.ehanmy.hospital.di.module.RelatedListModule;
 import cn.ehanmy.hospital.mvp.contract.RelatedListContract;
-import cn.ehanmy.hospital.mvp.model.entity.Order;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.RelatedOrderBean;
 import cn.ehanmy.hospital.mvp.presenter.RelatedListPresenter;
-
-import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.mvp.ui.adapter.RelatedListAdapter;
 import cn.ehanmy.hospital.mvp.ui.holder.RelatedListHolder;
-
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -42,7 +37,7 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
 
     public static final String KEY_FOR_MEMBER_ID = "key_for_project_id";
     public static final String KEY_FOR_RESERVATION_ID = "key_for_reservation_id";
-            // 每一个用相同的reservationID？
+    // 每一个用相同的reservationID？
 
     @BindView(R.id.title_Layout)
     View title;
@@ -53,14 +48,14 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
     RecyclerView.Adapter mAdapter;
     @BindView(R.id.contentList)
     RecyclerView contentList;
-
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    private Paginate mPaginate;
-    private boolean isLoadingMore;
-    private boolean isEnd;
     @BindView(R.id.no_date)
     View onDateV;
+
+    private Paginate mPaginate;
+    private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
 
 
     @Override
@@ -80,17 +75,17 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"关联列表");
+        new TitleUtil(title, this, "关联列表");
         ArmsUtils.configRecyclerView(contentList, mLayoutManager);
         String reservationId = getIntent().getStringExtra(KEY_FOR_RESERVATION_ID);
-        ((RelatedListAdapter)mAdapter).setOnChildItemClickLinstener(new RelatedListHolder.OnChildItemClickLinstener() {
+        ((RelatedListAdapter) mAdapter).setOnChildItemClickLinstener(new RelatedListHolder.OnChildItemClickLinstener() {
             @Override
             public void onChildItemClick(View v, RelatedListHolder.ViewName viewname, int position) {
-                switch (viewname){
+                switch (viewname) {
                     case RELATED:
                         RelatedOrderBean item = ((RelatedListAdapter) mAdapter).getItem(position);
-                        mPresenter.confirmShopAppointment(item.getOrderId(),reservationId);
-                    break;
+                        mPresenter.confirmShopAppointment(item.getOrderId(), reservationId);
+                        break;
                 }
             }
         });
@@ -99,7 +94,7 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.requestOrderList();
+                mPresenter.requestOrderList(true);
             }
         });
         initPaginate();
@@ -111,7 +106,7 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.nextPage();
+                    mPresenter.requestOrderList(false);
                 }
 
                 @Override
@@ -121,7 +116,7 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
 
                 @Override
                 public boolean hasLoadedAllItems() {
-                    return isEnd;
+                    return hasLoadedAllItems;
                 }
             };
 
@@ -134,15 +129,16 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
 
     @Override
     public void showLoading() {
-
+        swipeRefreshLayout.setRefreshing(true);
     }
+
     @Override
     public void hideLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 
@@ -158,16 +154,24 @@ public class RelatedListActivity extends BaseActivity<RelatedListPresenter> impl
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
+    @Override
+    public void setLoadedAllItems(boolean hasLoadedAllItems) {
+        this.hasLoadedAllItems = hasLoadedAllItems;
+    }
+
+    @Override
+    public Cache getCache() {
+        return provideCache();
+    }
+
     @Override
     public void showError(boolean hasDate) {
         onDateV.setVisibility(hasDate ? INVISIBLE : VISIBLE);
         contentList.setVisibility(hasDate ? VISIBLE : INVISIBLE);
     }
 
-    @Override
-    public void setEnd(boolean isEnd) {
-        this.isEnd = isEnd;
-    }
+
     @Override
     protected void onDestroy() {
         DefaultAdapter.releaseAllHolder(contentList);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用

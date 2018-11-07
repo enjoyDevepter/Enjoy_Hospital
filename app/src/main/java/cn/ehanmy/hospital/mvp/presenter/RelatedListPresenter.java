@@ -47,7 +47,9 @@ public class RelatedListPresenter extends BasePresenter<RelatedListContract.Mode
     RecyclerView.Adapter mAdapter;
     @Inject
     List<RelatedOrderBean> orderBeanList;
-    private int nextPageIndex = 1;
+
+    private int preEndIndex;
+    private int lastPageIndex = 1;
 
     @Inject
     public RelatedListPresenter(RelatedListContract.Model model, RelatedListContract.View rootView) {
@@ -65,34 +67,30 @@ public class RelatedListPresenter extends BasePresenter<RelatedListContract.Mode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void requestOrderList() {
-        requestOrderList(1, true);
+        requestOrderList(true);
     }
 
-    public void nextPage() {
-        requestOrderList(nextPageIndex, false);
-    }
-
-    private void requestOrderList(int pageIndex, final boolean clear) {
+    public void requestOrderList(boolean pullToRefresh) {
         GetRelatedListRequest request = new GetRelatedListRequest();
-        request.setPageIndex(pageIndex);
-        request.setPageSize(10);
         Intent intent = mRootView.getActivity().getIntent();
         String projectId = intent.getStringExtra(RelatedListActivity.KEY_FOR_MEMBER_ID);
         request.setMemberId(projectId);
-
         UserBean ub = CacheUtil.getConstant(CacheUtil.CACHE_KEY_USER);
         request.setToken(ub.getToken());
+
+        if (pullToRefresh) lastPageIndex = 1;
+        request.setPageIndex(lastPageIndex);//下拉刷新默认只请求第一页
 
         mModel.getRelatedList(request)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                    if (clear) {
+                    if (pullToRefresh) {
                         mRootView.showLoading();//显示下拉刷新的进度条
                     } else
                         mRootView.startLoadMore();//显示上拉加载更多的进度条
                 }).observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
-                    if (clear)
+                    if (pullToRefresh)
                         mRootView.hideLoading();//隐藏下拉刷新的进度条
                     else
                         mRootView.endLoadMore();//隐藏上拉加载更多的进度条
@@ -103,17 +101,16 @@ public class RelatedListPresenter extends BasePresenter<RelatedListContract.Mode
                     @Override
                     public void onNext(GetRelatedListResponse response) {
                         if (response.isSuccess()) {
-                            if (clear) {
+                            if (pullToRefresh) {
                                 orderBeanList.clear();
+                                orderBeanList.add(new RelatedOrderBean());
                             }
-                            nextPageIndex = response.getNextPageIndex();
-                            mRootView.setEnd(nextPageIndex == -1);
                             mRootView.showError(response.getOrderList().size() > 0);
                             orderBeanList.addAll(response.getOrderList());
+                            preEndIndex = orderBeanList.size();//更新之前列表总长度,用于确定加载更多的起始位置
+                            lastPageIndex = orderBeanList.size() / 10 + 1;
+                            mRootView.setLoadedAllItems(response.getNextPageIndex() == -1);
                             mAdapter.notifyDataSetChanged();
-                            mRootView.hideLoading();
-                        } else {
-                            mRootView.showMessage(response.getRetDesc());
                         }
                     }
                 });
