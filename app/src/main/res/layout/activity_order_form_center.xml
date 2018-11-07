@@ -52,10 +52,11 @@
                 android:visibility="gone">
 
                 <View
-                    android:layout_width="188px"
-                    android:layout_height="120px"
-                    android:layout_marginTop="20px"
-                    android:background="@mipmap/nodata" />
+                    android:layout_width="153px"
+                    android:layout_height="100px"
+                    android:layout_marginTop="30px"
+                    android:background="@mipmap/nodata"
+                    app:layout_auto_baseheight="width" />
 
                 <TextView
                     android:layout_width="wrap_content"

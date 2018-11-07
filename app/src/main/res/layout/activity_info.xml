@@ -40,13 +40,13 @@
         <TextView
             android:id="@+id/add_activity"
             android:layout_width="wrap_content"
-            android:paddingLeft="10px"
-            android:paddingRight="10px"
-            android:gravity="center"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="40px"
+            android:gravity="center"
+            android:paddingLeft="10px"
+            android:paddingRight="10px"
             android:text="添加活动"
             android:textColor="#ff333333"
             android:textSize="28px" />
@@ -86,10 +86,10 @@
                 android:id="@+id/contentList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="20px"
                 android:layout_marginLeft="40px"
                 android:layout_marginRight="40px"
                 android:layout_marginTop="20px"
-                android:layout_marginBottom="20px"
                 android:scrollbars="none"
                 tools:listitem="@layout/recycle_list" />
 
@@ -98,20 +98,22 @@
                 android:id="@+id/no_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <View
-                    android:layout_width="188px"
-                    android:layout_height="120px"
-                    android:background="@mipmap/nodata" />
+                    android:layout_width="153px"
+                    android:layout_height="100px"
+                    android:layout_marginTop="30px"
+                    android:background="@mipmap/nodata"
+                    app:layout_auto_baseheight="width" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="60px"
+                    android:layout_marginTop="30px"
                     android:text="暂无数据"
                     android:textColor="#FF666666"
                     android:textSize="26px" />

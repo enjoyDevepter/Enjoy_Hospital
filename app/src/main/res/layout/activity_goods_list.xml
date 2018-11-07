@@ -37,16 +37,16 @@
                     android:visibility="gone">
 
                     <View
-                        android:layout_width="188px"
-                        android:layout_height="120px"
-                        android:layout_marginTop="60px"
+                        android:layout_width="153px"
+                        android:layout_height="100px"
+                        android:layout_marginTop="30px"
                         android:background="@mipmap/nodata"
                         app:layout_auto_baseheight="width" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="60px"
+                        android:layout_marginTop="30px"
                         android:text="暂无数据"
                         android:textColor="#FF666666"
                         android:textSize="26px" />
