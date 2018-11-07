@@ -7,8 +7,6 @@ import com.jess.arms.mvp.IView;
 
 import cn.ehanmy.hospital.mvp.model.entity.UpdateRequest;
 import cn.ehanmy.hospital.mvp.model.entity.UpdateResponse;
-import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoRequest;
-import cn.ehanmy.hospital.mvp.model.entity.hospital.HospitalInfoResponse;
 import io.reactivex.Observable;
 
 
@@ -23,9 +21,6 @@ public interface MainContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<HospitalInfoResponse> requestHospitalInfo(HospitalInfoRequest request);
-
         Observable<UpdateResponse> checkUpdate(UpdateRequest request);
-
     }
 }
