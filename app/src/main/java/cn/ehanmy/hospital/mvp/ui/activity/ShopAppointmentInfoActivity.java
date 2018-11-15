@@ -15,7 +15,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
@@ -25,7 +24,6 @@ import cn.ehanmy.hospital.R;
 import cn.ehanmy.hospital.di.component.DaggerShopAppointmentInfoComponent;
 import cn.ehanmy.hospital.di.module.ShopAppointmentInfoModule;
 import cn.ehanmy.hospital.mvp.contract.ShopAppointmentInfoContract;
-import cn.ehanmy.hospital.mvp.model.entity.ShopAppointment;
 import cn.ehanmy.hospital.mvp.model.entity.shop_appointment.OrderProjectDetailBean;
 import cn.ehanmy.hospital.mvp.model.entity.user_appointment.UserAppointmentGoodsBean;
 import cn.ehanmy.hospital.mvp.presenter.ShopAppointmentInfoPresenter;
@@ -42,15 +40,12 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
 
     @BindView(R.id.related)
     View related;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     ImageLoader mImageLoader;
-
     @BindView(R.id.appointment_order)
     TextView form_id;
     @BindView(R.id.appointment_state)
     TextView form_state;
-
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.time)
@@ -65,6 +60,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
     TextView project_name;
     @BindView(R.id.order_time)
     TextView order_time;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -83,7 +79,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        new TitleUtil(title,this,"预约详细");
+        new TitleUtil(title, this, "预约详细");
 
     }
 
@@ -114,7 +110,7 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         finish();
     }
 
-    public void updateOrderInfo(OrderProjectDetailBean orderInfoBean){
+    public void updateOrderInfo(OrderProjectDetailBean orderInfoBean) {
         UserAppointmentGoodsBean goodsOrderBean = orderInfoBean.getGoods();
         mImageLoader.loadImage(this,
                 ImageConfigImpl
@@ -127,9 +123,9 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         related.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShopAppointmentInfoActivity.this,RelatedListActivity.class);
-                intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID,orderInfoBean.getMember().getMemberId());
-                intent.putExtra(RelatedListActivity.KEY_FOR_RESERVATION_ID,orderInfoBean.getReservationId());
+                Intent intent = new Intent(ShopAppointmentInfoActivity.this, RelatedListActivity.class);
+                intent.putExtra(RelatedListActivity.KEY_FOR_MEMBER_ID, orderInfoBean.getMember().getMemberId());
+                intent.putExtra(RelatedListActivity.KEY_FOR_RESERVATION_ID, orderInfoBean.getReservationId());
                 launchActivity(intent);
             }
         });
@@ -141,11 +137,11 @@ public class ShopAppointmentInfoActivity extends BaseActivity<ShopAppointmentInf
         form_tel.setText(orderInfoBean.getMember().getMobile());
         form_add.setText(orderInfoBean.getAddress());
         project_name.setText(goodsOrderBean.getName());
-        order_time.setText(orderInfoBean.getReservationTime());
+        order_time.setText(orderInfoBean.getReservationDate() + " " + orderInfoBean.getReservationTime());
     }
 
 
-    public Activity getActivity(){
+    public Activity getActivity() {
         return this;
     }
 }

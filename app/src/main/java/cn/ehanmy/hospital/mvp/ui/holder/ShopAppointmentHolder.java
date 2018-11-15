@@ -84,9 +84,9 @@ public class ShopAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
         line2.setBackgroundColor(Color.WHITE);
         order_id.setText(order.getReservationId());
         order_phone.setText(order.getPhone());
-        order_related.setText(order.getStatusDesc());
+        order_related.setText(order.getRelateStatusDesc());
         order_time.setText(order.getReservationDate());
-        order_status.setText(order.getRelateStatusDesc());
+        order_status.setText(order.getStatusDesc());
         UserAppointmentGoodsBean goods = order.getGoods();
         if(goods != null){
             order_project.setText(goods.getName());
@@ -134,16 +134,6 @@ public class ShopAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
         super.onClick(view);
     }
 
-    public interface OnChildItemClickLinstener {
-        void onChildItemClick(View v, ViewName viewname, int position);
-    }
-
-    public enum ViewName {
-        CANCEL,
-        RELATED,
-        INFO,
-    }
-
     @Override
     protected void onRelease() {
         this.line1 = null;
@@ -158,5 +148,15 @@ public class ShopAppointmentHolder extends BaseHolder<OrderProjectDetailBean> {
         this.order_related = null;
         this.order_status = null;
         this.order_time = null;
+    }
+
+    public enum ViewName {
+        CANCEL,
+        RELATED,
+        INFO,
+    }
+
+    public interface OnChildItemClickLinstener {
+        void onChildItemClick(View v, ViewName viewname, int position);
     }
 }
