@@ -12,4 +12,4 @@
     android:paddingRight="10px"
     android:paddingTop="6px"
     android:text="清洁补水"
-    android:textSize="13sp" />
+    android:textSize="26px" />
